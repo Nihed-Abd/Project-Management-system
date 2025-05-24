@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { FiSave, FiArrowLeft, FiUpload, FiX, FiMapPin, FiUser, FiSearch, FiPlus } from 'react-icons/fi';
 import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Map, Marker } from 'react-map-gl';
+import Map, { Marker } from 'react-map-gl';
 
 const AddProjectPage = () => {
   const navigate = useNavigate();
@@ -73,14 +73,15 @@ const AddProjectPage = () => {
   const fetchCategories = async () => {
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
-      if (response.data.success) {
-        setCategories(response.data.categories);
+      // API returns array directly, not wrapped in success object
+      if (Array.isArray(response.data)) {
+        setCategories(response.data);
         // Set default category if available
-        if (response.data.categories.length > 0) {
-          setFormData(prev => ({ ...prev, categoryId: response.data.categories[0]._id }));
+        if (response.data.length > 0) {
+          setFormData(prev => ({ ...prev, categoryId: response.data[0]._id }));
         }
       } else {
-        console.error('Failed to fetch categories:', response.data.message);
+        console.error('Failed to fetch categories: Unexpected response format');
       }
     } catch (err) {
       console.error('Error fetching categories:', err);
@@ -90,12 +91,13 @@ const AddProjectPage = () => {
   // Fetch users from API
   const fetchUsers = async () => {
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/users`);
-      if (response.data.success) {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/auth/users`);
+      // The auth endpoint consistently returns users in a success wrapper
+      if (response.data && response.data.success && Array.isArray(response.data.users)) {
         setUsers(response.data.users);
         setFilteredUsers(response.data.users);
       } else {
-        console.error('Failed to fetch users:', response.data.message);
+        console.error('Failed to fetch users: Unexpected response format');
       }
     } catch (err) {
       console.error('Error fetching users:', err);
@@ -166,7 +168,9 @@ const AddProjectPage = () => {
         name: newCategoryName.trim()
       });
       
-      if (response.data.success) {
+      // Category API returns the created category directly
+      if (response.data && response.data._id) {
+        const newCategory = response.data;
         setNewCategoryName('');
         setShowAddCategory(false);
         setSuccess('Category added successfully');
@@ -175,9 +179,9 @@ const AddProjectPage = () => {
         fetchCategories();
         
         // Set the new category as selected
-        setFormData(prev => ({ ...prev, categoryId: response.data.category._id }));
+        setFormData(prev => ({ ...prev, categoryId: newCategory._id }));
       } else {
-        setError(response.data.message || 'Failed to add category');
+        setError('Failed to add category: Unexpected response format');
       }
     } catch (err) {
       setError(err.response?.data?.message || 'An error occurred while adding the category');
@@ -201,21 +205,38 @@ const AddProjectPage = () => {
     const imageUrls = [];
     
     try {
-      // In a real implementation, you would upload to your server or a cloud storage service
-      // For now, we'll simulate the upload and return the local preview URLs
-      // This should be replaced with actual image upload logic
+      // Create a FormData object for file upload
+      const formData = new FormData();
       
-      // Simulate upload delay
-      await new Promise(resolve => setTimeout(resolve, 1000));
+      // Add each picture to the form data
+      pictures.forEach(file => {
+        formData.append('images', file);
+      });
       
-      // For demo purposes, we'll just use the preview URLs
-      // In a real app, you would upload each file and get the remote URL
-      imageUrls.push(...imagePreviewUrls);
+      // Upload the images using the new upload API endpoint
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/upload/multiple`, 
+        formData, 
+        {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        }
+      );
+      
+      if (response.data.success && response.data.fileUrls) {
+        // Convert relative URLs to absolute URLs
+        const baseUrl = process.env.REACT_APP_API_URL;
+        const absoluteUrls = response.data.fileUrls.map(url => `${baseUrl}${url}`);
+        imageUrls.push(...absoluteUrls);
+      } else {
+        throw new Error('Image upload failed');
+      }
       
       return imageUrls;
     } catch (err) {
       console.error('Error uploading images:', err);
-      throw new Error('Failed to upload images');
+      throw new Error('Failed to upload images: ' + (err.response?.data?.message || err.message));
     } finally {
       setUploadingImages(false);
     }
@@ -575,6 +596,7 @@ const AddProjectPage = () => {
                       style={{ width: '100%', height: '100%' }}
                       mapStyle="mapbox://styles/mapbox/streets-v11"
                       mapboxAccessToken={mapboxToken}
+                      attributionControl={true}
                       onClick={handleMapClick}
                     >
                       <Marker

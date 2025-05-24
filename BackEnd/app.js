@@ -2,6 +2,7 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require("mongoose");
 const cors = require('cors');
+const path = require('path');
 
 const app = express();
 
@@ -12,6 +13,7 @@ const authRouter = require("./routes/auth.route"); // Add new auth router
 const categoryRouter = require("./routes/categorie.route");
 const reclamationRouter = require("./routes/reclamation.route");
 const interviewRouter = require("./routes/interview.route");
+const uploadRouter = require("./routes/upload.route"); // Add upload router
 
 // Middleware globaux
 // Configure CORS for frontend communication
@@ -23,6 +25,9 @@ app.use(cors({
 }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
+
+// Serve uploaded files statically
+app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 
 // Connexion à MongoDB
 mongoose.connect(process.env.MONGODB_URI || process.env.DATABASE)
@@ -39,6 +44,7 @@ app.use("/api/auth", authRouter); // Register auth routes
 app.use("/api/categories", categoryRouter);
 app.use("/api/reclamations", reclamationRouter);
 app.use("/api/interviews", interviewRouter);
+app.use("/api/upload", uploadRouter); // Register upload routes
 
 // Route test
 app.get("/", (req, res) => {

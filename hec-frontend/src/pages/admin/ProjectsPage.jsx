@@ -40,11 +40,15 @@ const ProjectsPage = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/projects`);
-      if (response.data.success) {
+      // Handle both formats - array directly or wrapped in success object
+      if (Array.isArray(response.data)) {
+        setProjects(response.data);
+        setFilteredProjects(response.data);
+      } else if (response.data.success && Array.isArray(response.data.projects)) {
         setProjects(response.data.projects);
         setFilteredProjects(response.data.projects);
       } else {
-        setError('Failed to fetch projects');
+        setError('Failed to fetch projects: Unexpected response format');
       }
     } catch (err) {
       console.error('Error fetching projects:', err);
@@ -61,16 +65,23 @@ const ProjectsPage = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/projects/search?query=${query}`);
-      if (response.data.success) {
-        let filtered = response.data.projects;
-        // Apply status filter to search results if needed
-        if (statusFilter) {
-          filtered = filtered.filter(project => project.status === statusFilter);
-        }
-        setFilteredProjects(filtered);
+      // Handle both formats - array directly or wrapped in success object
+      let filtered = [];
+      if (Array.isArray(response.data)) {
+        filtered = response.data;
+      } else if (response.data.success && Array.isArray(response.data.projects)) {
+        filtered = response.data.projects;
       } else {
-        setError('Search failed');
+        setError('Search failed: Unexpected response format');
+        setLoading(false);
+        return;
       }
+      
+      // Apply status filter to search results if needed
+      if (statusFilter) {
+        filtered = filtered.filter(project => project.status === statusFilter);
+      }
+      setFilteredProjects(filtered);
     } catch (err) {
       console.error('Error searching projects:', err);
       setError(err.response?.data?.message || 'An error occurred while searching');

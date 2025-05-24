@@ -4,7 +4,7 @@ import { motion } from 'framer-motion';
 import { FiArrowLeft, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiCalendar, FiClock, FiMap, FiTag } from 'react-icons/fi';
 import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
-import { Map, Marker } from 'react-map-gl';
+import Map, { Marker } from 'react-map-gl';
 
 const ProjectDetailsPage = () => {
   const { projectId } = useParams();
@@ -23,10 +23,15 @@ const ProjectDetailsPage = () => {
     setLoading(true);
     try {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`);
-      if (response.data.success) {
+      // Handle both formats - object directly or wrapped in success object
+      if (response.data && !response.data.success && response.data._id) {
+        // Direct object response
+        setProject(response.data);
+      } else if (response.data.success && response.data.project) {
+        // Wrapped in success object
         setProject(response.data.project);
       } else {
-        setError('Failed to fetch project details');
+        setError('Failed to fetch project details: Unexpected response format');
       }
     } catch (err) {
       console.error('Error fetching project details:', err);
@@ -199,6 +204,7 @@ const ProjectDetailsPage = () => {
                         style={{ width: '100%', height: '100%' }}
                         mapStyle="mapbox://styles/mapbox/streets-v11"
                         mapboxAccessToken={mapboxToken}
+                        attributionControl={true}
                       >
                         <Marker
                           longitude={project.location.coordinates[0]}

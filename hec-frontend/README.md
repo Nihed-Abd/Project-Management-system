@@ -90,3 +90,5 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/t
 
 npm uninstall tailwindcss postcss autoprefixer
 npm install -D tailwindcss@3.3.3 postcss@8.4.27 autoprefixer@10.4.14
+
+npm install react-map-gl@7.1.0
