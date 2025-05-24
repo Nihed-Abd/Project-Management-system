@@ -163,48 +163,6 @@ router.post('/login',loginLimiter , async (req, res) => {
     }
 });
 
-// ========= LOGIN =========
-/*router.post('/login', async (req, res) => {
-    const { email, password } = req.body;
-    let expires = Date.now() + 1;
-
-    try {
-        if (!email || !password) {
-            return res.status(400).json({ success: false, message: "Champs requis manquants." });
-        }
-
-        const user = await User.findOne({ email });
-        if (!user) return res.status(404).json({ success: false, message: "Compte inexistant." });
-
-        const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ success: false, message: "Mot de passe incorrect." });
-
-        if (!user.isActive) {
-            return res.status(403).json({ success: false, message: "Votre compte est inactif. Veuillez contacter l'administrateur." });
-        }
-
-        //delete user._doc.password;
-        user.findOne({ email }).select("+password");
-
-        if (!process.env.ACCESS_TOKEN_SECRET) {
-            console.error("❌ ACCESS_TOKEN_SECRET est introuvable dans le fichier .env");
-            return res.status(500).json({ message: "Erreur serveur. Secret JWT manquant." });
-        }
-        const token = generateAccessToken(user);
-        const refreshToken = generateRefreshToken(user);
-
-        return res.status(200).json({
-            success: true,
-            user,
-            token,
-            refreshToken,
-            expiresIn: expires
-        });
-
-    } catch (error) {
-        return res.status(500).json({ success: false, message: error.message });
-    }
-});*/
 
 // ========= REFRESH TOKEN =========
 router.post('/refreshToken', (req, res) => {
@@ -255,24 +213,116 @@ router.get('/:id', async (req, res) => {
 // ========= UPDATE USER =========
 router.put('/:id', async (req, res) => {
     try {
-        const { name, email, password, role } = req.body;
+        const { name, email, password, role, isActive } = req.body;
 
-        const updatedFields = { name, email, role };
+        const updatedFields = {};
+        
+        if (name !== undefined) updatedFields.name = name;
+        if (email !== undefined) updatedFields.email = email;
+        if (role !== undefined) {
+            if (role !== 'user' && role !== 'admin') {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: "Invalid role. Role must be either 'user' or 'admin'" 
+                });
+            }
+            updatedFields.role = role;
+        }
+        if (isActive !== undefined) updatedFields.isActive = isActive;
 
         if (password) {
             const salt = await bcrypt.genSalt(10);
             updatedFields.password = await bcrypt.hash(password, salt);
         }
 
-        const updatedUser = await User.findByIdAndUpdate(req.params.id, updatedFields, {
-            new: true,
-            runValidators: true
-        }).select("-password");
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            updatedFields,
+            { new: true }
+        ).select('-password');
 
-        if (!updatedUser) return res.status(404).json({ success: false, message: "Utilisateur introuvable." });
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
 
-        res.status(200).json({ success: true, message: "Utilisateur mis à jour.", user: updatedUser });
+        res.status(200).json({
+            success: true,
+            message: "User updated successfully",
+            user: updatedUser
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
 
+// ========= BAN/ACTIVATE USER =========
+router.put('/status/:id', async (req, res) => {
+    try {
+        const { isActive } = req.body;
+        
+        if (isActive === undefined) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "isActive status must be provided" 
+            });
+        }
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            { isActive },
+            { new: true }
+        ).select('-password');
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+
+        const statusMessage = isActive ? "activated" : "banned";
+        
+        res.status(200).json({
+            success: true,
+            message: `User ${statusMessage} successfully`,
+            user: updatedUser
+        });
+    } catch (error) {
+        res.status(500).json({ success: false, message: error.message });
+    }
+});
+
+// ========= CHANGE USER ROLE =========
+router.put('/role/:id', async (req, res) => {
+    try {
+        const { role } = req.body;
+        
+        if (!role) {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Role must be provided" 
+            });
+        }
+        
+        if (role !== 'user' && role !== 'admin') {
+            return res.status(400).json({ 
+                success: false, 
+                message: "Invalid role. Role must be either 'user' or 'admin'" 
+            });
+        }
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            { role },
+            { new: true }
+        ).select('-password');
+
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
+        
+        res.status(200).json({
+            success: true,
+            message: `User role changed to ${role} successfully`,
+            user: updatedUser
+        });
     } catch (error) {
         res.status(500).json({ success: false, message: error.message });
     }
