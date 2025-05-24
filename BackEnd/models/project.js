@@ -1,19 +1,29 @@
 const mongoose = require("mongoose");
 
+// Define the location schema for storing geo coordinates
+const LocationSchema = new mongoose.Schema({
+  type: {
+    type: String,
+    enum: ['Point'],
+    default: 'Point'
+  },
+  coordinates: {
+    type: [Number], // [longitude, latitude]
+    required: true
+  }
+}, { _id: false });
+
 const ProjectSchema = new mongoose.Schema({
   title: { 
     type: String, 
     required: true 
   },
-  images: { 
-    type: [String],
+  pictures: { 
+    type: [String], // Array of image URLs
     default: []
   },
   location: {
-    type: {
-      lat: { type: Number },
-      lng: { type: Number }
-    },
+    type: LocationSchema,
     default: null
   },
   description: { 
@@ -55,53 +65,3 @@ module.exports = mongoose.model("Project", ProjectSchema);
 
 
 
-
-
-/*const mongoose = require("mongoose");
-const categorie =require("./scategorie.js");
-const ProjectSchema = new mongoose.Schema({
-  title: { type: String, required: true },
-  photo :{
-
-    type: String,
-
-    required: false
-
-},
-  description: { type: String, required: true },
- // client: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true }, //client is removed as demanded from hec's admin
-  status: { type: String, enum: ["En cours", "Terminé"], default: "en cours" }, //, "Annulé" have been removed car client doesn't exist 
-                                                                                // could be added when needed
-  //createdAt: { type: Date, default: Date.now },
-
-  scategorieID: {type:mongoose.Schema.Types.ObjectId,
-    ref:Scategorie}
-});
-
-module.exports = mongoose.model("Project", ProjectSchema);
-
-
-const mongoose = require("mongoose");
-const Scategorie = require("./scategorie.js");
-const categorie = require("./categorie.js");
-
-const ProjectSchema = new mongoose.Schema({
-  
-  title: { type: String, required: true },
-  photo: { type: String },
-  description: { type: String, required: true },
-  status: { type: String, enum: ["En cours", "Terminé"], default: "en cours" },
-
-  scategorieID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "scategorie" 
-  },
-
-  categorieID: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "categorie" 
-  }
-});
-
-module.exports = mongoose.model("Project", ProjectSchema);
-*/

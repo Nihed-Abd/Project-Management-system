@@ -18,7 +18,7 @@ const User = require('../models/user');
 // Create a new project
 router.post('/', async (req, res) => {
     try {
-        const { title, picture, description, status, categoryId, userId } = req.body;
+        const { title, pictures, description, status, categoryId, userId, location } = req.body;
 
         // Verify the category exists
         const category = await Category.findById(categoryId);
@@ -35,11 +35,12 @@ router.post('/', async (req, res) => {
         // Create the project
         const newProject = new Project({
             title,
-            picture,
+            pictures: pictures || [], // Array of image URLs
             description,
             status,
             categoryId,
             userId,
+            location, // Add location data if provided
             creationDate: new Date(),
             LastEditDate: new Date()
         });
@@ -106,15 +107,24 @@ router.get('/:id', async (req, res) => {
 // Update a project by ID
 router.put('/:id', async (req, res) => {
     try {
-        const { title, picture, description, status, categoryId } = req.body;
+        const { title, pictures, description, status, categoryId, location } = req.body;
         
         // Prepare update object
         const updateData = {
             title,
-            picture,
             description,
             status,
             LastEditDate: new Date()
+        };
+        
+        // Only update pictures if provided
+        if (pictures) {
+            updateData.pictures = pictures;
+        }
+        
+        // Only update location if provided
+        if (location) {
+            updateData.location = location;
         };
         
         // Only update categoryId if provided
@@ -206,6 +216,48 @@ router.get('/category/:categoryId', async (req, res) => {
     try {
         const projects = await Project.find({ categoryId: req.params.categoryId })
             .populate('userId', 'name email picture')
+            .sort({ creationDate: -1 });
+        
+        res.status(200).json({
+            success: true,
+            count: projects.length,
+            projects
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+// Search projects by user name, email or phone
+router.get('/search', async (req, res) => {
+    try {
+        const { query } = req.query;
+        
+        if (!query) {
+            return res.status(400).json({
+                success: false,
+                message: 'Search query is required'
+            });
+        }
+        
+        // Find users matching the search query
+        const users = await User.find({
+            $or: [
+                { name: { $regex: query, $options: 'i' } },
+                { email: { $regex: query, $options: 'i' } },
+                { phoneNumber: { $regex: query, $options: 'i' } }
+            ]
+        }).select('_id');
+        
+        const userIds = users.map(user => user._id);
+        
+        // Find projects associated with those users
+        const projects = await Project.find({ userId: { $in: userIds } })
+            .populate('categoryId', 'name')
+            .populate('userId', 'name email picture phoneNumber')
             .sort({ creationDate: -1 });
         
         res.status(200).json({

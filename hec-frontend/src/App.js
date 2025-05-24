@@ -11,6 +11,10 @@ import RegisterPage from './pages/auth/RegisterPage';
 
 // Admin Pages
 import DashboardPage from './pages/admin/DashboardPage';
+import ProjectsPage from './pages/admin/ProjectsPage';
+import ProjectDetailsPage from './pages/admin/ProjectDetailsPage';
+import AddProjectPage from './pages/admin/AddProjectPage';
+import EditProjectPage from './pages/admin/EditProjectPage';
 
 // Client Pages
 import HomePage from './pages/client/HomePage';
@@ -53,7 +57,10 @@ function App() {
           }>
             <Route index element={<Navigate to="/admin/dashboard" />} />
             <Route path="dashboard" element={<DashboardPage />} />
-            <Route path="projects" element={<div>Projects Admin Page</div>} />
+            <Route path="projects" element={<ProjectsPage />} />
+            <Route path="projects/:projectId" element={<ProjectDetailsPage />} />
+            <Route path="projects/add" element={<AddProjectPage />} />
+            <Route path="projects/edit/:projectId" element={<EditProjectPage />} />
             <Route path="meetings" element={<div>Meetings Page</div>} />
             <Route path="reclamations" element={<div>Reclamations Page</div>} />
             <Route path="users" element={<div>Users Page</div>} />
