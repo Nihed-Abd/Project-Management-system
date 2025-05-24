@@ -5,6 +5,7 @@ import { FiArrowLeft, FiEdit, FiTrash2, FiUser, FiMail, FiPhone, FiCalendar, FiC
 import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { Marker } from 'react-map-gl';
+import Swal from 'sweetalert2';
 
 const ProjectDetailsPage = () => {
   const { projectId } = useParams();
@@ -18,6 +19,55 @@ const ProjectDetailsPage = () => {
   useEffect(() => {
     fetchProjectDetails();
   }, [projectId]);
+
+  // Delete project function
+  const deleteProject = async () => {
+    try {
+      // Show confirmation dialog with SweetAlert2
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#EF4444',
+        cancelButtonColor: '#9CA3AF',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        focusCancel: true
+      });
+      
+      // If user confirmed, proceed with deletion
+      if (result.isConfirmed) {
+        const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`);
+        
+        if (response.data && response.data.success) {
+          // Show success message
+          await Swal.fire({
+            title: 'Deleted!',
+            text: 'Project has been deleted successfully.',
+            icon: 'success',
+            confirmButtonColor: '#3085d6'
+          });
+          
+          // Navigate back to projects list
+          navigate('/admin/projects');
+        } else {
+          throw new Error(response.data?.message || 'Failed to delete project');
+        }
+      }
+    } catch (err) {
+      console.error('Error deleting project:', err);
+      
+      // Show error message
+      Swal.fire({
+        title: 'Error!',
+        text: err.response?.data?.message || 'Failed to delete project',
+        icon: 'error',
+        confirmButtonColor: '#3085d6'
+      });
+    }
+  };
 
   const fetchProjectDetails = async () => {
     setLoading(true);
@@ -101,12 +151,7 @@ const ProjectDetailsPage = () => {
                     </Link>
                     <button 
                       className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-full transition-colors"
-                      onClick={() => {
-                        // Delete functionality can be added here
-                        if (window.confirm('Are you sure you want to delete this project?')) {
-                          // Delete project
-                        }
-                      }}
+                      onClick={deleteProject}
                     >
                       <FiTrash2 />
                     </button>
@@ -289,12 +334,7 @@ const ProjectDetailsPage = () => {
                     <FiEdit /> Edit Project
                   </Link>
                   <button
-                    onClick={() => {
-                      // Delete functionality can be added here
-                      if (window.confirm('Are you sure you want to delete this project?')) {
-                        // Delete project
-                      }
-                    }}
+                    onClick={deleteProject}
                     className="w-full flex items-center justify-center gap-2 bg-white hover:bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-md transition-colors"
                   >
                     <FiTrash2 /> Delete Project

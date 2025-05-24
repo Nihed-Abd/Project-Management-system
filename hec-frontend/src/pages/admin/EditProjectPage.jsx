@@ -5,6 +5,7 @@ import { FiSave, FiArrowLeft, FiUpload, FiX, FiMapPin, FiUser, FiSearch, FiPlus,
 import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { Marker } from 'react-map-gl';
+import Swal from 'sweetalert2';
 
 const EditProjectPage = () => {
   const { projectId } = useParams();
@@ -200,6 +201,55 @@ const EditProjectPage = () => {
     const newExistingImages = [...existingImages];
     newExistingImages.splice(index, 1);
     setExistingImages(newExistingImages);
+  };
+
+  // Delete project function
+  const deleteProject = async () => {
+    try {
+      // Show confirmation dialog with SweetAlert2
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: 'You won\'t be able to revert this!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#EF4444',
+        cancelButtonColor: '#9CA3AF',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        focusCancel: true
+      });
+      
+      // If user confirmed, proceed with deletion
+      if (result.isConfirmed) {
+        const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`);
+        
+        if (response.data && response.data.success) {
+          // Show success message
+          await Swal.fire({
+            title: 'Deleted!',
+            text: 'Project has been deleted successfully.',
+            icon: 'success',
+            confirmButtonColor: '#3085d6'
+          });
+          
+          // Navigate back to projects list
+          navigate('/admin/projects');
+        } else {
+          throw new Error(response.data?.message || 'Failed to delete project');
+        }
+      }
+    } catch (err) {
+      console.error('Error deleting project:', err);
+      
+      // Show error message
+      Swal.fire({
+        title: 'Error!',
+        text: err.response?.data?.message || 'Failed to delete project',
+        icon: 'error',
+        confirmButtonColor: '#3085d6'
+      });
+    }
   };
 
   // Handle map click to set marker position
@@ -709,22 +759,7 @@ const EditProjectPage = () => {
                   </p>
                   <button
                     type="button"
-                    onClick={() => {
-                      if (window.confirm('Are you sure you want to delete this project? This action cannot be undone.')) {
-                        // Delete logic would go here
-                        axios.delete(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`)
-                          .then(response => {
-                            if (response.data.success) {
-                              navigate('/admin/projects');
-                            } else {
-                              setError(response.data.message || 'Failed to delete project');
-                            }
-                          })
-                          .catch(err => {
-                            setError(err.response?.data?.message || 'An error occurred while deleting the project');
-                          });
-                      }
-                    }}
+                    onClick={deleteProject}
                     className="mt-2 px-3 py-1 bg-white border border-red-300 text-red-600 text-sm rounded hover:bg-red-50"
                   >
                     Delete Project
