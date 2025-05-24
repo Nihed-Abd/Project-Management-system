@@ -302,8 +302,8 @@ const ProjectsPage = () => {
             <p className="mb-8 max-w-2xl mx-auto">
               Our team of experienced professionals is ready to bring your electrical project to life with quality and expertise.
             </p>
-            <Link to="/contact" className="px-8 py-3 bg-white text-coquelicot font-medium rounded-md shadow hover:bg-gray-100 transition-colors inline-block">
-              Request a Quote
+            <Link to="/request-project" className="px-8 py-3 bg-white text-coquelicot font-medium rounded-md shadow hover:bg-gray-100 transition-colors inline-block">
+              Request a Project
             </Link>
           </div>
         </motion.div>

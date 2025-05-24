@@ -190,7 +190,7 @@ const ProjectDetailPage = () => {
               
               <div className="mt-6">
                 <Link 
-                  to="/contact" 
+                  to="/request-project" 
                   className="block w-full text-center bg-coquelicot hover:bg-coquelicot-600 text-white py-3 px-4 rounded-lg transition-colors"
                 >
                   Request Similar Project

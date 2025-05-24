@@ -137,11 +137,14 @@ const ClientLayout = () => {
                         <Link to="/profile" className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                           <FiUser className="mr-3 h-4 w-4" /> Profile
                         </Link>
-                        <Link to="/projects" className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                        <Link to="/user-projects" className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
                           <FiFolder className="mr-3 h-4 w-4" /> My Projects
                         </Link>
-                        <Link to="/meetings" className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
-                          <FiCalendar className="mr-3 h-4 w-4" /> Scheduled Meetings
+                        <Link to="/interviews" className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <FiCalendar className="mr-3 h-4 w-4" /> My Interviews
+                        </Link>
+                        <Link to="/reclamations" className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <FiMessageSquare className="mr-3 h-4 w-4" /> My Reclamations
                         </Link>
                         <button 
                           onClick={handleLogout}

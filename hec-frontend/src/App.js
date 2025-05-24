@@ -22,6 +22,7 @@ import HomePage from './pages/client/HomePage';
 import AboutPage from './pages/client/AboutPage';
 import FrontProjectsPage from './pages/client/ProjectsPage';
 import ProjectDetailPage from './pages/client/ProjectDetailPage';
+import RequestProjectPage from './pages/client/RequestProjectPage';
 import ContactPage from './pages/client/ContactPage';
 import UserProjectsPage from './pages/client/UserProjectsPage';
 import UserReclamationsPage from './pages/client/UserReclamationsPage';
@@ -79,6 +80,11 @@ function App() {
             <Route index element={<HomePage />} />
             <Route path="projects" element={<FrontProjectsPage />} />
             <Route path="projects/:projectId" element={<ProjectDetailPage />} />
+            <Route path="request-project" element={
+              <ProtectedRoute>
+                <RequestProjectPage />
+              </ProtectedRoute>
+            } />
             <Route path="profile" element={
               <ProtectedRoute>
                 <div>User Profile Page</div>

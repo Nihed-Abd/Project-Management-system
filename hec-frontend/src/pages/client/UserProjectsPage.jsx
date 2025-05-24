@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiSearch, FiFilter, FiCalendar, FiInfo, FiClock, FiMapPin } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiCalendar, FiInfo, FiClock, FiMapPin, FiGrid, FiList } from 'react-icons/fi';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -14,6 +14,9 @@ const UserProjectsPage = () => {
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [yearFilter, setYearFilter] = useState('');
+  const [monthFilter, setMonthFilter] = useState('');
+  const [viewMode, setViewMode] = useState('list'); // 'grid' or 'list'
   
   const statusOptions = [
     { value: '', label: 'All Statuses' },
@@ -30,10 +33,25 @@ const UserProjectsPage = () => {
     }
   }, [currentUser]);
 
-  // Filter projects when search query or status filter changes
+  // Get available years from projects for year filter
+  const [availableYears, setAvailableYears] = useState([]);
+  
+  useEffect(() => {
+    if (projects.length > 0) {
+      // Extract unique years from project creation dates
+      const years = [...new Set(projects.map(project => {
+        const date = new Date(project.creationDate || project.createdAt);
+        return date.getFullYear();
+      }))].sort((a, b) => b - a); // Sort descending
+      
+      setAvailableYears(years);
+    }
+  }, [projects]);
+  
+  // Filter projects when search query, status filter, or date filters change
   useEffect(() => {
     filterProjects();
-  }, [searchQuery, statusFilter, projects]);
+  }, [searchQuery, statusFilter, yearFilter, monthFilter, projects]);
 
   const fetchUserProjects = async () => {
     setLoading(true);
@@ -73,6 +91,22 @@ const UserProjectsPage = () => {
       filtered = filtered.filter(project => project.status === statusFilter);
     }
     
+    // Apply year filter
+    if (yearFilter) {
+      filtered = filtered.filter(project => {
+        const date = new Date(project.creationDate || project.createdAt);
+        return date.getFullYear() === parseInt(yearFilter);
+      });
+      
+      // Apply month filter (only if year is selected)
+      if (monthFilter) {
+        filtered = filtered.filter(project => {
+          const date = new Date(project.creationDate || project.createdAt);
+          return date.getMonth() === parseInt(monthFilter) - 1; // JavaScript months are 0-11
+        });
+      }
+    }
+    
     setFilteredProjects(filtered);
   };
 
@@ -84,6 +118,26 @@ const UserProjectsPage = () => {
   // Handle status filter change
   const handleStatusFilterChange = (e) => {
     setStatusFilter(e.target.value);
+  };
+  
+  // Handle year filter change
+  const handleYearFilterChange = (e) => {
+    const year = e.target.value;
+    setYearFilter(year);
+    // Reset month filter when year changes
+    if (year === '') {
+      setMonthFilter('');
+    }
+  };
+  
+  // Handle month filter change
+  const handleMonthFilterChange = (e) => {
+    setMonthFilter(e.target.value);
+  };
+  
+  // Toggle view mode between grid and list
+  const toggleViewMode = (mode) => {
+    setViewMode(mode);
   };
 
   // Animation variants
@@ -112,6 +166,17 @@ const UserProjectsPage = () => {
   const formatDate = (dateString) => {
     const options = { year: 'numeric', month: 'short', day: 'numeric' };
     return new Date(dateString).toLocaleDateString(undefined, options);
+  };
+
+  // Helper to get status class colors
+  const getStatusClass = (status) => {
+    switch(status) {
+      case 'Terminé': return 'bg-green-100 text-green-800';
+      case 'En cours': return 'bg-blue-100 text-blue-800';
+      case 'Demandé': return 'bg-amber-100 text-amber-800';
+      case 'Annulé': return 'bg-red-100 text-red-800';
+      default: return 'bg-gray-100 text-gray-800';
+    }
   };
 
   const renderContent = () => {
@@ -151,105 +216,179 @@ const UserProjectsPage = () => {
     if (filteredProjects.length === 0) {
       return (
         <div className="text-center py-20">
-          <p className="text-gray-600 mb-2">No projects found matching your criteria.</p>
-          {projects.length > 0 ? (
+          <p className="text-gray-600 mb-4">No projects found.</p>
+          {(searchQuery || statusFilter || yearFilter || monthFilter) && (
             <button 
               onClick={() => {
                 setSearchQuery('');
                 setStatusFilter('');
+                setYearFilter('');
+                setMonthFilter('');
               }}
-              className="text-coquelicot hover:underline"
+              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
             >
-              Clear filters
+              Clear Filters
             </button>
-          ) : (
-            <div className="mt-4">
-              <p className="text-gray-600 mb-4">You don't have any projects yet.</p>
-              <Link 
-                to="/contact"
-                className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
-              >
-                Request a Project
-              </Link>
-            </div>
           )}
         </div>
       );
     }
 
-    return (
-      <motion.div 
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
-        className="grid grid-cols-1 md:grid-cols-2 gap-6"
-      >
-        {filteredProjects.map((project) => (
+    // Project count display
+    const projectCountDisplay = (
+      <div className="mb-6 text-sm text-gray-500">
+        Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
+      </div>
+    );
+
+    // Render grid view
+    if (viewMode === 'grid') {
+      return (
+        <>
+          {projectCountDisplay}
+          
           <motion.div
-            key={project._id}
-            variants={itemVariants}
-            className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all border border-gray-100"
+            variants={containerVariants}
+            initial="hidden"
+            animate="visible"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6"
           >
-            <div className="relative h-48 overflow-hidden">
-              {project.pictures && project.pictures.length > 0 ? (
-                <img
-                  src={project.pictures[0]}
-                  alt={project.title}
-                  className="w-full h-full object-cover transition-transform hover:scale-105"
-                />
-              ) : (
-                <div className="w-full h-full flex items-center justify-center bg-gray-100">
-                  <span className="text-gray-400">No image available</span>
-                </div>
-              )}
-              <div className="absolute top-2 right-2">
-                <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                  project.status === 'Terminé' ? 'bg-green-100 text-green-800' :
-                  project.status === 'En cours' ? 'bg-blue-100 text-blue-800' :
-                  project.status === 'Demandé' ? 'bg-amber-100 text-amber-800' :
-                  'bg-red-100 text-red-800'
-                }`}>
-                  {project.status}
-                </span>
-              </div>
-            </div>
-            
-            <div className="p-4">
-              <h3 className="text-lg font-semibold text-gray-800 mb-2">{project.title}</h3>
-              <p className="text-gray-600 text-sm mb-4 line-clamp-2">
-                {project.description || 'No description available'}
-              </p>
-              
-              <div className="space-y-2 mb-4">
-                <div className="flex items-center text-sm text-gray-500">
-                  <FiCalendar className="mr-2 h-4 w-4" />
-                  <span>Created: {formatDate(project.createdAt)}</span>
-                </div>
-                {project.location && project.location.type === 'Point' && (
-                  <div className="flex items-center text-sm text-gray-500">
-                    <FiMapPin className="mr-2 h-4 w-4" />
-                    <span>Location specified</span>
+            {filteredProjects.map((project) => (
+              <motion.div
+                key={project._id}
+                variants={itemVariants}
+                className="bg-white rounded-lg overflow-hidden shadow-sm border border-gray-100 hover:shadow-md transition-all h-full flex flex-col"
+                whileHover={{ y: -5 }}
+              >
+                <div className="relative h-48 overflow-hidden">
+                  {project.pictures && project.pictures.length > 0 ? (
+                    <img 
+                      src={project.pictures[0]} 
+                      alt={project.title} 
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-gray-100 flex items-center justify-center">
+                      <span className="text-gray-400">No image available</span>
+                    </div>
+                  )}
+                  <div className="absolute top-2 right-2">
+                    <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${getStatusClass(project.status)}`}>
+                      {project.status}
+                    </span>
                   </div>
-                )}
-                <div className="flex items-center text-sm text-gray-500">
-                  <FiClock className="mr-2 h-4 w-4" />
-                  <span>Last update: {formatDate(project.updatedAt || project.createdAt)}</span>
+                </div>
+                
+                <div className="p-4 flex-grow flex flex-col">
+                  <h3 className="text-lg font-semibold text-gray-800 mb-2">{project.title}</h3>
+                  <p className="text-gray-600 text-sm mb-3 flex-grow">
+                    {project.description ? (
+                      project.description.length > 120 
+                        ? `${project.description.substring(0, 120)}...` 
+                        : project.description
+                    ) : 'No description available'}
+                  </p>
+                  
+                  <div className="flex items-center text-xs text-gray-500 mt-auto mb-3">
+                    <FiCalendar className="mr-1 h-3 w-3" />
+                    <span>{formatDate(project.creationDate || project.createdAt)}</span>
+                  </div>
+                  
+                  <Link 
+                    to={`/projects/${project._id}`}
+                    className="w-full text-center px-3 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors inline-block"
+                  >
+                    View Details
+                  </Link>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+        </>
+      );
+    }
+
+    // Render list view
+    return (
+      <>
+        {projectCountDisplay}
+        
+        <motion.div
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+          className="space-y-4"
+        >
+          {filteredProjects.map((project) => (
+            <motion.div
+              key={project._id}
+              variants={itemVariants}
+              className="bg-white p-6 rounded-lg shadow-sm border border-gray-100 hover:shadow-md transition-all"
+            >
+              <div className="flex flex-col md:flex-row gap-6">
+                <div className="w-full md:w-1/4">
+                  {project.pictures && project.pictures.length > 0 ? (
+                    <img 
+                      src={project.pictures[0]} 
+                      alt={project.title} 
+                      className="w-full h-48 object-cover rounded-md"
+                    />
+                  ) : (
+                    <div className="w-full h-48 bg-gray-100 rounded-md flex items-center justify-center">
+                      <span className="text-gray-400">No image available</span>
+                    </div>
+                  )}
+                </div>
+                
+                <div className="flex-1">
+                  <div className="flex justify-between items-start">
+                    <h3 className="text-xl font-semibold text-gray-800 mb-2">{project.title}</h3>
+                    <span className={`px-3 py-1 rounded-full text-xs font-medium ${getStatusClass(project.status)}`}>
+                      {project.status}
+                    </span>
+                  </div>
+                  
+                  <p className="text-gray-600 mb-4">
+                    {project.description ? (
+                      project.description.length > 200 
+                        ? `${project.description.substring(0, 200)}...` 
+                        : project.description
+                    ) : 'No description available'}
+                  </p>
+                  
+                  <div className="flex flex-wrap gap-4 mb-4">
+                    <div className="flex items-center text-sm text-gray-500">
+                      <FiCalendar className="mr-2 h-4 w-4" />
+                      <span>Created: {formatDate(project.creationDate || project.createdAt)}</span>
+                    </div>
+                    
+                    {project.location && project.location.type === 'Point' && (
+                      <div className="flex items-center text-sm text-gray-500">
+                        <FiMapPin className="mr-2 h-4 w-4" />
+                        <span>Location specified</span>
+                      </div>
+                    )}
+                    <div className="flex items-center text-sm text-gray-500">
+                      <FiClock className="mr-2 h-4 w-4" />
+                      <span>Last update: {formatDate(project.LastEditDate || project.updatedAt || project.createdAt)}</span>
+                    </div>
+                  </div>
+                  
+                  <div className="flex justify-end">
+                    <Link 
+                      to={`/projects/${project._id}`}
+                      className="inline-flex items-center px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
+                    >
+                      <FiInfo className="mr-2 h-4 w-4" />
+                      View Details
+                    </Link>
+                  </div>
                 </div>
               </div>
-              
-              <div className="flex justify-end">
-                <Link 
-                  to={`/projects/${project._id}`}
-                  className="inline-flex items-center px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
-                >
-                  <FiInfo className="mr-2 h-4 w-4" />
-                  View Details
-                </Link>
-              </div>
-            </div>
-          </motion.div>
-        ))}
-      </motion.div>
+            </motion.div>
+          ))}
+        </motion.div>
+      </>
     );
   };
 
@@ -276,34 +415,100 @@ const UserProjectsPage = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mb-8"
         >
-          <div className="flex flex-col md:flex-row gap-4 bg-gray-50 p-4 rounded-lg">
-            <div className="flex-grow">
-              <div className="relative">
-                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <input
-                  type="text"
-                  placeholder="Search projects..."
-                  value={searchQuery}
-                  onChange={handleSearchChange}
-                  className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500"
-                />
+          <div className="flex flex-col gap-4 bg-gray-50 p-4 rounded-lg">
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="flex-grow">
+                <div className="relative">
+                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <input
+                    type="text"
+                    placeholder="Search projects..."
+                    value={searchQuery}
+                    onChange={handleSearchChange}
+                    className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500"
+                  />
+                </div>
+              </div>
+              
+              <div className="w-full md:w-64">
+                <div className="relative">
+                  <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <select
+                    value={statusFilter}
+                    onChange={handleStatusFilterChange}
+                    className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500 appearance-none bg-white"
+                  >
+                    {statusOptions.map(option => (
+                      <option key={option.value} value={option.value}>
+                        {option.label}
+                      </option>
+                    ))}
+                  </select>
+                </div>
               </div>
             </div>
             
-            <div className="w-full md:w-64">
-              <div className="relative">
-                <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
-                <select
-                  value={statusFilter}
-                  onChange={handleStatusFilterChange}
-                  className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500 appearance-none bg-white"
+            <div className="flex flex-col md:flex-row gap-4">
+              <div className="w-full md:w-1/2">
+                <div className="relative">
+                  <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <select
+                    value={yearFilter}
+                    onChange={handleYearFilterChange}
+                    className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500 appearance-none bg-white"
+                  >
+                    <option value="">All Years</option>
+                    {availableYears.map(year => (
+                      <option key={year} value={year}>{year}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+              
+              <div className="w-full md:w-1/2">
+                <div className="relative">
+                  <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <select
+                    value={monthFilter}
+                    onChange={handleMonthFilterChange}
+                    disabled={!yearFilter}
+                    className={`w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500 appearance-none bg-white ${!yearFilter ? 'opacity-50 cursor-not-allowed' : ''}`}
+                  >
+                    <option value="">All Months</option>
+                    <option value="1">January</option>
+                    <option value="2">February</option>
+                    <option value="3">March</option>
+                    <option value="4">April</option>
+                    <option value="5">May</option>
+                    <option value="6">June</option>
+                    <option value="7">July</option>
+                    <option value="8">August</option>
+                    <option value="9">September</option>
+                    <option value="10">October</option>
+                    <option value="11">November</option>
+                    <option value="12">December</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            
+            {/* View Mode Toggle */}
+            <div className="flex justify-end">
+              <div className="flex items-center space-x-2 bg-white border border-gray-200 rounded-md p-1">
+                <button
+                  onClick={() => toggleViewMode('grid')}
+                  className={`p-2 rounded ${viewMode === 'grid' ? 'bg-coquelicot text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+                  title="Grid View"
                 >
-                  {statusOptions.map(option => (
-                    <option key={option.value} value={option.value}>
-                      {option.label}
-                    </option>
-                  ))}
-                </select>
+                  <FiGrid className="h-5 w-5" />
+                </button>
+                <button
+                  onClick={() => toggleViewMode('list')}
+                  className={`p-2 rounded ${viewMode === 'list' ? 'bg-coquelicot text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+                  title="List View"
+                >
+                  <FiList className="h-5 w-5" />
+                </button>
               </div>
             </div>
           </div>
@@ -323,7 +528,7 @@ const UserProjectsPage = () => {
           className="mt-16 text-center"
         >
           <Link 
-            to="/contact"
+            to="/request-project"
             className="inline-flex items-center px-6 py-3 bg-coquelicot text-white rounded-md shadow-md hover:bg-coquelicot-600 transition-colors"
           >
             Request a New Project

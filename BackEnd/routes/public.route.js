@@ -27,32 +27,6 @@ router.get('/projects', async (req, res) => {
     }
 });
 
-// Get a single project by ID
-router.get('/projects/:projectId', async (req, res) => {
-    try {
-        const project = await Project.findById(req.params.projectId)
-            .populate('categoryId', 'name')
-            .populate('userId', 'name email picture');
-
-        if (!project) {
-            return res.status(404).json({ 
-                success: false,
-                message: 'Project not found' 
-            });
-        }
-
-        res.status(200).json({
-            success: true,
-            project
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-});
-
 // Get public projects by category
 router.get('/projects/category/:categoryId', async (req, res) => {
     try {
@@ -71,6 +45,32 @@ router.get('/projects/category/:categoryId', async (req, res) => {
             success: true,
             count: projects.length,
             projects
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
+// Get a single project by ID
+router.get('/projects/:projectId', async (req, res) => {
+    try {
+        const project = await Project.findById(req.params.projectId)
+            .populate('categoryId', 'name')
+            .populate('userId', 'name email picture');
+
+        if (!project) {
+            return res.status(404).json({ 
+                success: false,
+                message: 'Project not found' 
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            project
         });
     } catch (error) {
         res.status(500).json({
