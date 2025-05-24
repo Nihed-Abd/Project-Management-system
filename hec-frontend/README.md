@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# HEC - Hammemi Electricity Concept
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+A full-stack application for Hammemi Electricity Concept, featuring both an admin dashboard and a client-facing website.
 
 ## Available Scripts
 
@@ -68,3 +68,25 @@ This section has moved here: [https://facebook.github.io/create-react-app/docs/d
 ### `npm run build` fails to minify
 
 This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+npm uninstall tailwindcss postcss autoprefixer
+npm install -D tailwindcss@3.3.3 postcss@8.4.27 autoprefixer@10.4.14
