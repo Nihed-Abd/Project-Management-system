@@ -4,6 +4,27 @@ import { motion } from 'framer-motion';
 import { FiSearch, FiPlus, FiFilter, FiEye, FiEdit, FiTrash2, FiUser, FiCalendar, FiTag, FiClock } from 'react-icons/fi';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import Swal from 'sweetalert2';
+
+// Add global styles for SweetAlert buttons when component loads
+const sweetAlertStyles = document.createElement('style');
+sweetAlertStyles.innerHTML = `
+  .swal2-styled.swal2-confirm {
+    background-color: #EF4444 !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    padding: 10px 24px !important;
+    border-radius: 8px !important;
+  }
+  .swal2-styled.swal2-cancel {
+    background-color: #64748B !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    padding: 10px 24px !important;
+    border-radius: 8px !important;
+  }
+`;
+document.head.appendChild(sweetAlertStyles);
 
 const ProjectsPage = () => {
   const [projects, setProjects] = useState([]);
@@ -12,6 +33,9 @@ const ProjectsPage = () => {
   const [error, setError] = useState('');
   const [searchQuery, setSearchQuery] = useState('');
   const [statusFilter, setStatusFilter] = useState('');
+  const [yearFilter, setYearFilter] = useState('');
+  const [monthFilter, setMonthFilter] = useState('');
+  const [availableYears, setAvailableYears] = useState([]);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
@@ -20,20 +44,55 @@ const ProjectsPage = () => {
     fetchProjects();
   }, []);
 
-  // Apply filters when search query or status filter changes
+  // Extract available years from projects when they load
+  useEffect(() => {
+    if (projects.length > 0) {
+      const years = new Set();
+      projects.forEach(project => {
+        if (project.creationDate) {
+          const year = new Date(project.creationDate).getFullYear();
+          years.add(year);
+        }
+      });
+      // Sort years in descending order (newest first)
+      setAvailableYears(Array.from(years).sort((a, b) => b - a));
+    }
+  }, [projects]);
+
+  // Apply filters when search query, status filter, or date filters change
   useEffect(() => {
     if (searchQuery) {
       // If search query exists, use the backend search endpoint
       searchProjects(searchQuery);
     } else {
-      // Otherwise apply local status filter to all projects
+      // Otherwise apply local filters to all projects
       let filtered = [...projects];
+      
+      // Apply status filter if selected
       if (statusFilter) {
         filtered = filtered.filter(project => project.status === statusFilter);
       }
+      
+      // Apply year filter if selected
+      if (yearFilter) {
+        filtered = filtered.filter(project => {
+          const projectDate = new Date(project.creationDate);
+          return projectDate.getFullYear() === parseInt(yearFilter);
+        });
+      }
+      
+      // Apply month filter if both year and month are selected
+      if (yearFilter && monthFilter) {
+        filtered = filtered.filter(project => {
+          const projectDate = new Date(project.creationDate);
+          return projectDate.getFullYear() === parseInt(yearFilter) && 
+                 projectDate.getMonth() === parseInt(monthFilter) - 1; // JavaScript months are 0-indexed
+        });
+      }
+      
       setFilteredProjects(filtered);
     }
-  }, [searchQuery, statusFilter, projects]);
+  }, [searchQuery, statusFilter, yearFilter, monthFilter, projects]);
 
   // Fetch all projects from the API
   const fetchProjects = async () => {
@@ -99,10 +158,81 @@ const ProjectsPage = () => {
   const handleStatusFilterChange = (e) => {
     setStatusFilter(e.target.value);
   };
+  
+  // Handle year filter change
+  const handleYearFilterChange = (e) => {
+    setYearFilter(e.target.value);
+    // Reset month filter when year changes
+    if (!e.target.value) {
+      setMonthFilter('');
+    }
+  };
+  
+  // Handle month filter change
+  const handleMonthFilterChange = (e) => {
+    setMonthFilter(e.target.value);
+  };
+  
+  // Get month name from number
+  const getMonthName = (monthNumber) => {
+    const date = new Date();
+    date.setMonth(monthNumber - 1);
+    return date.toLocaleString('en-US', { month: 'long' });
+  };
 
   // View project details
   const viewProjectDetails = (projectId) => {
     navigate(`/admin/projects/${projectId}`);
+  };
+  
+  // Delete project function
+  const deleteProject = async (projectId, projectTitle) => {
+    try {
+      // Show confirmation dialog with SweetAlert2
+      const result = await Swal.fire({
+        title: 'Are you sure?',
+        text: `You are about to delete the project "${projectTitle}". This action cannot be undone!`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#EF4444',
+        cancelButtonColor: '#64748B',
+        confirmButtonText: 'Yes, delete it!',
+        cancelButtonText: 'Cancel',
+        reverseButtons: true,
+        focusCancel: true,
+        buttonsStyling: true
+      });
+      
+      // If user confirmed, proceed with deletion
+      if (result.isConfirmed) {
+        const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`);
+        
+        if (response.data && response.data.success) {
+          // Show success message
+          await Swal.fire({
+            title: 'Deleted!',
+            text: 'Project has been deleted successfully.',
+            icon: 'success',
+            confirmButtonColor: '#10B981'
+          });
+          
+          // Refresh project list
+          fetchProjects();
+        } else {
+          throw new Error(response.data?.message || 'Failed to delete project');
+        }
+      }
+    } catch (err) {
+      console.error('Error deleting project:', err);
+      
+      // Show error message
+      Swal.fire({
+        title: 'Error!',
+        text: err.response?.data?.message || 'Failed to delete project',
+        icon: 'error',
+        confirmButtonColor: '#3B82F6'
+      });
+    }
   };
 
   // Format date to readable format
@@ -156,21 +286,59 @@ const ProjectsPage = () => {
               className="block w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
             />
           </div>
-          <div className="relative w-full md:w-48">
-            <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-              <FiFilter className="text-gray-400" />
+          <div className="flex space-x-2">
+            {/* Status filter */}
+            <div className="relative">
+              <select
+                className="bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={statusFilter}
+                onChange={handleStatusFilterChange}
+              >
+                <option value="">All Statuses</option>
+                <option value="Demandé">Demandé</option>
+                <option value="En cours">En cours</option>
+                <option value="Terminé">Terminé</option>
+                <option value="Annulé">Annulé</option>
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <FiFilter />
+              </div>
             </div>
-            <select
-              value={statusFilter}
-              onChange={handleStatusFilterChange}
-              className="block w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 appearance-none"
-            >
-              <option value="">All Statuses</option>
-              <option value="Demandé">Demandé</option>
-              <option value="Accepteé">Accepteé</option>
-              <option value="En cours">En cours</option>
-              <option value="terminé">Terminé</option>
-            </select>
+            
+            {/* Year filter */}
+            <div className="relative">
+              <select
+                className="bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={yearFilter}
+                onChange={handleYearFilterChange}
+              >
+                <option value="">All Years</option>
+                {availableYears.map(year => (
+                  <option key={year} value={year}>{year}</option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <FiCalendar />
+              </div>
+            </div>
+            
+            {/* Month filter - only enabled if year is selected */}
+            <div className="relative">
+              <select
+                className={`bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${!yearFilter ? 'opacity-50 cursor-not-allowed' : ''}`}
+                value={monthFilter}
+                onChange={handleMonthFilterChange}
+                disabled={!yearFilter}
+              >
+                <option value="">All Months</option>
+                {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
+                  <option key={month} value={month}>{getMonthName(month)}</option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <FiClock />
+              </div>
+            </div>
           </div>
         </div>
 
@@ -277,29 +445,29 @@ const ProjectsPage = () => {
                     <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
                       <div className="flex justify-end space-x-2" onClick={(e) => e.stopPropagation()}>
                         <button 
-                          className="text-blue-600 hover:text-blue-900"
+                          className="text-blue-600 hover:text-blue-900 p-2 hover:bg-blue-50 rounded-full transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
                             viewProjectDetails(project._id);
                           }}
                         >
-                          <FiEye />
+                          <FiEye className="text-xl" />
                         </button>
                         <Link 
                           to={`/admin/projects/edit/${project._id}`}
-                          className="text-amber-600 hover:text-amber-900"
+                          className="text-amber-600 hover:text-amber-900 p-2 hover:bg-amber-50 rounded-full transition-colors"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <FiEdit />
+                          <FiEdit className="text-xl" />
                         </Link>
                         <button 
-                          className="text-red-600 hover:text-red-900"
+                          className="text-red-600 hover:text-red-900 p-2 hover:bg-red-50 rounded-full transition-colors"
                           onClick={(e) => {
                             e.stopPropagation();
-                            // Delete functionality can be added here
+                            deleteProject(project._id, project.title);
                           }}
                         >
-                          <FiTrash2 />
+                          <FiTrash2 className="text-xl" />
                         </button>
                       </div>
                     </td>

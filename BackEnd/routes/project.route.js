@@ -78,6 +78,48 @@ router.get('/', async (req, res) => {
     }
 });
 
+// Search projects by user name, email or phone
+router.get('/search', async (req, res) => {
+    try {
+        const { query } = req.query;
+        
+        if (!query) {
+            return res.status(400).json({
+                success: false,
+                message: 'Search query is required'
+            });
+        }
+        
+        // Find users matching the search query
+        const users = await User.find({
+            $or: [
+                { name: { $regex: query, $options: 'i' } },
+                { email: { $regex: query, $options: 'i' } },
+                { phoneNumber: { $regex: query, $options: 'i' } }
+            ]
+        }).select('_id');
+        
+        const userIds = users.map(user => user._id);
+        
+        // Find projects associated with those users
+        const projects = await Project.find({ userId: { $in: userIds } })
+            .populate('categoryId', 'name')
+            .populate('userId', 'name email picture phoneNumber')
+            .sort({ creationDate: -1 });
+        
+        res.status(200).json({
+            success: true,
+            count: projects.length,
+            projects
+        });
+    } catch (error) {
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
+    }
+});
+
 // Get a project by ID
 router.get('/:id', async (req, res) => {
     try {
@@ -231,47 +273,7 @@ router.get('/category/:categoryId', async (req, res) => {
     }
 });
 
-// Search projects by user name, email or phone
-router.get('/search', async (req, res) => {
-    try {
-        const { query } = req.query;
-        
-        if (!query) {
-            return res.status(400).json({
-                success: false,
-                message: 'Search query is required'
-            });
-        }
-        
-        // Find users matching the search query
-        const users = await User.find({
-            $or: [
-                { name: { $regex: query, $options: 'i' } },
-                { email: { $regex: query, $options: 'i' } },
-                { phoneNumber: { $regex: query, $options: 'i' } }
-            ]
-        }).select('_id');
-        
-        const userIds = users.map(user => user._id);
-        
-        // Find projects associated with those users
-        const projects = await Project.find({ userId: { $in: userIds } })
-            .populate('categoryId', 'name')
-            .populate('userId', 'name email picture phoneNumber')
-            .sort({ creationDate: -1 });
-        
-        res.status(200).json({
-            success: true,
-            count: projects.length,
-            projects
-        });
-    } catch (error) {
-        res.status(500).json({
-            success: false,
-            message: error.message
-        });
-    }
-});
+
 
 // Get projects by status
 router.get('/status/:status', async (req, res) => {

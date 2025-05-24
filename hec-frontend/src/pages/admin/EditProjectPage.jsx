@@ -7,6 +7,26 @@ import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { Marker } from 'react-map-gl';
 import Swal from 'sweetalert2';
 
+// Add global styles for SweetAlert buttons when component loads
+const sweetAlertStyles = document.createElement('style');
+sweetAlertStyles.innerHTML = `
+  .swal2-styled.swal2-confirm {
+    background-color: #EF4444 !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    padding: 10px 24px !important;
+    border-radius: 8px !important;
+  }
+  .swal2-styled.swal2-cancel {
+    background-color: #64748B !important;
+    color: white !important;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1) !important;
+    padding: 10px 24px !important;
+    border-radius: 8px !important;
+  }
+`;
+document.head.appendChild(sweetAlertStyles);
+
 const EditProjectPage = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
@@ -213,11 +233,12 @@ const EditProjectPage = () => {
         icon: 'warning',
         showCancelButton: true,
         confirmButtonColor: '#EF4444',
-        cancelButtonColor: '#9CA3AF',
+        cancelButtonColor: '#64748B',
         confirmButtonText: 'Yes, delete it!',
         cancelButtonText: 'Cancel',
         reverseButtons: true,
-        focusCancel: true
+        focusCancel: true,
+        buttonsStyling: true
       });
       
       // If user confirmed, proceed with deletion
@@ -230,7 +251,7 @@ const EditProjectPage = () => {
             title: 'Deleted!',
             text: 'Project has been deleted successfully.',
             icon: 'success',
-            confirmButtonColor: '#3085d6'
+            confirmButtonColor: '#10B981'
           });
           
           // Navigate back to projects list
@@ -247,7 +268,7 @@ const EditProjectPage = () => {
         title: 'Error!',
         text: err.response?.data?.message || 'Failed to delete project',
         icon: 'error',
-        confirmButtonColor: '#3085d6'
+        confirmButtonColor: '#3B82F6'
       });
     }
   };

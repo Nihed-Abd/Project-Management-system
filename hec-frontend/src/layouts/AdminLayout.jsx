@@ -26,7 +26,6 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       <div className="flex h-20 items-center justify-between px-6 border-b border-gray-200">
         <div className="flex items-center">
           <img src="/logo.png" alt="HEC Logo" className="h-10 w-10" />
-          <h1 className="ml-2 text-xl font-bold text-coquelicot-500">HEC</h1>
         </div>
         <button className="block md:hidden" onClick={toggleSidebar}>
           <FiX className="h-6 w-6" />
