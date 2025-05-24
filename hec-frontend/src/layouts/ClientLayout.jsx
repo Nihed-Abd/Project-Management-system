@@ -1,12 +1,17 @@
-import React, { useState, useEffect } from 'react';
-import { Outlet, Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from 'react';
+import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiX } from 'react-icons/fi';
+import { FiMenu, FiX, FiUser, FiLogOut, FiCalendar, FiFolder } from 'react-icons/fi';
+import { useAuth } from '../context/AuthContext';
 
 const ClientLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isProfileOpen, setIsProfileOpen] = useState(false);
   const location = useLocation();
+  const navigate = useNavigate();
+  const { currentUser, logout } = useAuth();
+  const profileRef = useRef(null);
 
   const navItems = [
     { name: 'Home', path: '/' },
@@ -31,7 +36,25 @@ const ClientLayout = () => {
   useEffect(() => {
     // Close mobile menu when route changes
     setIsMenuOpen(false);
+    setIsProfileOpen(false);
   }, [location.pathname]);
+  
+  // Close dropdown when clicking outside
+  useEffect(() => {
+    const handleClickOutside = (event) => {
+      if (profileRef.current && !profileRef.current.contains(event.target)) {
+        setIsProfileOpen(false);
+      }
+    };
+    
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  }, []);
+  
+  const handleLogout = () => {
+    logout();
+    navigate('/login');
+  };
 
   return (
     <div className="flex min-h-screen flex-col bg-isabelline-800">
@@ -86,20 +109,67 @@ const ClientLayout = () => {
               </ul>
             </nav>
 
-            {/* Auth Buttons */}
+            {/* Auth Buttons or User Profile */}
             <div className="hidden items-center space-x-4 md:flex">
-              <Link
-                to="/login"
-                className="rounded-md px-4 py-2 text-sm font-medium text-coquelicot transition-colors hover:bg-coquelicot hover:text-white"
-              >
-                Login
-              </Link>
-              <Link
-                to="/register"
-                className="rounded-md bg-coquelicot px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-coquelicot-600"
-              >
-                Sign Up
-              </Link>
+              {currentUser ? (
+                <div className="relative" ref={profileRef}>
+                  <button
+                    onClick={() => setIsProfileOpen(!isProfileOpen)}
+                    className="flex items-center space-x-2 rounded-md px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-100"
+                  >
+                    <img 
+                      src={currentUser.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=fe3201&color=fff`} 
+                      alt={currentUser.name} 
+                      className="h-8 w-8 rounded-full"
+                    />
+                    <span>{currentUser.name}</span>
+                  </button>
+                  
+                  {/* Profile Dropdown */}
+                  <AnimatePresence>
+                    {isProfileOpen && (
+                      <motion.div 
+                        initial={{ opacity: 0, y: 10 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        exit={{ opacity: 0, y: 10 }}
+                        transition={{ duration: 0.2 }}
+                        className="absolute right-0 mt-2 w-48 rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5"
+                      >
+                        <Link to="/profile" className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <FiUser className="mr-3 h-4 w-4" /> Profile
+                        </Link>
+                        <Link to="/projects" className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <FiFolder className="mr-3 h-4 w-4" /> My Projects
+                        </Link>
+                        <Link to="/meetings" className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100">
+                          <FiCalendar className="mr-3 h-4 w-4" /> Scheduled Meetings
+                        </Link>
+                        <button 
+                          onClick={handleLogout}
+                          className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                        >
+                          <FiLogOut className="mr-3 h-4 w-4" /> Logout
+                        </button>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </div>
+              ) : (
+                <>
+                  <Link
+                    to="/login"
+                    className="rounded-md px-4 py-2 text-sm font-medium text-coquelicot transition-colors hover:bg-coquelicot hover:text-white"
+                  >
+                    Login
+                  </Link>
+                  <Link
+                    to="/register"
+                    className="rounded-md bg-coquelicot px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-coquelicot-600"
+                  >
+                    Sign Up
+                  </Link>
+                </>
+              )}
             </div>
 
             {/* Mobile Menu Button */}
@@ -139,18 +209,40 @@ const ClientLayout = () => {
                     </li>
                   ))}
                   <li className="mt-6 flex flex-col space-y-2">
-                    <Link
-                      to="/login"
-                      className="rounded-md px-4 py-2 text-center text-coquelicot transition-colors hover:bg-coquelicot-100"
-                    >
-                      Login
-                    </Link>
-                    <Link
-                      to="/register"
-                      className="rounded-md bg-coquelicot px-4 py-2 text-center text-white transition-colors hover:bg-coquelicot-600"
-                    >
-                      Sign Up
-                    </Link>
+                    {currentUser ? (
+                      <>
+                        <Link to="/profile" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
+                          <FiUser className="mr-3 h-4 w-4" /> Profile
+                        </Link>
+                        <Link to="/projects" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
+                          <FiFolder className="mr-3 h-4 w-4" /> My Projects
+                        </Link>
+                        <Link to="/meetings" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
+                          <FiCalendar className="mr-3 h-4 w-4" /> Scheduled Meetings
+                        </Link>
+                        <button 
+                          onClick={handleLogout}
+                          className="flex w-full items-center rounded-md px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
+                        >
+                          <FiLogOut className="mr-3 h-4 w-4" /> Logout
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <Link
+                          to="/login"
+                          className="rounded-md px-4 py-2 text-center text-coquelicot transition-colors hover:bg-coquelicot-100"
+                        >
+                          Login
+                        </Link>
+                        <Link
+                          to="/register"
+                          className="rounded-md bg-coquelicot px-4 py-2 text-center text-white transition-colors hover:bg-coquelicot-600"
+                        >
+                          Sign Up
+                        </Link>
+                      </>
+                    )}
                   </li>
                 </ul>
               </div>

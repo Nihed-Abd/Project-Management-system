@@ -11,7 +11,7 @@ const RegisterPage = () => {
     password: '',
     confirmPassword: '',
     phoneNumber: '',
-    role: 'client' // Default role is client
+    role: 'user' // Default role is user
   });
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);

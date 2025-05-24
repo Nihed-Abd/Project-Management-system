@@ -5,9 +5,16 @@ const ProjectSchema = new mongoose.Schema({
     type: String, 
     required: true 
   },
-  picture: { 
-    type: String,
-    default: ''
+  images: { 
+    type: [String],
+    default: []
+  },
+  location: {
+    type: {
+      lat: { type: Number },
+      lng: { type: Number }
+    },
+    default: null
   },
   description: { 
     type: String, 

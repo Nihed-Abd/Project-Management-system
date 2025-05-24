@@ -28,6 +28,7 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
   }
   
   if (requireAdmin && !isAdmin) {
+    // Redirect non-admin users to the home page
     return <Navigate to="/" />;
   }
   

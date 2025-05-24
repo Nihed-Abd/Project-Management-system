@@ -1,11 +1,8 @@
 import React, { createContext, useState, useEffect, useContext } from 'react';
-import axios from 'axios';
+import apiClient from '../utils/api';
 
 // Create the auth context
 export const AuthContext = createContext();
-
-// Define the base URL for API requests
-const API_URL = 'http://localhost:5000/api';
 
 export const AuthProvider = ({ children }) => {
   const [currentUser, setCurrentUser] = useState(null);
@@ -13,14 +10,8 @@ export const AuthProvider = ({ children }) => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Set up axios with authentication token
-  useEffect(() => {
-    if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-    } else {
-      delete axios.defaults.headers.common['Authorization'];
-    }
-  }, [token]);
+  // Our apiClient already handles token in interceptors
+  // so we don't need to manually set headers here
 
   // Check if user is already logged in
   useEffect(() => {
@@ -28,7 +19,7 @@ export const AuthProvider = ({ children }) => {
       if (token) {
         try {
           setLoading(true);
-          const res = await axios.get(`${API_URL}/users/me`);
+          const res = await apiClient.get('/auth/me');
           setCurrentUser(res.data);
           setLoading(false);
         } catch (err) {
@@ -52,7 +43,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await axios.post(`${API_URL}/users/register`, userData);
+      const res = await apiClient.post('/auth/register', userData);
       setToken(res.data.token);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('userRole', res.data.user.role);
@@ -72,7 +63,7 @@ export const AuthProvider = ({ children }) => {
     try {
       setLoading(true);
       setError(null);
-      const res = await axios.post(`${API_URL}/users/login`, { email, password });
+      const res = await apiClient.post('/auth/login', { email, password });
       setToken(res.data.token);
       localStorage.setItem('token', res.data.token);
       localStorage.setItem('userRole', res.data.user.role);
@@ -105,7 +96,7 @@ export const AuthProvider = ({ children }) => {
         register,
         login,
         logout,
-        isAdmin: currentUser?.role === 'admin',
+        isAdmin: currentUser?.role === 'admin', // Check if user has admin role
       }}
     >
       {children}
