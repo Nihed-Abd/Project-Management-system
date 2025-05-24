@@ -14,6 +14,7 @@ const categoryRouter = require("./routes/categorie.route");
 const reclamationRouter = require("./routes/reclamation.route");
 const interviewRouter = require("./routes/interview.route");
 const uploadRouter = require("./routes/upload.route"); // Add upload router
+const publicRouter = require("./routes/public.route"); // Public routes without auth
 
 // Middleware globaux
 // Configure CORS for frontend communication
@@ -45,6 +46,7 @@ app.use("/api/categories", categoryRouter);
 app.use("/api/reclamations", reclamationRouter);
 app.use("/api/interviews", interviewRouter);
 app.use("/api/upload", uploadRouter); // Register upload routes
+app.use("/api/public", publicRouter); // Register public routes without auth
 
 // Route test
 app.get("/", (req, res) => {

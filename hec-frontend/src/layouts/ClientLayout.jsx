@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
-import { FiMenu, FiX, FiUser, FiLogOut, FiCalendar, FiFolder } from 'react-icons/fi';
+import { FiMenu, FiX, FiUser, FiLogOut, FiCalendar, FiFolder, FiMessageSquare } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 
 const ClientLayout = () => {
@@ -17,7 +17,7 @@ const ClientLayout = () => {
     { name: 'Home', path: '/' },
     { name: 'Projects', path: '/projects' },
     { name: 'About Us', path: '/about' },
-    { name: 'Help Center', path: '/help' },
+    { name: 'Contact', path: '/contact' },
   ];
 
   useEffect(() => {
@@ -57,11 +57,11 @@ const ClientLayout = () => {
   };
 
   return (
-    <div className="flex min-h-screen flex-col bg-isabelline-800">
+    <div className="flex min-h-screen flex-col bg-white">
       {/* Navigation */}
       <header
         className={`fixed top-0 z-50 w-full transition-all duration-300 ${
-          isScrolled ? 'bg-timberwolf-400 shadow-md' : 'bg-transparent'
+          isScrolled ? 'bg-white shadow-md' : 'bg-white bg-opacity-90'
         }`}
       >
         <div className="container mx-auto px-4">
@@ -77,7 +77,6 @@ const ClientLayout = () => {
                   e.target.src = 'https://via.placeholder.com/40x40?text=HEC';
                 }}
               />
-              <span className="ml-2 text-xl font-bold text-coquelicot">HEC</span>
             </Link>
 
             {/* Desktop Navigation */}
@@ -214,11 +213,14 @@ const ClientLayout = () => {
                         <Link to="/profile" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
                           <FiUser className="mr-3 h-4 w-4" /> Profile
                         </Link>
-                        <Link to="/projects" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
+                        <Link to="/user-projects" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
                           <FiFolder className="mr-3 h-4 w-4" /> My Projects
                         </Link>
-                        <Link to="/meetings" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          <FiCalendar className="mr-3 h-4 w-4" /> Scheduled Meetings
+                        <Link to="/interviews" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
+                          <FiCalendar className="mr-3 h-4 w-4" /> My Interviews
+                        </Link>
+                        <Link to="/reclamations" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
+                          <FiMessageSquare className="mr-3 h-4 w-4" /> My Reclamations
                         </Link>
                         <button 
                           onClick={handleLogout}
@@ -257,21 +259,21 @@ const ClientLayout = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-timberwolf-300 py-8">
+      <footer className="bg-gray-50 py-8 border-t border-gray-100">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
             <div>
-              <h3 className="mb-4 text-lg font-bold text-silver-100">HEC</h3>
-              <p className="text-sm text-silver-200">
+              <h3 className="mb-4 text-lg font-bold text-gray-800">HEC</h3>
+              <p className="text-sm text-gray-600">
                 Hammemi Electricity Concept provides quality electrical services and solutions for all your needs.
               </p>
             </div>
             <div>
-              <h3 className="mb-4 text-lg font-bold text-silver-100">Quick Links</h3>
+              <h3 className="mb-4 text-lg font-bold text-gray-800">Quick Links</h3>
               <ul className="space-y-2 text-sm">
                 {navItems.map((item) => (
                   <li key={item.name}>
-                    <Link to={item.path} className="text-silver-200 hover:text-coquelicot">
+                    <Link to={item.path} className="text-gray-600 hover:text-coquelicot">
                       {item.name}
                     </Link>
                   </li>
@@ -279,29 +281,29 @@ const ClientLayout = () => {
               </ul>
             </div>
             <div>
-              <h3 className="mb-4 text-lg font-bold text-silver-100">Contact</h3>
-              <ul className="space-y-2 text-sm text-silver-200">
+              <h3 className="mb-4 text-lg font-bold text-gray-800">Contact</h3>
+              <ul className="space-y-2 text-sm text-gray-600">
                 <li>Email: contact@hec.com</li>
                 <li>Phone: +123 456 7890</li>
                 <li>Address: 123 Main St, City</li>
               </ul>
             </div>
             <div>
-              <h3 className="mb-4 text-lg font-bold text-silver-100">Follow Us</h3>
+              <h3 className="mb-4 text-lg font-bold text-gray-800">Follow Us</h3>
               <div className="flex space-x-4">
-                <a href="#" className="text-silver-200 hover:text-coquelicot">
+                <a href="#" className="text-gray-600 hover:text-coquelicot">
                   Facebook
                 </a>
-                <a href="#" className="text-silver-200 hover:text-coquelicot">
+                <a href="#" className="text-gray-600 hover:text-coquelicot">
                   Twitter
                 </a>
-                <a href="#" className="text-silver-200 hover:text-coquelicot">
+                <a href="#" className="text-gray-600 hover:text-coquelicot">
                   Instagram
                 </a>
               </div>
             </div>
           </div>
-          <div className="mt-8 border-t border-silver-300 pt-6 text-center text-sm text-silver-200">
+          <div className="mt-8 border-t border-gray-200 pt-6 text-center text-sm text-gray-600">
             <p>&copy; {new Date().getFullYear()} Hammemi Electricity Concept. All rights reserved.</p>
           </div>
         </div>

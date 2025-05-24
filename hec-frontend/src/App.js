@@ -19,6 +19,13 @@ import UsersPage from './pages/admin/UsersPage';
 
 // Client Pages
 import HomePage from './pages/client/HomePage';
+import AboutPage from './pages/client/AboutPage';
+import FrontProjectsPage from './pages/client/ProjectsPage';
+import ProjectDetailPage from './pages/client/ProjectDetailPage';
+import ContactPage from './pages/client/ContactPage';
+import UserProjectsPage from './pages/client/UserProjectsPage';
+import UserReclamationsPage from './pages/client/UserReclamationsPage';
+import UserInterviewsPage from './pages/client/UserInterviewsPage';
 
 // Auth protected route component
 const ProtectedRoute = ({ children, requireAdmin = false }) => {
@@ -70,23 +77,30 @@ function App() {
           {/* Client Routes */}
           <Route path="/" element={<ClientLayout />}>
             <Route index element={<HomePage />} />
-            <Route path="projects" element={
-              <ProtectedRoute>
-                <div>Projects Page</div>
-              </ProtectedRoute>
-            } />
+            <Route path="projects" element={<FrontProjectsPage />} />
+            <Route path="projects/:projectId" element={<ProjectDetailPage />} />
             <Route path="profile" element={
               <ProtectedRoute>
                 <div>User Profile Page</div>
               </ProtectedRoute>
             } />
-            <Route path="meetings" element={
+            <Route path="user-projects" element={
               <ProtectedRoute>
-                <div>User Meetings Page</div>
+                <UserProjectsPage />
               </ProtectedRoute>
             } />
-            <Route path="about" element={<div>About Us Page</div>} />
-            <Route path="help" element={<div>Help Center Page</div>} />
+            <Route path="reclamations" element={
+              <ProtectedRoute>
+                <UserReclamationsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="interviews" element={
+              <ProtectedRoute>
+                <UserInterviewsPage />
+              </ProtectedRoute>
+            } />
+            <Route path="about" element={<AboutPage />} />
+            <Route path="contact" element={<ContactPage />} />
           </Route>
         </Routes>
       </Router>
