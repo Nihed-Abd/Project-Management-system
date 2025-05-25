@@ -52,8 +52,12 @@ router.post('/single', upload.single('image'), (req, res) => {
       });
     }
     
-    // Create URL path for the uploaded file
-    const fileUrl = `/uploads/projects/${req.file.filename}`;
+    // Create full URL path for the uploaded file with server base URL
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://yourdomain.com' // Change this to your production domain
+      : 'http://localhost:5000';
+      
+    const fileUrl = `${baseUrl}/uploads/projects/${req.file.filename}`;
     
     res.status(200).json({
       success: true,
@@ -79,8 +83,12 @@ router.post('/multiple', upload.array('images', 10), (req, res) => {
       });
     }
     
-    // Create URL paths for all uploaded files
-    const fileUrls = req.files.map(file => `/uploads/projects/${file.filename}`);
+    // Create full URL paths for all uploaded files with server base URL
+    const baseUrl = process.env.NODE_ENV === 'production' 
+      ? 'https://yourdomain.com' // Change this to your production domain
+      : 'http://localhost:5000';
+      
+    const fileUrls = req.files.map(file => `${baseUrl}/uploads/projects/${file.filename}`);
     
     res.status(200).json({
       success: true,

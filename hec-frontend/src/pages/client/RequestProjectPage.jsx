@@ -183,13 +183,16 @@ const RequestProjectPage = () => {
         projectData
       );
       
-      if (response.data && response.data.success) {
+      if (response.data && (response.data.success || response.data.project)) {
         Swal.fire({
           icon: 'success',
           title: 'Project Requested',
           text: 'Your project request has been submitted successfully!',
+          confirmButtonText: 'View My Projects'
+        }).then((result) => {
+          // Always redirect to user projects page
+          navigate('/user-projects');
         });
-        navigate('/user-projects');
       } else {
         throw new Error('Failed to create project');
       }

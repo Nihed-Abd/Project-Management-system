@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiSearch, FiFilter, FiCalendar, FiInfo, FiClock, FiMapPin, FiGrid, FiList } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiCalendar, FiInfo, FiClock, FiMapPin, FiGrid, FiList, FiTrash2 } from 'react-icons/fi';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
@@ -140,6 +140,46 @@ const UserProjectsPage = () => {
     setViewMode(mode);
   };
 
+  // Handle project withdrawal (only for status 'Demandé')
+  const handleWithdrawProject = (projectId) => {
+    Swal.fire({
+      title: 'Withdraw Project Request?',
+      text: 'Are you sure you want to withdraw this project request? This action cannot be undone.',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#EF4444',
+      cancelButtonColor: '#6B7280',
+      confirmButtonText: 'Yes, withdraw it!',
+      cancelButtonText: 'Cancel'
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          const response = await axios.delete(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`);
+          
+          if (response.data && response.data.success) {
+            Swal.fire({
+              title: 'Withdrawn!',
+              text: 'Your project request has been withdrawn.',
+              icon: 'success',
+              confirmButtonColor: '#EF4444'
+            });
+            // Refresh project list
+            fetchUserProjects();
+          } else {
+            throw new Error('Failed to withdraw project request');
+          }
+        } catch (err) {
+          console.error('Error withdrawing project:', err);
+          Swal.fire({
+            title: 'Error',
+            text: err.response?.data?.message || 'Failed to withdraw project request. Please try again.',
+            icon: 'error'
+          });
+        }
+      }
+    });
+  };
+  
   // Animation variants
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -294,12 +334,27 @@ const UserProjectsPage = () => {
                     <span>{formatDate(project.creationDate || project.createdAt)}</span>
                   </div>
                   
-                  <Link 
-                    to={`/projects/${project._id}`}
-                    className="w-full text-center px-3 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors inline-block"
-                  >
-                    View Details
-                  </Link>
+                  <div className="flex space-x-2">
+                    <Link 
+                      to={`/projects/${project._id}`}
+                      className="flex-grow text-center px-3 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors inline-block"
+                    >
+                      View Details
+                    </Link>
+                    
+                    {project.status === 'Demandé' && (
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleWithdrawProject(project._id);
+                        }}
+                        className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors inline-flex items-center justify-center"
+                        title="Withdraw Request"
+                      >
+                        <FiTrash2 className="h-5 w-5" />
+                      </button>
+                    )}
+                  </div>
                 </div>
               </motion.div>
             ))}
@@ -374,7 +429,17 @@ const UserProjectsPage = () => {
                     </div>
                   </div>
                   
-                  <div className="flex justify-end">
+                  <div className="flex justify-end space-x-2">
+                    {project.status === 'Demandé' && (
+                      <button
+                        onClick={() => handleWithdrawProject(project._id)}
+                        className="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
+                        title="Withdraw Request"
+                      >
+                        <FiTrash2 className="mr-2 h-4 w-4" />
+                        Withdraw
+                      </button>
+                    )}
                     <Link 
                       to={`/projects/${project._id}`}
                       className="inline-flex items-center px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
