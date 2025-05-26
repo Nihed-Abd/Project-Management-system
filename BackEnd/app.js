@@ -17,6 +17,7 @@ const uploadRouter = require("./routes/upload.route"); // Add upload router
 const publicRouter = require("./routes/public.route"); // Public routes without auth
 const messageRouter = require("./routes/message.route"); // Contact messages router
 const responseRouter = require("./routes/response.route"); // Reclamation responses router
+const chatbotRouter = require("./routes/chatbot.route"); // Chatbot with Gemini AI
 
 // Middleware globaux
 // Configure CORS for frontend communication
@@ -51,6 +52,7 @@ app.use("/api/upload", uploadRouter); // Register upload routes
 app.use("/api/public", publicRouter); // Register public routes without auth
 app.use("/api/messages", messageRouter); // Register contact messages routes
 app.use("/api/responses", responseRouter); // Register reclamation responses routes
+app.use("/api/chatbot", chatbotRouter); // Register chatbot routes
 
 // Route test
 app.get("/", (req, res) => {

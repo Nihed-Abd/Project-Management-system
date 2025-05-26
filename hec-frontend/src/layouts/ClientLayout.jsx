@@ -3,6 +3,7 @@ import { Outlet, Link, useLocation, useNavigate } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX, FiUser, FiLogOut, FiCalendar, FiFolder, FiMessageSquare } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
+import ChatBot from '../components/ChatBot';
 
 const ClientLayout = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -262,6 +263,9 @@ const ClientLayout = () => {
       </main>
 
       {/* Footer */}
+      {/* ChatBot Component */}
+      <ChatBot />
+      
       <footer className="bg-gray-50 py-8 border-t border-gray-100">
         <div className="container mx-auto px-4">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
