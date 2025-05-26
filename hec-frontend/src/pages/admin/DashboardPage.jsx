@@ -154,11 +154,27 @@ const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#FF6B6B'
 const ProjectDistributionChart = ({ stats }) => {
   console.log('ProjectDistributionChart stats:', stats);
   
+  // Demo data - for visualization purposes when no real data is available
+  // Remove this in production
+  const demoData = {
+    pending: 1,
+    accepted: 1,
+    inProgress: 1,
+    completed: 1,
+    total: 4
+  };
+  
+  // Use either real stats or demo data
+  const useStats = stats.total > 0 && (stats.pending > 0 || stats.accepted > 0 || 
+                   stats.inProgress > 0 || stats.completed > 0) ? stats : demoData;
+  
+  console.log('Using project stats:', useStats);
+  
   const data = [
-    { name: 'Pending', value: stats.pending, color: COLORS[0] },
-    { name: 'Accepted', value: stats.accepted, color: COLORS[1] },
-    { name: 'In Progress', value: stats.inProgress, color: COLORS[2] },
-    { name: 'Completed', value: stats.completed, color: COLORS[3] }
+    { name: 'Pending', value: useStats.pending, color: COLORS[0] },
+    { name: 'Accepted', value: useStats.accepted, color: COLORS[1] },
+    { name: 'In Progress', value: useStats.inProgress, color: COLORS[2] },
+    { name: 'Completed', value: useStats.completed, color: COLORS[3] }
   ].filter(item => item.value > 0);
 
   return (
@@ -196,9 +212,19 @@ const ProjectDistributionChart = ({ stats }) => {
 
 // User Status Chart (Pie Chart)
 const UserStatusChart = ({ stats }) => {
+  // Demo data for when real data is missing
+  const demoData = {
+    active: 1,
+    inactive: 0,
+    total: 1
+  };
+  
+  // Use real data if available, otherwise use demo data
+  const useStats = stats.total > 0 ? stats : demoData;
+  
   const data = [
-    { name: 'Active', value: stats.active, color: COLORS[1] },
-    { name: 'Inactive', value: stats.inactive, color: COLORS[0] }
+    { name: 'Active', value: useStats.active, color: COLORS[1] },
+    { name: 'Inactive', value: useStats.inactive, color: COLORS[3] }
   ].filter(item => item.value > 0);
 
   return (
@@ -234,10 +260,22 @@ const UserStatusChart = ({ stats }) => {
 
 // Meeting Status Chart (Pie Chart)
 const MeetingStatusChart = ({ stats }) => {
+  // Demo data for when real data is missing
+  const demoData = {
+    pending: 1,
+    accepted: 1,
+    declined: 1,
+    total: 3
+  };
+  
+  // Use real data if available, otherwise use demo data
+  const useStats = stats.total > 0 && (stats.pending > 0 || stats.accepted > 0 || stats.declined > 0) ? 
+                  stats : demoData;
+  
   const data = [
-    { name: 'Pending', value: stats.pending, color: COLORS[0] },
-    { name: 'Accepted', value: stats.accepted, color: COLORS[1] },
-    { name: 'Declined', value: stats.declined, color: COLORS[3] }
+    { name: 'Pending', value: useStats.pending, color: COLORS[0] },
+    { name: 'Accepted', value: useStats.accepted, color: COLORS[1] },
+    { name: 'Declined', value: useStats.declined, color: COLORS[3] }
   ].filter(item => item.value > 0);
 
   return (
@@ -273,9 +311,20 @@ const MeetingStatusChart = ({ stats }) => {
 
 // Reclamation Status Chart (Pie Chart)
 const ReclamationStatusChart = ({ stats }) => {
+  // Demo data for when real data is missing
+  const demoData = {
+    pending: 2,
+    answered: 2,
+    total: 4
+  };
+  
+  // Use real data if available, otherwise use demo data
+  const useStats = stats.total > 0 && (stats.pending > 0 || stats.answered > 0) ? 
+                 stats : demoData;
+  
   const data = [
-    { name: 'Pending', value: stats.pending, color: COLORS[0] },
-    { name: 'Answered', value: stats.answered, color: COLORS[1] }
+    { name: 'Pending', value: useStats.pending, color: COLORS[0] },
+    { name: 'Answered', value: useStats.answered, color: COLORS[1] }
   ].filter(item => item.value > 0);
 
   return (
@@ -312,23 +361,68 @@ const ReclamationStatusChart = ({ stats }) => {
 // Monthly Activity Chart (Bar Chart)
 const MonthlyActivityChart = ({ data = [] }) => {
   console.log('Monthly activity data:', data);
-  // Check if we have any non-zero data
-  const hasData = data.some(month => 
-    month.projects > 0 || month.meetings > 0 || 
-    month.reclamations > 0 || month.messages > 0
-  );
+  const [timeframe, setTimeframe] = useState('6months'); // Default to 6 months view
+  
+  // Use only the real data, no demo data
+  const availableData = data.length > 0 ? data : [];
+  
+  // Filter data based on the selected timeframe
+  const getFilteredData = () => {
+    if (availableData.length === 0) return [];
+    
+    switch(timeframe) {
+      case '3months':
+        return availableData.slice(-3); // Last 3 months
+      case 'currentYear':
+        const currentYear = moment().year();
+        return availableData.filter(item => {
+          // Extract year from the month name and current date
+          const monthDate = moment().month(item.name).year(currentYear);
+          return monthDate.year() === currentYear;
+        });
+      case 'lastYear':
+        const lastYear = moment().year() - 1;
+        return availableData.filter(item => {
+          // Extract year from the month name and current date
+          const monthDate = moment().month(item.name).year(lastYear);
+          return monthDate.year() === lastYear;
+        });
+      case '6months':
+      default:
+        return availableData;
+    }
+  };
+  
+  const filteredData = getFilteredData();
+  console.log('Filtered data:', filteredData);
+  
+  // Check if we have any real data to display
+  const hasData = filteredData.length > 0;
   
   return (
     <div className="h-80">
-      {data.length > 0 && hasData ? (
-        <ResponsiveContainer width="100%" height="100%">
+      <div className="flex justify-end mb-4">
+        <select 
+          className="p-2 border border-gray-300 rounded text-sm focus:outline-none focus:ring-2 focus:ring-orange-500" 
+          value={timeframe}
+          onChange={(e) => setTimeframe(e.target.value)}
+        >
+          <option value="3months">Last 3 Months</option>
+          <option value="6months">Last 6 Months</option>
+          <option value="currentYear">Current Year</option>
+          <option value="lastYear">Previous Year</option>
+        </select>
+      </div>
+      
+      {hasData ? (
+        <ResponsiveContainer width="100%" height="90%">
           <BarChart
-            data={data}
+            data={filteredData}
             margin={{ top: 20, right: 30, left: 20, bottom: 5 }}
           >
             <CartesianGrid strokeDasharray="3 3" />
             <XAxis dataKey="name" />
-            <YAxis />
+            <YAxis allowDecimals={false} />
             <Tooltip />
             <Legend />
             <Bar dataKey="projects" name="Projects" fill={COLORS[0]} />
@@ -339,7 +433,7 @@ const MonthlyActivityChart = ({ data = [] }) => {
         </ResponsiveContainer>
       ) : (
         <div className="flex items-center justify-center h-full text-gray-500">
-          {data.length > 0 ? 'No activity recorded in recent months' : 'No monthly data available'}
+          No activity data available for the selected timeframe
         </div>
       )}
     </div>
@@ -559,14 +653,16 @@ const DashboardPage = () => {
         
         setRecentActivities(sortedActivities);
         
-        // Generate monthly statistics for the past 6 months
-        const last6Months = [];
+        // Generate monthly statistics for the past 12 months
+        const last12Months = [];
         try {
-          for (let i = 5; i >= 0; i--) {
+          for (let i = 11; i >= 0; i--) {
             const month = moment().subtract(i, 'months');
             const monthName = month.format('MMM');
             const monthStart = month.startOf('month');
             const monthEnd = month.endOf('month');
+            
+            console.log(`Processing month: ${monthName} (${monthStart.format('YYYY-MM-DD')} to ${monthEnd.format('YYYY-MM-DD')})`);
             
             // Count projects in this month
             let projectsInMonth = 0;
@@ -575,6 +671,8 @@ const DashboardPage = () => {
               const dateField = p.creationDate || p.dateCreation || p.LastEditDate;
               if (dateField) {
                 const createdAt = moment(dateField);
+                console.log(`Project date: ${createdAt.format('YYYY-MM-DD')}`, 
+                  createdAt.isBetween(monthStart, monthEnd, null, '[]') ? 'IN RANGE' : 'outside range');
                 if (createdAt.isBetween(monthStart, monthEnd, null, '[]')) {
                   projectsInMonth++;
                 }
@@ -614,9 +712,13 @@ const DashboardPage = () => {
               }
             });
             
+            // No random data - only use real values
+            // Keep all values as they are, even if they're zero
+            
             // Add data for this month
-            last6Months.push({
+            last12Months.push({
               name: monthName,
+              yearMonth: month.format('YYYY-MM'), // Add year-month for sorting/filtering
               projects: projectsInMonth,
               meetings: meetingsInMonth,
               reclamations: reclamationsInMonth,
@@ -624,12 +726,16 @@ const DashboardPage = () => {
             });
           }
           
-          console.log('Monthly stats generated:', last6Months);
+          console.log('Monthly stats generated:', last12Months);
         } catch (error) {
           console.error('Error generating monthly stats:', error);
+          // Provide an empty array if there's an error
+          setMonthlyStats([]);
+          return;
         }
         
-        setMonthlyStats(last6Months);
+        // Get the most recent 6 months by default for the initial view
+        setMonthlyStats(last12Months.slice(-6));
       } catch (error) {
         console.error('Error fetching dashboard data:', error);
       } finally {
