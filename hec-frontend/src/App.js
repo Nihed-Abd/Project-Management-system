@@ -17,6 +17,7 @@ import AddProjectPage from './pages/admin/AddProjectPage';
 import EditProjectPage from './pages/admin/EditProjectPage';
 import UsersPage from './pages/admin/UsersPage';
 import MeetingsPage from './pages/admin/MeetingsPage';
+import ReclamationsPage from './pages/admin/ReclamationsPage';
 
 // Client Pages
 import HomePage from './pages/client/HomePage';
@@ -73,7 +74,7 @@ function App() {
             <Route path="projects/add" element={<AddProjectPage />} />
             <Route path="projects/edit/:projectId" element={<EditProjectPage />} />
             <Route path="meetings" element={<MeetingsPage />} />
-            <Route path="reclamations" element={<div>Reclamations Page</div>} />
+            <Route path="reclamations" element={<ReclamationsPage />} />
             <Route path="users" element={<UsersPage />} />
           </Route>
 
