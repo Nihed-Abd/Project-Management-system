@@ -114,7 +114,7 @@ const ProjectDetailsPage = () => {
 
   // Format date to readable format
   const formatDate = (dateString) => {
-    const options = { year: 'numeric', month: 'long', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    const options = { year: 'numeric', month: 'long', day: 'numeric' };
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
@@ -124,13 +124,52 @@ const ProjectDetailsPage = () => {
       case 'Demandé':
         return 'bg-blue-100 text-blue-800';
       case 'Accepteé':
-        return 'bg-green-100 text-green-800';
+        return 'bg-yellow-100 text-yellow-800';
       case 'En cours':
-        return 'bg-amber-100 text-amber-800';
+        return 'bg-purple-100 text-purple-800';
       case 'terminé':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-green-100 text-green-800';
       default:
         return 'bg-gray-100 text-gray-800';
+    }
+  };
+  
+  // Available project statuses
+  const projectStatuses = ["Demandé", "Accepteé", "En cours", "terminé"];
+  
+  // Change project status
+  const changeProjectStatus = async (newStatus) => {
+    try {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`, {
+        status: newStatus
+      });
+      
+      // Update local state
+      setProject(prev => ({
+        ...prev,
+        status: newStatus
+      }));
+      
+      // Show success toast
+      Swal.fire({
+        title: 'Status Updated',
+        text: `Project status changed to ${newStatus}`,
+        icon: 'success',
+        confirmButtonColor: '#10B981',
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+      });
+    } catch (error) {
+      console.error('Error updating project status:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to update project status',
+        icon: 'error',
+        confirmButtonColor: '#EF4444'
+      });
     }
   };
 
@@ -161,28 +200,96 @@ const ProjectDetailsPage = () => {
               className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
             >
               <div className="p-6">
-                <div className="flex justify-between items-start mb-4">
-                  <h1 className="text-2xl font-bold text-silver-100">{project.title}</h1>
-                  <div className="flex space-x-2">
-                    <Link 
-                      to={`/admin/projects/edit/${project._id}`}
-                      className="p-2 text-amber-600 hover:text-amber-800 hover:bg-amber-50 rounded-full transition-colors"
-                    >
-                      <FiEdit />
-                    </Link>
-                    <button 
-                      className="p-2 text-red-600 hover:text-red-800 hover:bg-red-50 rounded-full transition-colors"
-                      onClick={deleteProject}
-                    >
-                      <FiTrash2 />
-                    </button>
+                <h1 className="text-2xl font-bold text-silver-100 mb-4">{project.title}</h1>
+                
+                <div className="flex flex-wrap items-center gap-4 mb-4">
+                  <div className="flex items-center gap-2">
+                    <FiCalendar className="text-gray-400" />
+                    <span className="text-silver-200">Created on {formatDate(project.creationDate)}</span>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <FiClock className="text-gray-400" />
+                    <span className="text-silver-200">Last updated on {formatDate(project.LastEditDate)}</span>
                   </div>
                 </div>
 
-                <div className="mb-6">
-                  <span className={`px-3 py-1 inline-flex text-sm font-semibold rounded-full ${getStatusClass(project.status)}`}>
-                    {project.status}
-                  </span>
+                <div className="flex flex-wrap gap-4 mb-6">
+                  <div className="flex items-center gap-2">
+                    <div className="text-silver-200">Status:</div>
+                    <div className="relative inline-block">
+                      <button 
+                        type="button" 
+                        className={`inline-flex justify-between items-center rounded-full px-3 py-1.5 text-xs font-semibold ${getStatusClass(project.status)} hover:bg-opacity-90 focus:outline-none shadow-sm border border-white`}
+                        id="status-button"
+                        aria-expanded="true"
+                        aria-haspopup="true"
+                        onClick={() => {
+                          const dropdown = document.getElementById('status-dropdown');
+                          dropdown.classList.toggle('hidden');
+                        }}
+                      >
+                        <span className="flex items-center gap-1.5">
+                          <span className="inline-block w-2 h-2 rounded-full" style={{
+                            backgroundColor: project.status === 'Demandé' ? '#3B82F6' : 
+                                        project.status === 'Accepteé' ? '#F59E0B' : 
+                                        project.status === 'En cours' ? '#8B5CF6' : 
+                                        project.status === 'terminé' ? '#10B981' : '#9CA3AF'
+                          }}></span>
+                          {project.status}
+                        </span>
+                        <svg className="h-4 w-4 ml-1 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                        </svg>
+                      </button>
+                      
+                      <div 
+                        id="status-dropdown"
+                        className="absolute left-0 z-50 mt-1 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-200 focus:outline-none hidden overflow-hidden"
+                        role="menu" 
+                        aria-orientation="vertical" 
+                        aria-labelledby="status-button"
+                      >
+                        <div className="py-1" role="none">
+                          {projectStatuses.map(status => {
+                            const statusColor = status === 'Demandé' ? '#3B82F6' : 
+                                            status === 'Accepteé' ? '#F59E0B' : 
+                                            status === 'En cours' ? '#8B5CF6' : 
+                                            status === 'terminé' ? '#10B981' : '#9CA3AF';
+                            
+                            return (
+                              <button
+                                key={status}
+                                className={`w-full text-left flex items-center px-4 py-2 text-sm ${project.status === status ? 'bg-gray-50 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                                role="menuitem"
+                                onClick={() => {
+                                  if (project.status !== status) {
+                                    changeProjectStatus(status);
+                                  }
+                                  document.getElementById('status-dropdown').classList.add('hidden');
+                                }}
+                              >
+                                <span className="inline-block w-3 h-3 rounded-full mr-2" style={{ backgroundColor: statusColor }}></span>
+                                {status}
+                                {project.status === status && (
+                                  <svg className="ml-auto h-4 w-4 text-coquelicot" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                  </svg>
+                                )}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div className="flex items-center gap-2">
+                    <FiTag className="text-gray-400" />
+                    <span className="text-silver-200">
+                      Category: {project.categoryId?.name || 'Unknown'}
+                    </span>
+                  </div>
                 </div>
 
                 <div className="mb-6">
@@ -195,16 +302,17 @@ const ProjectDetailsPage = () => {
                           className="w-full h-full object-cover"
                         />
                       </div>
+                      
                       {project.pictures.length > 1 && (
-                        <div className="flex gap-2 overflow-x-auto pb-2">
-                          {project.pictures.map((img, index) => (
-                            <button 
+                        <div className="flex flex-wrap gap-2">
+                          {project.pictures.map((pic, index) => (
+                            <button
                               key={index}
-                              className={`h-16 w-16 rounded-md overflow-hidden border-2 flex-shrink-0 ${index === activeImage ? 'border-coquelicot' : 'border-transparent'}`}
                               onClick={() => setActiveImage(index)}
+                              className={`w-16 h-16 rounded-md overflow-hidden border-2 ${index === activeImage ? 'border-coquelicot' : 'border-transparent'}`}
                             >
                               <img 
-                                src={img} 
+                                src={pic} 
                                 alt={`Thumbnail ${index + 1}`} 
                                 className="w-full h-full object-cover"
                               />
@@ -214,7 +322,7 @@ const ProjectDetailsPage = () => {
                       )}
                     </>
                   ) : (
-                    <div className="bg-gray-100 h-60 rounded-lg flex items-center justify-center">
+                    <div className="bg-gray-100 rounded-lg h-60 flex items-center justify-center">
                       <p className="text-gray-500">No images available</p>
                     </div>
                   )}
@@ -225,59 +333,38 @@ const ProjectDetailsPage = () => {
                   <p className="text-silver-200 whitespace-pre-line">{project.description}</p>
                 </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-blue-50 text-blue-600 mr-3">
-                      <FiCalendar />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Created</p>
-                      <p className="font-medium">{formatDate(project.creationDate)}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-amber-50 text-amber-600 mr-3">
-                      <FiClock />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Last Updated</p>
-                      <p className="font-medium">{formatDate(project.LastEditDate)}</p>
-                    </div>
-                  </div>
-                  <div className="flex items-center">
-                    <div className="w-10 h-10 flex items-center justify-center rounded-full bg-green-50 text-green-600 mr-3">
-                      <FiTag />
-                    </div>
-                    <div>
-                      <p className="text-sm text-gray-500">Category</p>
-                      <p className="font-medium">{project.categoryId?.name || 'Unknown'}</p>
-                    </div>
-                  </div>
-                </div>
-
                 {project.location && project.location.coordinates && (
                   <div className="mb-6">
-                    <h2 className="text-lg font-semibold text-silver-100 mb-2 flex items-center">
-                      <FiMap className="mr-2" /> Project Location
-                    </h2>
-                    <div className="h-60 rounded-lg overflow-hidden">
-                      <Map
-                        initialViewState={{
-                          longitude: project.location.coordinates[0],
-                          latitude: project.location.coordinates[1],
-                          zoom: 13
-                        }}
-                        style={{ width: '100%', height: '100%' }}
-                        mapStyle="mapbox://styles/mapbox/streets-v11"
-                        mapboxAccessToken={mapboxToken}
-                        attributionControl={true}
-                      >
-                        <Marker
-                          longitude={project.location.coordinates[0]}
-                          latitude={project.location.coordinates[1]}
-                          color="#EF4444"
-                        />
-                      </Map>
+                    <h2 className="text-lg font-semibold text-silver-100 mb-2">Location</h2>
+                    <div className="h-64 rounded-lg overflow-hidden">
+                      {mapboxToken ? (
+                        <Map
+                          mapboxAccessToken={mapboxToken}
+                          initialViewState={{
+                            longitude: project.location.coordinates[0],
+                            latitude: project.location.coordinates[1],
+                            zoom: 14
+                          }}
+                          style={{ width: '100%', height: '100%' }}
+                          mapStyle="mapbox://styles/mapbox/streets-v11"
+                        >
+                          <Marker
+                            longitude={project.location.coordinates[0]}
+                            latitude={project.location.coordinates[1]}
+                            color="#fe3201"
+                          />
+                        </Map>
+                      ) : (
+                        <div className="bg-gray-100 h-full flex items-center justify-center">
+                          <p className="text-gray-500">Mapbox token not available</p>
+                        </div>
+                      )}
+                    </div>
+                    <div className="mt-2 flex items-center">
+                      <FiMap className="text-gray-400 mr-2" />
+                      <span className="text-silver-200">
+                        Coordinates: {project.location.coordinates[1]}, {project.location.coordinates[0]}
+                      </span>
                     </div>
                   </div>
                 )}

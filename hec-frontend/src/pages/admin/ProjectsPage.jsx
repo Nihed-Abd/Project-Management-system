@@ -241,21 +241,64 @@ const ProjectsPage = () => {
     return new Date(dateString).toLocaleDateString('en-US', options);
   };
 
+  // Change project status
+  const changeProjectStatus = async (projectId, newStatus, projectTitle) => {
+    try {
+      await axios.put(`${process.env.REACT_APP_API_URL}/api/projects/${projectId}`, {
+        status: newStatus
+      });
+      
+      // Update local state
+      const updatedProjects = projects.map(p => {
+        if (p._id === projectId) {
+          return { ...p, status: newStatus };
+        }
+        return p;
+      });
+      
+      setProjects(updatedProjects);
+      
+      // Show success toast
+      Swal.fire({
+        title: 'Status Updated',
+        text: `Project "${projectTitle}" status changed to ${newStatus}`,
+        icon: 'success',
+        confirmButtonColor: '#10B981',
+        toast: true,
+        position: 'bottom-end',
+        showConfirmButton: false,
+        timer: 3000,
+        timerProgressBar: true
+      });
+    } catch (error) {
+      console.error('Error updating project status:', error);
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to update project status',
+        icon: 'error',
+        confirmButtonColor: '#EF4444'
+      });
+    }
+  };
+
   // Get status class for styling
   const getStatusClass = (status) => {
     switch (status) {
       case 'Demandé':
         return 'bg-blue-100 text-blue-800';
       case 'Accepteé':
-        return 'bg-green-100 text-green-800';
+        return 'bg-yellow-100 text-yellow-800';
       case 'En cours':
-        return 'bg-amber-100 text-amber-800';
+        return 'bg-purple-100 text-purple-800';
       case 'terminé':
-        return 'bg-gray-100 text-gray-800';
+        return 'bg-green-100 text-green-800';
       default:
         return 'bg-gray-100 text-gray-800';
     }
   };
+  
+  // Available project statuses
+  const projectStatuses = ["Demandé", "Accepteé", "En cours", "terminé"];
 
   return (
     <div className="p-6">
@@ -432,9 +475,80 @@ const ProjectsPage = () => {
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <span className={`px-2 inline-flex text-xs leading-5 font-semibold rounded-full ${getStatusClass(project.status)}`}>
-                        {project.status}
-                      </span>
+                      <div className="relative inline-block text-left" onClick={(e) => e.stopPropagation()}>
+                        <button 
+                          type="button" 
+                          className={`inline-flex w-full justify-between items-center rounded-full px-3 py-1.5 text-xs font-semibold ${getStatusClass(project.status)} hover:bg-opacity-90 focus:outline-none shadow-sm border border-white`}
+                          id={`status-button-${project._id}`}
+                          aria-expanded="true"
+                          aria-haspopup="true"
+                          onClick={(e) => {
+                            e.stopPropagation();
+                            // Close all other open dropdowns first
+                            document.querySelectorAll('[id^="status-dropdown-"]').forEach(el => {
+                              if (el.id !== `status-dropdown-${project._id}`) {
+                                el.classList.add('hidden');
+                              }
+                            });
+                            // Toggle current dropdown
+                            const dropdown = document.getElementById(`status-dropdown-${project._id}`);
+                            dropdown.classList.toggle('hidden');
+                          }}
+                        >
+                          <span className="flex items-center gap-1.5">
+                            <span className="inline-block w-2 h-2 rounded-full" style={{
+                              backgroundColor: project.status === 'Demandé' ? '#3B82F6' : 
+                                            project.status === 'Accepteé' ? '#F59E0B' : 
+                                            project.status === 'En cours' ? '#8B5CF6' : 
+                                            project.status === 'terminé' ? '#10B981' : '#9CA3AF'
+                            }}></span>
+                            {project.status}
+                          </span>
+                          <svg className="h-4 w-4 ml-1 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+                          </svg>
+                        </button>
+                        
+                        <div 
+                          id={`status-dropdown-${project._id}`}
+                          className="absolute right-0 z-50 mt-1 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-200 focus:outline-none hidden overflow-hidden"
+                          role="menu" 
+                          aria-orientation="vertical" 
+                          aria-labelledby={`status-button-${project._id}`}
+                        >
+                          <div className="py-1" role="none">
+                            {projectStatuses.map(status => {
+                              const statusColor = status === 'Demandé' ? '#3B82F6' : 
+                                              status === 'Accepteé' ? '#F59E0B' : 
+                                              status === 'En cours' ? '#8B5CF6' : 
+                                              status === 'terminé' ? '#10B981' : '#9CA3AF';
+                              
+                              return (
+                                <button
+                                  key={status}
+                                  className={`w-full text-left flex items-center px-4 py-2 text-sm ${project.status === status ? 'bg-gray-50 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                                  role="menuitem"
+                                  onClick={(e) => {
+                                    e.stopPropagation();
+                                    if (project.status !== status) {
+                                      changeProjectStatus(project._id, status, project.title);
+                                    }
+                                    document.getElementById(`status-dropdown-${project._id}`).classList.add('hidden');
+                                  }}
+                                >
+                                  <span className="inline-block w-3 h-3 rounded-full mr-2" style={{ backgroundColor: statusColor }}></span>
+                                  {status}
+                                  {project.status === status && (
+                                    <svg className="ml-auto h-4 w-4 text-coquelicot" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M5 13l4 4L19 7" />
+                                    </svg>
+                                  )}
+                                </button>
+                              );
+                            })}
+                          </div>
+                        </div>
+                      </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
                       <span className="inline-flex items-center gap-1">
