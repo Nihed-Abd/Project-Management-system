@@ -6,8 +6,6 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { FiPlusCircle, FiCalendar, FiClock, FiUser, FiMessageSquare, FiCheckCircle, FiXCircle, FiEdit } from 'react-icons/fi';
-import DatePicker from 'react-datepicker';
-import "react-datepicker/dist/react-datepicker.css";
 
 // Setup the localizer for react-big-calendar
 const localizer = momentLocalizer(moment);
@@ -81,9 +79,9 @@ const MeetingsPage = () => {
     setFormData(prev => ({ ...prev, [name]: value }));
   };
 
-  // Handle date change from datepicker
-  const handleDateChange = (date) => {
-    setFormData(prev => ({ ...prev, date }));
+  // Handle date change from input
+  const handleDateChange = (e) => {
+    setFormData(prev => ({ ...prev, date: new Date(e.target.value) }));
   };
 
   // Reset form
@@ -284,27 +282,36 @@ const MeetingsPage = () => {
 
   // Calendar event styling
   const eventStyleGetter = (event) => {
-    let backgroundColor;
+    let backgroundColor, borderColor, textColor;
     
     switch (event.status) {
       case 'accepted':
-        backgroundColor = '#10b981'; // Green
+        backgroundColor = '#d1fae5'; // Green light bg
+        borderColor = '#10b981';     // Green border
+        textColor = '#047857';       // Green text
         break;
       case 'declined':
-        backgroundColor = '#ef4444'; // Red
+        backgroundColor = '#fee2e2'; // Red light bg
+        borderColor = '#ef4444';     // Red border
+        textColor = '#b91c1c';       // Red text
         break;
       default:
-        backgroundColor = '#f97316'; // Orange for pending
+        backgroundColor = '#ffedd5'; // Orange light bg
+        borderColor = '#f97316';     // Orange border
+        textColor = '#c2410c';       // Orange text
     }
     
     return {
       style: {
         backgroundColor,
+        borderLeft: `4px solid ${borderColor}`,
         borderRadius: '4px',
-        opacity: 0.9,
-        color: 'white',
-        border: '0px',
-        display: 'block'
+        opacity: 1,
+        color: textColor,
+        fontWeight: '500',
+        boxShadow: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+        display: 'block',
+        overflow: 'hidden'
       }
     };
   };
@@ -313,11 +320,11 @@ const MeetingsPage = () => {
   const renderStatusBadge = (status) => {
     switch (status) {
       case 'accepted':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800"><FiCheckCircle className="mr-1" /> Accepted</span>;
+        return <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200"><FiCheckCircle className="mr-1" /> Accepted</span>;
       case 'declined':
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800"><FiXCircle className="mr-1" /> Declined</span>;
+        return <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200"><FiXCircle className="mr-1" /> Declined</span>;
       default:
-        return <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-orange-100 text-orange-800"><FiClock className="mr-1" /> Pending</span>;
+        return <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200"><FiClock className="mr-1" /> Pending</span>;
     }
   };
 
@@ -336,21 +343,65 @@ const MeetingsPage = () => {
         </button>
       </div>
 
-      {/* Filters */}
-      <div className="mb-6 bg-white p-4 rounded-md shadow-sm">
-        <div className="flex flex-wrap gap-4">
-          <div>
-            <label className="block text-sm font-medium text-silver-200 mb-1">Filter by Status</label>
-            <select
-              className="border border-gray-300 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-transparent"
-              value={filteredStatus}
-              onChange={(e) => setFilteredStatus(e.target.value)}
-            >
-              <option value="all">All Statuses</option>
-              <option value="pending">Pending</option>
-              <option value="accepted">Accepted</option>
-              <option value="declined">Declined</option>
-            </select>
+      {/* Meeting Stats */}
+      <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
+        <div 
+          className={`bg-white p-4 rounded-md shadow-sm border-l-4 border-coquelicot cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'all' ? 'ring-2 ring-coquelicot ring-opacity-50' : ''}`}
+          onClick={() => setFilteredStatus('all')}
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-silver-200 text-sm">Total Meetings</p>
+              <p className="text-2xl font-bold text-silver-100">{meetings.length}</p>
+            </div>
+            <div className="bg-orange-100 p-3 rounded-full">
+              <FiCalendar className="text-coquelicot h-6 w-6" />
+            </div>
+          </div>
+        </div>
+        
+        <div 
+          className={`bg-white p-4 rounded-md shadow-sm border-l-4 border-orange-500 cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'pending' ? 'ring-2 ring-orange-500 ring-opacity-50' : ''}`}
+          onClick={() => setFilteredStatus('pending')}
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-silver-200 text-sm">Pending</p>
+              <p className="text-2xl font-bold text-silver-100">{meetings.filter(m => m.statusInterview === 'pending').length}</p>
+            </div>
+            <div className="bg-orange-100 p-3 rounded-full">
+              <FiClock className="text-orange-500 h-6 w-6" />
+            </div>
+          </div>
+        </div>
+        
+        <div 
+          className={`bg-white p-4 rounded-md shadow-sm border-l-4 border-green-500 cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'accepted' ? 'ring-2 ring-green-500 ring-opacity-50' : ''}`}
+          onClick={() => setFilteredStatus('accepted')}
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-silver-200 text-sm">Accepted</p>
+              <p className="text-2xl font-bold text-silver-100">{meetings.filter(m => m.statusInterview === 'accepted').length}</p>
+            </div>
+            <div className="bg-green-100 p-3 rounded-full">
+              <FiCheckCircle className="text-green-500 h-6 w-6" />
+            </div>
+          </div>
+        </div>
+        
+        <div 
+          className={`bg-white p-4 rounded-md shadow-sm border-l-4 border-red-500 cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'declined' ? 'ring-2 ring-red-500 ring-opacity-50' : ''}`}
+          onClick={() => setFilteredStatus('declined')}
+        >
+          <div className="flex justify-between items-center">
+            <div>
+              <p className="text-silver-200 text-sm">Declined</p>
+              <p className="text-2xl font-bold text-silver-100">{meetings.filter(m => m.statusInterview === 'declined').length}</p>
+            </div>
+            <div className="bg-red-100 p-3 rounded-full">
+              <FiXCircle className="text-red-500 h-6 w-6" />
+            </div>
           </div>
         </div>
       </div>
@@ -373,8 +424,27 @@ const MeetingsPage = () => {
               style={{ height: '100%' }}
               eventPropGetter={eventStyleGetter}
               onSelectEvent={(event) => openEditModal(event.resource)}
+              onSelectSlot={(slotInfo) => {
+                // Pre-fill the form with the selected slot date
+                resetForm();
+                setFormData(prev => ({ ...prev, date: slotInfo.start }));
+                setModalMode('create');
+                setShowModal(true);
+              }}
+              selectable
               popup
               views={['month', 'week', 'day', 'agenda']}
+              components={{
+                event: (props) => {
+                  const event = props.event;
+                  return (
+                    <div>
+                      <div className="font-medium">{event.title}</div>
+                      <div className="text-xs">{moment(event.start).format('h:mm A')}</div>
+                    </div>
+                  );
+                }
+              }}
             />
           )}
         </div>
@@ -404,7 +474,6 @@ const MeetingsPage = () => {
               </thead>
               <tbody className="bg-white divide-y divide-gray-200">
                 {meetings
-                  .filter(meeting => new Date(meeting.date) >= new Date())
                   .filter(meeting => filteredStatus === 'all' || meeting.statusInterview === filteredStatus)
                   .sort((a, b) => new Date(a.date) - new Date(b.date))
                   .map((meeting) => (
@@ -413,7 +482,7 @@ const MeetingsPage = () => {
                         <div className="flex items-center">
                           <div className="h-10 w-10 flex-shrink-0">
                             <img 
-                              className="h-10 w-10 rounded-full" 
+                              className="h-10 w-10 rounded-full object-cover border-2 border-gray-200" 
                               src={meeting.userId?.picture || `https://ui-avatars.com/api/?name=${meeting.userId?.name || 'User'}&background=random`} 
                               alt={meeting.userId?.name}
                             />
@@ -425,53 +494,76 @@ const MeetingsPage = () => {
                         </div>
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
-                        <div className="text-sm text-silver-100">{moment(meeting.date).format('MMMM D, YYYY')}</div>
-                        <div className="text-sm text-silver-200">{moment(meeting.date).format('h:mm A')}</div>
+                        <div className="flex items-center space-x-2">
+                          <div className="bg-gray-100 p-2 rounded-md">
+                            <FiCalendar className="text-coquelicot" />
+                          </div>
+                          <div>
+                            <div className="text-sm font-medium text-silver-100">{moment(meeting.date).format('MMMM D, YYYY')}</div>
+                            <div className="text-sm text-silver-200">{moment(meeting.date).format('h:mm A')}</div>
+                            <div className="text-xs text-gray-400">{moment(meeting.date).fromNow()}</div>
+                          </div>
+                        </div>
                       </td>
                       <td className="px-6 py-4">
-                        <div className="text-sm text-silver-100">{meeting.interviewGoal}</div>
+                        <div className="text-sm font-medium text-silver-100">{meeting.interviewGoal}</div>
                         {meeting.note && (
-                          <div className="text-sm text-silver-200 truncate max-w-xs">{meeting.note}</div>
+                          <div className="text-sm text-silver-200 mt-1 max-w-xs overflow-hidden text-ellipsis">
+                            <span className="inline-block bg-gray-100 px-2 py-0.5 rounded text-xs">Note:</span> {meeting.note}
+                          </div>
                         )}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap">
                         {renderStatusBadge(meeting.statusInterview)}
                       </td>
                       <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                        <div className="flex space-x-2">
+                        <div className="flex space-x-1">
                           <button 
-                            onClick={() => openEditModal(meeting)}
-                            className="text-blue-600 hover:text-blue-900"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              openEditModal(meeting);
+                            }}
+                            className="bg-blue-50 p-2 rounded-full text-blue-600 hover:bg-blue-100 transition-colors"
+                            title="Edit Meeting"
                           >
-                            <FiEdit className="h-5 w-5" />
+                            <FiEdit className="h-4 w-4" />
                           </button>
                           
                           {meeting.statusInterview !== 'accepted' && (
                             <button 
-                              onClick={() => changeMeetingStatus(meeting._id, 'accepted')}
-                              className="text-green-600 hover:text-green-900"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                changeMeetingStatus(meeting._id, 'accepted');
+                              }}
+                              className="bg-green-50 p-2 rounded-full text-green-600 hover:bg-green-100 transition-colors"
                               title="Accept Meeting"
                             >
-                              <FiCheckCircle className="h-5 w-5" />
+                              <FiCheckCircle className="h-4 w-4" />
                             </button>
                           )}
                           
                           {meeting.statusInterview !== 'declined' && (
                             <button 
-                              onClick={() => changeMeetingStatus(meeting._id, 'declined')}
-                              className="text-red-600 hover:text-red-900"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                changeMeetingStatus(meeting._id, 'declined');
+                              }}
+                              className="bg-red-50 p-2 rounded-full text-red-600 hover:bg-red-100 transition-colors"
                               title="Decline Meeting"
                             >
-                              <FiXCircle className="h-5 w-5" />
+                              <FiXCircle className="h-4 w-4" />
                             </button>
                           )}
                           
                           <button 
-                            onClick={() => deleteMeeting(meeting._id)}
-                            className="text-red-600 hover:text-red-900"
+                            onClick={(e) => {
+                              e.stopPropagation();
+                              deleteMeeting(meeting._id);
+                            }}
+                            className="bg-red-50 p-2 rounded-full text-red-600 hover:bg-red-100 transition-colors"
                             title="Delete Meeting"
                           >
-                            <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <svg xmlns="http://www.w3.org/2000/svg" className="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16" />
                             </svg>
                           </button>
@@ -485,20 +577,12 @@ const MeetingsPage = () => {
         )}
       </div>
 
-      {/* Meeting Create/Edit Modal */}
+      {/* Meeting Create/Edit Modal - Simplified without overlay */}
       {showModal && (
-        <div className="fixed inset-0 z-50 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div className="fixed inset-0 transition-opacity" aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
-
-            <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
-
-            <motion.div 
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full"
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+            <div 
+              className="bg-white rounded-lg text-left overflow-hidden shadow-xl w-full max-w-lg mx-auto"
+              style={{ maxHeight: '90vh', overflowY: 'auto' }}
             >
               <form onSubmit={handleSubmit}>
                 <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -527,14 +611,13 @@ const MeetingsPage = () => {
                         
                         <div>
                           <label htmlFor="date" className="block text-sm font-medium text-silver-200">Date and Time</label>
-                          <DatePicker
+                          <input
+                            type="datetime-local"
                             id="date"
-                            selected={formData.date}
+                            name="date"
+                            value={formData.date ? moment(formData.date).format('YYYY-MM-DDTHH:mm') : ''}
                             onChange={handleDateChange}
-                            showTimeSelect
-                            dateFormat="MMMM d, yyyy h:mm aa"
                             className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-coquelicot focus:border-coquelicot rounded-md"
-                            required
                           />
                         </div>
                         
