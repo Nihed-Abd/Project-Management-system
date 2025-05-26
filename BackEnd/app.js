@@ -18,6 +18,7 @@ const publicRouter = require("./routes/public.route"); // Public routes without 
 const messageRouter = require("./routes/message.route"); // Contact messages router
 const responseRouter = require("./routes/response.route"); // Reclamation responses router
 const chatbotRouter = require("./routes/chatbot.route"); // Chatbot with Gemini AI
+const mapRouter = require("./routes/map.route"); // Map with 3D building and project locations
 
 // Middleware globaux
 // Configure CORS for frontend communication
@@ -53,6 +54,7 @@ app.use("/api/public", publicRouter); // Register public routes without auth
 app.use("/api/messages", messageRouter); // Register contact messages routes
 app.use("/api/responses", responseRouter); // Register reclamation responses routes
 app.use("/api/chatbot", chatbotRouter); // Register chatbot routes
+app.use("/api/map", mapRouter); // Register map routes
 
 // Route test
 app.get("/", (req, res) => {

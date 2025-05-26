@@ -95,7 +95,7 @@ const RegisterPage = () => {
         className="w-full max-w-md space-y-8 rounded-xl bg-white p-10 shadow-xl"
       >
         <div className="text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-coquelicot">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full">
             <img
               src="/logo.png"
               alt="HEC Logo"

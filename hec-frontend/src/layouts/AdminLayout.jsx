@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
-import { FiMenu, FiX, FiLogOut, FiUser, FiChevronDown } from 'react-icons/fi';
+import { FiMenu, FiX, FiLogOut, FiUser, FiChevronDown, FiMapPin } from 'react-icons/fi';
 import { FaHome, FaProjectDiagram, FaUsers, FaCalendarAlt, FaExclamationTriangle } from 'react-icons/fa';
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -13,6 +13,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
   const menuItems = [
     { title: 'Dashboard', path: '/admin/dashboard', icon: <FaHome /> },
     { title: 'Projects', path: '/admin/projects', icon: <FaProjectDiagram /> },
+    { title: 'Projects Location', path: '/admin/map', icon: <FiMapPin /> },
     { title: 'Meetings', path: '/admin/meetings', icon: <FaCalendarAlt /> },
     { title: 'Reclamations', path: '/admin/reclamations', icon: <FaExclamationTriangle /> },
     { title: 'Users', path: '/admin/users', icon: <FaUsers /> },

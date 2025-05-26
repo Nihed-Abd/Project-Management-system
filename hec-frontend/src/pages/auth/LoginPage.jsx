@@ -72,7 +72,7 @@ const LoginPage = () => {
         className="w-full max-w-md space-y-8 rounded-xl bg-white p-10 shadow-xl"
       >
         <div className="text-center">
-          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-coquelicot">
+          <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full">
             <img
               src="/logo.png"
               alt="HEC Logo"
@@ -217,14 +217,7 @@ const LoginPage = () => {
           </div>
         </form>
 
-        <div className="mt-6">
-          <p className="text-center text-sm text-gray-600">
-            <span>Connect to your backend API at: </span>
-            <code className="rounded-md bg-gray-100 px-2 py-1 text-sm">
-              http://localhost:5000/api
-            </code>
-          </p>
-        </div>
+       
       </motion.div>
     </div>
   );
