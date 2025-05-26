@@ -229,40 +229,8 @@ const UserInterviewsPage = () => {
     }
   };
   
-  // Handle interview status change
-  const changeInterviewStatus = async (interviewId, newStatus) => {
-    try {
-      const response = await axios.put(
-        `http://localhost:5000/api/interviews/${interviewId}`,
-        { statusInterview: newStatus }
-      );
-      
-      if (response.data) {
-        const statusText = {
-          'accepted': 'accepted',
-          'declined': 'declined',
-          'pending': 'set to pending'
-        }[newStatus];
-        
-        Swal.fire({
-          title: 'Status Updated',
-          text: `Interview has been ${statusText} successfully`,
-          icon: 'success',
-          confirmButtonColor: '#10B981'
-        });
-        
-        fetchUserInterviews();
-      }
-    } catch (err) {
-      console.error('Error updating interview status:', err);
-      Swal.fire({
-        title: 'Error',
-        text: 'Failed to update interview status. Please try again.',
-        icon: 'error',
-        confirmButtonColor: '#EF4444'
-      });
-    }
-  };
+  // Status can only be changed by admin
+  // The changeInterviewStatus function has been removed as regular users shouldn't change interview status
   
   // Delete an interview
   const deleteInterview = async (interviewId) => {
@@ -642,7 +610,6 @@ const UserInterviewsPage = () => {
                                 style={{ backgroundColor: statusInfo.color }}
                               ></span>
                               <span>{statusInfo.label}</span>
-                              <span className="ml-1 text-xs text-gray-500">(Status can only be changed by admin)</span>
                             </>
                           );
                         })()}

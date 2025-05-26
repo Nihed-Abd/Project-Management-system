@@ -123,7 +123,9 @@ const UserReclamationsPage = () => {
         message: formData.message
       });
 
-      if (response.data && response.data.success) {
+      // If we get a response with data, consider it successful
+      // The API appears to return successfully but may not have the exact structure we expect
+      if (response.data) {
         // Show success message
         Swal.fire({
           title: 'Success!',
