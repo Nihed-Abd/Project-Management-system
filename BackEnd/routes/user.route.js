@@ -213,12 +213,21 @@ router.get('/:id', async (req, res) => {
 // ========= UPDATE USER =========
 router.put('/:id', async (req, res) => {
     try {
-        const { name, email, password, role, isActive } = req.body;
+        const { name, email, password, role, isActive, phoneNumber, picture, currentPassword } = req.body;
+
+        // First get the user to check if they exist
+        const user = await User.findById(req.params.id);
+        if (!user) {
+            return res.status(404).json({ success: false, message: "User not found" });
+        }
 
         const updatedFields = {};
         
+        // Update basic profile fields
         if (name !== undefined) updatedFields.name = name;
         if (email !== undefined) updatedFields.email = email;
+        if (phoneNumber !== undefined) updatedFields.phoneNumber = phoneNumber;
+        if (picture !== undefined) updatedFields.picture = picture;
         if (role !== undefined) {
             if (role !== 'user' && role !== 'admin') {
                 return res.status(400).json({ 
@@ -230,7 +239,26 @@ router.put('/:id', async (req, res) => {
         }
         if (isActive !== undefined) updatedFields.isActive = isActive;
 
+        // If password change is requested, verify current password first
         if (password) {
+            // If changing password, currentPassword must be provided
+            if (!currentPassword) {
+                return res.status(400).json({ 
+                    success: false, 
+                    message: "Current password is required to change password" 
+                });
+            }
+            
+            // Verify current password
+            const isMatch = await bcrypt.compare(currentPassword, user.password);
+            if (!isMatch) {
+                return res.status(401).json({ 
+                    success: false, 
+                    message: "Current password is incorrect" 
+                });
+            }
+            
+            // Hash and update the new password
             const salt = await bcrypt.genSalt(10);
             updatedFields.password = await bcrypt.hash(password, salt);
         }

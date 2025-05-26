@@ -12,8 +12,8 @@ const interviewSchema = mongoose.Schema({
     },
     statusInterview: {
         type: String,
-        enum: ["accepted", "declined"],
-        default: "accepted"
+        enum: ["pending" , "accepted", "declined"],
+        default: "pending"
     },
     interviewGoal: {
         type: String,

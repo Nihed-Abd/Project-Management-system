@@ -171,4 +171,93 @@ router.get('/users', async (req, res) => {
     }
 });
 
+// Get a user by ID
+router.get('/users/:id', async (req, res) => {
+    try {
+        const user = await User.findById(req.params.id).select('-password');
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        res.status(200).json({ success: true, user });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// Update user profile
+router.put('/users/:id', async (req, res) => {
+    try {
+        const { name, email, phoneNumber, picture } = req.body;
+        
+        // Check if email already exists with a different user
+        if (email) {
+            const existingUser = await User.findOne({ email, _id: { $ne: req.params.id } });
+            if (existingUser) {
+                return res.status(400).json({ success: false, message: 'Email already in use by another user' });
+            }
+        }
+        
+        // Only update the fields that were provided
+        const updateData = {};
+        if (name) updateData.name = name;
+        if (email) updateData.email = email;
+        if (phoneNumber !== undefined) updateData.phoneNumber = phoneNumber;
+        if (picture) updateData.picture = picture;
+        
+        const updatedUser = await User.findByIdAndUpdate(
+            req.params.id,
+            { $set: updateData },
+            { new: true }
+        ).select('-password');
+        
+        if (!updatedUser) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        
+        res.status(200).json({ success: true, user: updatedUser });
+    } catch (err) {
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
+// Change user password
+router.post('/change-password', async (req, res) => {
+    try {
+        const { userId, currentPassword, newPassword } = req.body;
+        
+        // Validate input
+        if (!userId || !currentPassword || !newPassword) {
+            return res.status(400).json({ 
+                success: false, 
+                message: 'Please provide userId, current password and new password' 
+            });
+        }
+        
+        // Find user
+        const user = await User.findById(userId);
+        if (!user) {
+            return res.status(404).json({ success: false, message: 'User not found' });
+        }
+        
+        // Verify current password
+        const isMatch = await bcrypt.compare(currentPassword, user.password);
+        if (!isMatch) {
+            return res.status(401).json({ success: false, message: 'Current password is incorrect' });
+        }
+        
+        // Hash new password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(newPassword, salt);
+        
+        // Update password
+        user.password = hashedPassword;
+        await user.save();
+        
+        res.status(200).json({ success: true, message: 'Password updated successfully' });
+    } catch (err) {
+        console.error('Password change error:', err);
+        res.status(500).json({ success: false, message: err.message });
+    }
+});
+
 module.exports = router;

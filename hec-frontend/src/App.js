@@ -27,6 +27,7 @@ import ContactPage from './pages/client/ContactPage';
 import UserProjectsPage from './pages/client/UserProjectsPage';
 import UserReclamationsPage from './pages/client/UserReclamationsPage';
 import UserInterviewsPage from './pages/client/UserInterviewsPage';
+import UserProfilePage from './pages/client/UserProfilePage';
 
 // Auth protected route component
 const ProtectedRoute = ({ children, requireAdmin = false }) => {
@@ -87,7 +88,7 @@ function App() {
             } />
             <Route path="profile" element={
               <ProtectedRoute>
-                <div>User Profile Page</div>
+                <UserProfilePage />
               </ProtectedRoute>
             } />
             <Route path="user-projects" element={

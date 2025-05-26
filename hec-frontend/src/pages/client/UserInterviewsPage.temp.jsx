@@ -631,22 +631,18 @@ const UserInterviewsPage = () => {
                     <label className="block text-sm font-medium text-gray-700 mb-1">
                       Status
                     </label>
-                    <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-700">
-                      <div className="flex items-center">
-                        {(() => {
-                          const statusInfo = getStatusInfo(selectedInterview.statusInterview);
-                          return (
-                            <>
-                              <span 
-                                className="inline-block w-3 h-3 rounded-full mr-2" 
-                                style={{ backgroundColor: statusInfo.color }}
-                              ></span>
-                              <span>{statusInfo.label}</span>
-                              <span className="ml-1 text-xs text-gray-500">(Status can only be changed by admin)</span>
-                            </>
-                          );
-                        })()}
-                      </div>
+                    <div className="flex space-x-2">
+                      {statusOptions.map(status => (
+                        <button
+                          key={status.value}
+                          type="button"
+                          onClick={() => changeInterviewStatus(selectedInterview._id, status.value)}
+                          className={`px-3 py-1 text-sm rounded-md flex items-center ${selectedInterview.statusInterview === status.value ? 'bg-gray-200' : 'bg-gray-100 hover:bg-gray-200'}`}
+                        >
+                          <status.icon className="mr-1" />
+                          {status.label}
+                        </button>
+                      ))}
                     </div>
                   </div>
                 )}
