@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import moment from 'moment';
 import Swal from 'sweetalert2';
-import 'animate.css';
 import { FiMessageSquare, FiFilter, FiSearch, FiCheckCircle, FiClock, FiUser, FiMail, FiInfo, FiCalendar, FiEdit, FiX, FiSend } from 'react-icons/fi';
 
 // Set axios base URL
@@ -101,8 +100,13 @@ const ReclamationsPage = () => {
         title: 'Empty Response',
         text: 'Please enter a response before submitting',
         confirmButtonColor: '#f97316',
-        customClass: {
-          popup: 'animated fadeInDown faster'
+        showClass: {
+          popup: 'swal2-show',
+          backdrop: 'swal2-backdrop-show'
+        },
+        hideClass: {
+          popup: 'swal2-hide',
+          backdrop: 'swal2-backdrop-hide'
         }
       });
       return;
@@ -118,10 +122,13 @@ const ReclamationsPage = () => {
       cancelButtonColor: '#64748b',
       confirmButtonText: 'Yes, send it!',
       cancelButtonText: 'Not yet',
-      customClass: {
-        popup: 'animated zoomIn faster',
-        confirmButton: 'btn-confirm',
-        cancelButton: 'btn-cancel'
+      showClass: {
+        popup: 'swal2-show',
+        backdrop: 'swal2-backdrop-show'
+      },
+      hideClass: {
+        popup: 'swal2-hide',
+        backdrop: 'swal2-backdrop-hide'
       }
     });
     
@@ -138,8 +145,13 @@ const ReclamationsPage = () => {
       didOpen: () => {
         Swal.showLoading();
       },
-      customClass: {
-        popup: 'animated fadeIn faster'
+      showClass: {
+        popup: 'swal2-show',
+        backdrop: 'swal2-backdrop-show'
+      },
+      hideClass: {
+        popup: 'swal2-hide',
+        backdrop: 'swal2-backdrop-hide'
       }
     });
     
@@ -207,11 +219,13 @@ const ReclamationsPage = () => {
         showConfirmButton: false,
         timer: 2000,
         timerProgressBar: true,
-        customClass: {
-          popup: 'animated fadeInUp faster',
-          icon: 'animated heartBeat delay-1s',
-          title: 'text-success',
-          timerProgressBar: 'timer-progress'
+        showClass: {
+          popup: 'swal2-show',
+          backdrop: 'swal2-backdrop-show'
+        },
+        hideClass: {
+          popup: 'swal2-hide',
+          backdrop: 'swal2-backdrop-hide'
         }
       });
       
@@ -228,9 +242,13 @@ const ReclamationsPage = () => {
           title: 'Oops...',
           text: error.response.data.message || 'Failed to submit response',
           confirmButtonColor: '#f97316',
-          customClass: {
-            popup: 'animated shakeX',
-            title: 'text-error'
+          showClass: {
+            popup: 'swal2-show',
+            backdrop: 'swal2-backdrop-show'
+          },
+          hideClass: {
+            popup: 'swal2-hide',
+            backdrop: 'swal2-backdrop-hide'
           }
         });
       } else {
@@ -239,9 +257,13 @@ const ReclamationsPage = () => {
           title: 'Something went wrong',
           text: 'Failed to submit response. Please try again later.',
           confirmButtonColor: '#f97316',
-          customClass: {
-            popup: 'animated shakeX',
-            title: 'text-error'
+          showClass: {
+            popup: 'swal2-show',
+            backdrop: 'swal2-backdrop-show'
+          },
+          hideClass: {
+            popup: 'swal2-hide',
+            backdrop: 'swal2-backdrop-hide'
           }
         });
       }
@@ -706,7 +728,7 @@ const ReclamationsPage = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-coquelicot border border-transparent rounded-md font-medium text-white hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors flex items-center animate__animated animate__pulse animate__infinite animate__slower"
+                    className="px-4 py-2 bg-coquelicot border border-transparent rounded-md font-medium text-white hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors flex items-center"
                   >
                     <FiSend className="mr-2" />
                     Send Response
