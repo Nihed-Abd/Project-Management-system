@@ -577,115 +577,175 @@ const MeetingsPage = () => {
         )}
       </div>
 
-      {/* Meeting Create/Edit Modal - Simplified without overlay */}
+      {/* Meeting Create/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center">
-            <div 
-              className="bg-white rounded-lg text-left overflow-hidden shadow-xl w-full max-w-lg mx-auto"
-              style={{ maxHeight: '90vh', overflowY: 'auto' }}
-            >
-              <form onSubmit={handleSubmit}>
-                <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                  <div className="sm:flex sm:items-start">
-                    <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">
-                      <h3 className="text-lg leading-6 font-medium text-silver-100">
-                        {modalMode === 'create' ? 'Schedule New Meeting' : 'Edit Meeting'}
-                      </h3>
-                      <div className="mt-4 space-y-4">
-                        <div>
-                          <label htmlFor="userId" className="block text-sm font-medium text-silver-200">User</label>
-                          <select
-                            id="userId"
-                            name="userId"
-                            value={formData.userId}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-coquelicot focus:border-coquelicot rounded-md"
-                            required
-                          >
-                            <option value="">Select a user</option>
-                            {users.map(user => (
-                              <option key={user._id} value={user._id}>{user.name} ({user.email})</option>
-                            ))}
-                          </select>
-                        </div>
-                        
-                        <div>
-                          <label htmlFor="date" className="block text-sm font-medium text-silver-200">Date and Time</label>
-                          <input
-                            type="datetime-local"
-                            id="date"
-                            name="date"
-                            value={formData.date ? moment(formData.date).format('YYYY-MM-DDTHH:mm') : ''}
-                            onChange={handleDateChange}
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-coquelicot focus:border-coquelicot rounded-md"
-                          />
-                        </div>
-                        
-                        <div>
-                          <label htmlFor="interviewGoal" className="block text-sm font-medium text-silver-200">Meeting Purpose</label>
-                          <input
-                            type="text"
-                            id="interviewGoal"
-                            name="interviewGoal"
-                            value={formData.interviewGoal}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-coquelicot focus:border-coquelicot rounded-md"
-                            required
-                          />
-                        </div>
-                        
-                        <div>
-                          <label htmlFor="statusInterview" className="block text-sm font-medium text-silver-200">Status</label>
-                          <select
-                            id="statusInterview"
-                            name="statusInterview"
-                            value={formData.statusInterview}
-                            onChange={handleInputChange}
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-coquelicot focus:border-coquelicot rounded-md"
-                          >
-                            <option value="pending">Pending</option>
-                            <option value="accepted">Accepted</option>
-                            <option value="declined">Declined</option>
-                          </select>
-                        </div>
-                        
-                        <div>
-                          <label htmlFor="note" className="block text-sm font-medium text-silver-200">Notes (Optional)</label>
-                          <textarea
-                            id="note"
-                            name="note"
-                            value={formData.note}
-                            onChange={handleInputChange}
-                            rows="3"
-                            className="mt-1 block w-full pl-3 pr-10 py-2 text-base border-gray-300 focus:outline-none focus:ring-coquelicot focus:border-coquelicot rounded-md"
-                          ></textarea>
-                        </div>
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-25">
+          <div
+            className="bg-white rounded-xl overflow-hidden w-full max-w-lg mx-auto border border-gray-100"
+            style={{
+              maxHeight: '90vh',
+              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              borderTop: '4px solid #f97316'
+            }}
+          >
+            <form onSubmit={handleSubmit}>
+              {/* Modal header */}
+              <div className="bg-gradient-to-r from-orange-50 to-white px-6 py-4 border-b border-gray-100">
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center">
+                    <div className="bg-coquelicot bg-opacity-10 p-2.5 rounded-full mr-3">
+                      {modalMode === 'create' ?
+                        <FiPlusCircle className="h-6 w-6 text-coquelicot" /> :
+                        <FiEdit className="h-6 w-6 text-coquelicot" />}
+                    </div>
+                    <h3 className="text-xl font-semibold text-silver-100">
+                      {modalMode === 'create' ? 'Schedule New Meeting' : 'Edit Meeting'}
+                    </h3>
+                  </div>
+                  <button
+                    type="button"
+                    className="bg-gray-50 hover:bg-gray-100 p-2 rounded-full text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                    onClick={() => setShowModal(false)}
+                  >
+                    <span className="sr-only">Close</span>
+                    <svg className="h-5 w-5" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              </div>
+              
+              {/* Modal body */}
+              <div className="px-6 py-4 max-h-[60vh] overflow-y-auto">
+                <div className="space-y-5">
+                  <div>
+                    <label htmlFor="userId" className="block text-sm font-medium text-silver-100 mb-1">User</label>
+                    <div className="relative">
+                      <select
+                        id="userId"
+                        name="userId"
+                        value={formData.userId}
+                        onChange={handleInputChange}
+                        className="appearance-none block w-full pl-3 pr-10 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                        required
+                      >
+                        <option value="">Select a user</option>
+                        {users.map(user => (
+                          <option key={user._id} value={user._id}>{user.name} ({user.email})</option>
+                        ))}
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
                       </div>
                     </div>
                   </div>
+                  
+                  <div>
+                    <label htmlFor="date" className="block text-sm font-medium text-silver-100 mb-1">Date and Time</label>
+                    <div className="relative">
+                      <input
+                        type="datetime-local"
+                        id="date"
+                        name="date"
+                        value={formData.date ? moment(formData.date).format('YYYY-MM-DDTHH:mm') : ''}
+                        onChange={handleDateChange}
+                        className="appearance-none block w-full pl-3 pr-10 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                      />
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                        <FiCalendar className="w-5 h-5" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="interviewGoal" className="block text-sm font-medium text-silver-100 mb-1">Meeting Purpose</label>
+                    <div className="relative">
+                      <input
+                        type="text"
+                        id="interviewGoal"
+                        name="interviewGoal"
+                        value={formData.interviewGoal}
+                        onChange={handleInputChange}
+                        placeholder="Enter the purpose of this meeting"
+                        className="appearance-none block w-full pl-3 pr-10 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                        required
+                      />
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                        <FiMessageSquare className="w-5 h-5" />
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="statusInterview" className="block text-sm font-medium text-silver-100 mb-1">Status</label>
+                    <div className="relative">
+                      <select
+                        id="statusInterview"
+                        name="statusInterview"
+                        value={formData.statusInterview}
+                        onChange={handleInputChange}
+                        className="appearance-none block w-full pl-3 pr-10 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="accepted">Accepted</option>
+                        <option value="declined">Declined</option>
+                      </select>
+                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
+                        <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path>
+                        </svg>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div>
+                    <label htmlFor="note" className="block text-sm font-medium text-silver-100 mb-1">Notes (Optional)</label>
+                    <textarea
+                      id="note"
+                      name="note"
+                      value={formData.note}
+                      onChange={handleInputChange}
+                      rows="3"
+                      placeholder="Add any additional notes about this meeting"
+                      className="appearance-none block w-full pl-3 pr-3 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                    ></textarea>
+                  </div>
                 </div>
-                <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                  <button
-                    type="submit"
-                    className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-coquelicot text-base font-medium text-white hover:bg-coquelicot-600 focus:outline-none sm:ml-3 sm:w-auto sm:text-sm"
-                  >
-                    {modalMode === 'create' ? 'Schedule Meeting' : 'Update Meeting'}
-                  </button>
-                  <button
-                    type="button"
-                    className="mt-3 w-full inline-flex justify-center rounded-md border border-gray-300 shadow-sm px-4 py-2 bg-white text-base font-medium text-silver-200 hover:bg-gray-50 focus:outline-none sm:mt-0 sm:ml-3 sm:w-auto sm:text-sm"
-                    onClick={() => setShowModal(false)}
-                  >
-                    Cancel
-                  </button>
-                </div>
-              </form>
-            </motion.div>
+              </div>
+              
+              {/* Modal footer */}
+              <div className="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-end space-x-3">
+                <button
+                  type="button"
+                  className="px-4 py-2 bg-white border border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors"
+                  onClick={() => setShowModal(false)}
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="px-4 py-2 bg-coquelicot border border-transparent rounded-md font-medium text-white hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors flex items-center"
+                >
+                  {modalMode === 'create' ? (
+                    <>
+                      <FiPlusCircle className="mr-2" />
+                      Schedule Meeting
+                    </>
+                  ) : (
+                    <>
+                      <FiEdit className="mr-2" />
+                      Update Meeting
+                    </>
+                  )}
+                </button>
+              </div>
+            </form>
           </div>
         </div>
       )}
     </div>
   );
 };
-
 export default MeetingsPage;
