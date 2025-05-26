@@ -49,13 +49,18 @@ const ContactPage = () => {
     setLoading(true);
 
     try {
-      // Replace with your actual API endpoint for contact messages
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/contact`, formData);
+      // Post to our new messages API endpoint
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/messages`, {
+        name: formData.name,
+        email: formData.email,
+        subject: formData.subject,
+        message: formData.message
+      });
       
-      // Show success message
+      // Show success message as requested
       Swal.fire({
         title: 'Message Envoyé!',
-        text: 'Nous vous contacterons bientôt.',
+        text: 'Merci pour votre confiance, un agent vous contactera dans les plus brefs délais.',
         icon: 'success',
         confirmButtonColor: '#fe3201'
       });
