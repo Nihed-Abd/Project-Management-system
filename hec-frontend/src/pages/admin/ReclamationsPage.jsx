@@ -115,7 +115,14 @@ const ReclamationsPage = () => {
     // Ask for confirmation before submitting
     const result = await Swal.fire({
       title: 'Send Response?',
-      text: `Are you sure you want to respond to this reclamation from ${selectedReclamation.userId?.name}?`,
+      html: `
+        <div>
+          <p>Are you sure you want to respond to this reclamation from <strong>${selectedReclamation.userId?.name}</strong>?</p>
+          <div style="background-color:#f8f9fa; padding:10px; margin-top:15px; border-radius:5px; text-align:left;">
+            <p style="margin:0; font-size:14px;"><i class="fas fa-envelope" style="color:#4CAF50; margin-right:5px;"></i> An email notification will be sent to <strong>${selectedReclamation.userId?.email}</strong></p>
+          </div>
+        </div>
+      `,
       icon: 'question',
       showCancelButton: true,
       confirmButtonColor: '#f97316',
@@ -215,9 +222,14 @@ const ReclamationsPage = () => {
       Swal.fire({
         icon: 'success',
         title: 'Response Sent!',
-        text: 'Your response has been submitted successfully',
+        html: `
+          <p>Your response has been submitted successfully.</p>
+          <div style="background-color:#f1f9f1; padding:10px; margin-top:15px; border-radius:5px; text-align:left;">
+            <p style="margin:0; color:#2e7d32;"><i class="fas fa-envelope"></i> An email notification has been sent to <strong>${selectedReclamation.userId?.email}</strong></p>
+          </div>
+        `,
         showConfirmButton: false,
-        timer: 2000,
+        timer: 3000,
         timerProgressBar: true,
         showClass: {
           popup: 'swal2-show',
@@ -701,6 +713,12 @@ const ReclamationsPage = () => {
                     onChange={(e) => setResponseContent(e.target.value)}
                     required
                   ></textarea>
+                  <div className="mt-2 bg-blue-50 p-3 rounded-md border border-blue-100 flex items-center">
+                    <FiMail className="text-blue-500 mr-2 flex-shrink-0" />
+                    <p className="text-xs text-blue-700">
+                      An email notification will be sent to <span className="font-semibold">{selectedReclamation.userId?.email}</span> with your response
+                    </p>
+                  </div>
                 </div>
                 
                 {/* Modal Footer */}
