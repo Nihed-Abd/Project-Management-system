@@ -10,6 +10,8 @@
 const express = require('express');
 const router = express.Router();
 const Reclamation = require('../models/reclamation');
+const User = require('../models/user');
+const sendEmail = require('../utils/sendEmail');
 
 // Get all reclamations
 router.get('/', async (req, res) => {
@@ -51,7 +53,8 @@ router.get('/:id', async (req, res) => {
 // Update a reclamation (typically for admin response)
 router.put('/:id', async (req, res) => {
     try {
-        const updatedReclamation = await Reclamation.findById(req.params.id);
+        const updatedReclamation = await Reclamation.findById(req.params.id)
+            .populate('userId', 'name email');
         
         if (!updatedReclamation) {
             return res.status(404).json({ message: 'Reclamation not found' });
@@ -62,6 +65,61 @@ router.put('/:id', async (req, res) => {
             updatedReclamation.adminResponse = req.body.adminResponse;
             updatedReclamation.statusRec = 'Answered';
             updatedReclamation.dateAnswer = new Date();
+            
+            // Send email notification to user
+            if (updatedReclamation.userId && updatedReclamation.userId.email) {
+                const emailTemplate = `
+                <!DOCTYPE html>
+                <html>
+                <head>
+                    <style>
+                        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+                        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+                        .header { background-color: #f8f9fa; padding: 20px; text-align: center; }
+                        .content { padding: 20px; }
+                        .footer { background-color: #f8f9fa; padding: 10px; text-align: center; font-size: 12px; color: #777; }
+                        h2 { color: #EF4444; }
+                        .message { background-color: #f1f1f1; padding: 15px; border-radius: 5px; margin: 15px 0; }
+                        .response { background-color: #e6f7ff; padding: 15px; border-radius: 5px; margin: 15px 0; border-left: 4px solid #1890ff; }
+                    </style>
+                </head>
+                <body>
+                    <div class="container">
+                        <div class="header">
+                            <h2>Response to Your Reclamation</h2>
+                        </div>
+                        <div class="content">
+                            <p>Hello ${updatedReclamation.userId.name},</p>
+                            <p>We have received and reviewed your reclamation regarding:</p>
+                            <div class="message">
+                                <strong>Subject:</strong> ${updatedReclamation.object}<br>
+                                <strong>Submitted on:</strong> ${new Date(updatedReclamation.dateCreation).toLocaleDateString()}
+                            </div>
+                            <p>Our team has provided the following response:</p>
+                            <div class="response">
+                                ${updatedReclamation.adminResponse}
+                            </div>
+                            <p>If you have any further questions or concerns, please don't hesitate to contact us.</p>
+                            <p>Thank you for your patience and understanding.</p>
+                            <p>Best regards,<br>HEC ELECTRICITY Support Team</p>
+                        </div>
+                        <div class="footer">
+                            <p>This is an automated email. Please do not reply directly to this message.</p>
+                            <p>© ${new Date().getFullYear()} HEC ELECTRICITY. All rights reserved.</p>
+                        </div>
+                    </div>
+                </body>
+                </html>
+                `;
+                
+                await sendEmail(
+                    updatedReclamation.userId.email,
+                    `Response to Your Reclamation: ${updatedReclamation.object}`,
+                    emailTemplate
+                );
+                
+                console.log(`Email notification sent to ${updatedReclamation.userId.email}`);
+            }
         }
         
         // Update other fields if needed

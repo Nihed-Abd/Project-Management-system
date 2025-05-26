@@ -95,7 +95,24 @@ const ProjectsPage = () => {
       
       // Apply category filter if selected
       if (categoryFilter) {
-        filtered = filtered.filter(project => project.categoryId === categoryFilter);
+        filtered = filtered.filter(project => {
+          // Handle different possible data structures for categoryId
+          // It could be a string, an object with _id, or a direct reference
+          if (!project.categoryId) return false;
+          
+          // Case 1: categoryId is a string
+          if (typeof project.categoryId === 'string') {
+            return project.categoryId === categoryFilter;
+          }
+          // Case 2: categoryId is an object with _id property (populated mongoose reference)
+          else if (project.categoryId && typeof project.categoryId === 'object' && project.categoryId._id) {
+            return project.categoryId._id.toString() === categoryFilter.toString();
+          }
+          // Case 3: categoryId is a mongoose ObjectId (needs toString comparison)
+          else {
+            return project.categoryId.toString() === categoryFilter.toString();
+          }
+        });
       }
       
       setFilteredProjects(filtered);
@@ -109,9 +126,21 @@ const ProjectsPage = () => {
       const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/projects`);
       // Handle both formats - array directly or wrapped in success object
       if (Array.isArray(response.data)) {
+        console.log('Projects data:', response.data);
+        // Check the first project to examine its structure
+        if (response.data.length > 0) {
+          console.log('First project structure:', response.data[0]);
+          console.log('Category ID type:', typeof response.data[0].categoryId);
+        }
         setProjects(response.data);
         setFilteredProjects(response.data);
       } else if (response.data.success && Array.isArray(response.data.projects)) {
+        console.log('Projects data:', response.data.projects);
+        // Check the first project to examine its structure
+        if (response.data.projects.length > 0) {
+          console.log('First project structure:', response.data.projects[0]);
+          console.log('Category ID type:', typeof response.data.projects[0].categoryId);
+        }
         setProjects(response.data.projects);
         setFilteredProjects(response.data.projects);
       } else {
