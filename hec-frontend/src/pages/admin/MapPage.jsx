@@ -5,7 +5,7 @@ import axios from 'axios';
 import { FaSpinner, FaLayerGroup, FaUser, FaCalendarAlt } from 'react-icons/fa';
 
 // Mapbox token
-mapboxgl.accessToken = 'pk.eyJ1IjoiZXlhbmEiLCJhIjoiY2tyaW90YjRyMG01bzJ2bXA0aHFrdXp0YyJ9.5nNCUKgRdGXdtakd-KUoeQ';
+mapboxgl.accessToken = 'pk.eyJ1IjoibmloZWR4dG4iLCJhIjoiY205cmNmNDZoMHc3bTJpczQ3b3FodWVibCJ9.MBPaL38J-sYOaaw2BUQO0Q';
 
 // Helper function to get marker color based on status
 const getStatusColor = (status) => {
@@ -21,10 +21,12 @@ const getStatusColor = (status) => {
 const MapPage = () => {
   const mapContainer = useRef(null);
   const map = useRef(null);
+  const markersRef = useRef([]);
   const [projects, setProjects] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedProject, setSelectedProject] = useState(null);
   const [statusFilter, setStatusFilter] = useState('all');
+  const [mapLoaded, setMapLoaded] = useState(false);
   
   // Get unique statuses from projects
   const statuses = useMemo(() => {
@@ -67,8 +69,10 @@ const MapPage = () => {
     // Add navigation controls
     map.current.addControl(new mapboxgl.NavigationControl(), 'top-right');
 
-    // Setup map for 3D buildings
-    map.current.on('style.load', () => {
+    // Setup map for 3D buildings and set loaded state
+    map.current.on('load', () => {
+      setMapLoaded(true);
+      
       // Add 3D building layer
       const layers = map.current.getStyle().layers;
       
@@ -116,6 +120,10 @@ const MapPage = () => {
     // Clean up on unmount
     return () => {
       if (map.current) {
+        // Remove all markers before removing map
+        if (markersRef.current) {
+          markersRef.current.forEach(marker => marker.remove());
+        }
         map.current.remove();
         map.current = null;
       }
@@ -130,24 +138,16 @@ const MapPage = () => {
 
   // Add markers for projects after map is loaded and projects are fetched
   useEffect(() => {
-    if (!map.current || loading || projects.length === 0) return;
+    // Clear previous markers when filter changes
+    if (markersRef.current.length > 0) {
+      markersRef.current.forEach(marker => marker.remove());
+      markersRef.current = [];
+    }
     
-    // Ensure map is fully loaded before adding markers
-    if (!map.current.loaded()) {
-      map.current.on('load', () => addMarkersToMap());
+    if (!map.current || !mapLoaded || loading || filteredProjects.length === 0) {
       return;
     }
     
-    addMarkersToMap();
-    
-    function addMarkersToMap() {
-
-    // Remove existing markers if any
-    const markers = document.getElementsByClassName('mapboxgl-marker');
-    while (markers[0]) {
-      markers[0].parentNode.removeChild(markers[0]);
-    }
-
     // Add markers for each project with location data
     filteredProjects.forEach(project => {
       if (project.location && project.location.coordinates) {
@@ -226,22 +226,33 @@ const MapPage = () => {
           `);
 
         // Add marker to map
-        new mapboxgl.Marker(el)
+        const marker = new mapboxgl.Marker(el)
           .setLngLat([longitude, latitude])
-          .setPopup(popup)
-          .addTo(map.current);
+          .setPopup(popup);
+          
+        // Only add marker to map if map is available
+        if (map.current) {
+          marker.addTo(map.current);
+          // Store reference to marker for later cleanup
+          markersRef.current.push(marker);
+        }
           
         // Fly to the first project's location to center the map better
-        if (projects.indexOf(project) === 0) {
-          map.current.flyTo({
-            center: [longitude, latitude],
-            zoom: 13,
-            essential: true
-          });
+        if (filteredProjects.indexOf(project) === 0 && map.current) {
+          // Use a small timeout to ensure the map is ready
+          setTimeout(() => {
+            if (map.current) {
+              map.current.flyTo({
+                center: [longitude, latitude],
+                zoom: 13,
+                essential: true
+              });
+            }
+          }, 500);
         }
       }
     });
-  }, [filteredProjects, loading]);
+  }, [filteredProjects, loading, mapLoaded]);
 
   return (
     <div className="bg-white rounded-lg shadow-md p-6">
@@ -331,11 +342,13 @@ const MapPage = () => {
                         setSelectedProject(project._id);
                         if (project.location && project.location.coordinates) {
                           const [lng, lat] = project.location.coordinates;
-                          map.current.flyTo({
+                          if (map.current) {
+                            map.current.flyTo({
                             center: [lng, lat],
                             zoom: 15,
                             essential: true
                           });
+                          }
                         }
                       }}
                     >
