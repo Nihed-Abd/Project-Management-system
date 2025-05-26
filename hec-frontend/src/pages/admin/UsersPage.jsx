@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiSearch, FiFilter, FiCheck, FiX, FiEdit, FiUserX, FiUserCheck, FiCalendar, FiShield, FiMail } from 'react-icons/fi';
+import { FiSearch, FiFilter, FiCheck, FiX, FiEdit, FiUserX, FiUserCheck, FiCalendar, FiShield, FiMail, FiUserPlus } from 'react-icons/fi';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import Swal from 'sweetalert2';
@@ -36,6 +36,9 @@ const UsersPage = () => {
   const [yearFilter, setYearFilter] = useState('');
   const [availableYears, setAvailableYears] = useState([]);
   const { currentUser } = useAuth();
+  
+  // Add client form state
+  const [addingUser, setAddingUser] = useState(false);
   
   // Role options
   const roleOptions = [
@@ -210,6 +213,105 @@ const UsersPage = () => {
     }
   };
 
+  // Add new client
+  const addNewClient = () => {
+    Swal.fire({
+      title: 'Add New Client',
+      html: `
+        <div class="space-y-3">
+          <div class="flex flex-col">
+            <label for="swal-name" class="text-left text-sm font-medium text-gray-700 mb-1">Full Name</label>
+            <input id="swal-name" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-coquelicot focus:border-coquelicot">
+          </div>
+          <div class="flex flex-col">
+            <label for="swal-email" class="text-left text-sm font-medium text-gray-700 mb-1">Email</label>
+            <input id="swal-email" type="email" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-coquelicot focus:border-coquelicot">
+          </div>
+          <div class="flex flex-col">
+            <label for="swal-phone" class="text-left text-sm font-medium text-gray-700 mb-1">Phone Number</label>
+            <input id="swal-phone" type="tel" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-coquelicot focus:border-coquelicot">
+          </div>
+          <div class="flex flex-col">
+            <label for="swal-password" class="text-left text-sm font-medium text-gray-700 mb-1">Password</label>
+            <input id="swal-password" type="password" class="w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-coquelicot focus:border-coquelicot">
+          </div>
+        </div>
+      `,
+      showCancelButton: true,
+      confirmButtonText: 'Add Client',
+      cancelButtonText: 'Cancel',
+      showLoaderOnConfirm: true,
+      focusConfirm: false,
+      preConfirm: () => {
+        const name = document.getElementById('swal-name').value;
+        const email = document.getElementById('swal-email').value;
+        const phoneNumber = document.getElementById('swal-phone').value;
+        const password = document.getElementById('swal-password').value;
+        
+        // Validation
+        if (!name || !email || !password) {
+          Swal.showValidationMessage('Please fill in all required fields');
+          return false;
+        }
+        
+        // Email validation
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(email)) {
+          Swal.showValidationMessage('Please enter a valid email address');
+          return false;
+        }
+        
+        return { name, email, phoneNumber, password };
+      },
+      allowOutsideClick: () => !Swal.isLoading()
+    }).then((result) => {
+      if (result.isConfirmed) {
+        registerNewClient(result.value);
+      }
+    });
+  };
+  
+  // Register the new client
+  const registerNewClient = async (userData) => {
+    setAddingUser(true);
+    try {
+      // Add the default role as 'user'
+      const dataToSend = {
+        ...userData,
+        role: 'user'
+      };
+      
+      const response = await axios.post(
+        `${process.env.REACT_APP_API_URL}/api/auth/register`,
+        dataToSend
+      );
+      
+      if (response.data.success) {
+        Swal.fire({
+          title: 'Success',
+          text: 'New client has been added successfully',
+          icon: 'success',
+          confirmButtonText: 'Great!'
+        });
+        
+        // Refresh the user list
+        fetchUsers();
+      } else {
+        throw new Error(response.data.message || 'Failed to add client');
+      }
+    } catch (error) {
+      console.error('Error adding client:', error);
+      Swal.fire({
+        title: 'Error',
+        text: error.response?.data?.message || 'Failed to add client',
+        icon: 'error',
+        confirmButtonText: 'OK'
+      });
+    } finally {
+      setAddingUser(false);
+    }
+  };
+
   // Change user role
   const changeUserRole = async (user) => {
     try {
@@ -295,7 +397,28 @@ const UsersPage = () => {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-6">User Management</h1>
+      <div className="flex justify-between items-center mb-6">
+        <h1 className="text-2xl font-bold">User Management</h1>
+        
+        {/* Add New Client Button */}
+        <button
+          onClick={addNewClient}
+          className="flex items-center px-4 py-2 bg-coquelicot hover:bg-coquelicot-600 text-white rounded-md transition-colors"
+          disabled={addingUser}
+        >
+          {addingUser ? (
+            <>
+              <span className="mr-2 h-4 w-4 border-2 border-t-transparent border-white rounded-full animate-spin"></span>
+              Adding...
+            </>
+          ) : (
+            <>
+              <FiUserPlus className="mr-2" />
+              Add New Client
+            </>
+          )}
+        </button>
+      </div>
       
       {/* Search and filters */}
       <div className="mb-6 flex flex-wrap gap-4">

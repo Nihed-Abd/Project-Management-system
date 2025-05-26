@@ -35,13 +35,16 @@ const ProjectsPage = () => {
   const [statusFilter, setStatusFilter] = useState('');
   const [yearFilter, setYearFilter] = useState('');
   const [monthFilter, setMonthFilter] = useState('');
+  const [categoryFilter, setCategoryFilter] = useState('');
   const [availableYears, setAvailableYears] = useState([]);
+  const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
 
-  // Fetch projects on component mount
+  // Fetch projects and categories on component mount
   useEffect(() => {
     fetchProjects();
+    fetchCategories();
   }, []);
 
   // Extract available years from projects when they load
@@ -90,9 +93,14 @@ const ProjectsPage = () => {
         });
       }
       
+      // Apply category filter if selected
+      if (categoryFilter) {
+        filtered = filtered.filter(project => project.categoryId === categoryFilter);
+      }
+      
       setFilteredProjects(filtered);
     }
-  }, [searchQuery, statusFilter, yearFilter, monthFilter, projects]);
+  }, [searchQuery, statusFilter, yearFilter, monthFilter, categoryFilter, projects]);
 
   // Fetch all projects from the API
   const fetchProjects = async () => {
@@ -171,6 +179,26 @@ const ProjectsPage = () => {
   // Handle month filter change
   const handleMonthFilterChange = (e) => {
     setMonthFilter(e.target.value);
+  };
+  
+  // Handle category filter change
+  const handleCategoryFilterChange = (e) => {
+    setCategoryFilter(e.target.value);
+  };
+  
+  // Fetch categories from API
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/categories`);
+      // API returns array directly, not wrapped in success object
+      if (Array.isArray(response.data)) {
+        setCategories(response.data);
+      } else {
+        console.error('Failed to fetch categories: Unexpected response format');
+      }
+    } catch (err) {
+      console.error('Error fetching categories:', err);
+    }
   };
   
   // Get month name from number
@@ -362,6 +390,23 @@ const ProjectsPage = () => {
               </select>
               <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
                 <FiCalendar />
+              </div>
+            </div>
+            
+            {/* Category filter */}
+            <div className="relative">
+              <select
+                className="bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                value={categoryFilter}
+                onChange={handleCategoryFilterChange}
+              >
+                <option value="">All Categories</option>
+                {categories.map(category => (
+                  <option key={category._id} value={category._id}>{category.name}</option>
+                ))}
+              </select>
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                <FiTag />
               </div>
             </div>
             

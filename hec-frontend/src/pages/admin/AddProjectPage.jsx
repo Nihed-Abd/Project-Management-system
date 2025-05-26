@@ -225,10 +225,8 @@ const AddProjectPage = () => {
       );
       
       if (response.data.success && response.data.fileUrls) {
-        // Convert relative URLs to absolute URLs
-        const baseUrl = process.env.REACT_APP_API_URL;
-        const absoluteUrls = response.data.fileUrls.map(url => `${baseUrl}${url}`);
-        imageUrls.push(...absoluteUrls);
+        // Use the URLs directly from the response - they already include the base URL
+        imageUrls.push(...response.data.fileUrls);
       } else {
         throw new Error('Image upload failed');
       }
