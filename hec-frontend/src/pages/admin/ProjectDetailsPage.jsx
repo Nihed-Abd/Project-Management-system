@@ -6,6 +6,7 @@ import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { Marker } from 'react-map-gl';
 import Swal from 'sweetalert2';
+import { useTheme } from '../../context/ThemeContext';
 
 // Add global styles for SweetAlert buttons when component loads
 const sweetAlertStyles = document.createElement('style');
@@ -35,6 +36,8 @@ const ProjectDetailsPage = () => {
   const [activeImage, setActiveImage] = useState(0);
   const navigate = useNavigate();
   const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   useEffect(() => {
     fetchProjectDetails();
@@ -174,11 +177,11 @@ const ProjectDetailsPage = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className={`p-6 ${isDark ? 'bg-gray-900 text-white' : ''}`}>
       <div className="mb-6">
         <button 
           onClick={() => navigate(-1)} 
-          className="flex items-center text-silver-200 hover:text-silver-100 transition-colors"
+          className={`flex items-center transition-colors ${isDark ? 'text-gray-400 hover:text-white' : 'text-silver-200 hover:text-silver-100'}`}
         >
           <FiArrowLeft className="mr-2" /> Back to Projects
         </button>
@@ -189,7 +192,7 @@ const ProjectDetailsPage = () => {
           <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-coquelicot"></div>
         </div>
       ) : error ? (
-        <div className="p-4 text-center text-red-600 bg-red-50 rounded-md">{error}</div>
+        <div className={`p-4 text-center rounded-md ${isDark ? 'text-red-400 bg-red-900/30' : 'text-red-600 bg-red-50'}`}>{error}</div>
       ) : project ? (
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
           <div className="lg:col-span-2">
@@ -197,30 +200,30 @@ const ProjectDetailsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
+              className={`rounded-lg shadow-sm border overflow-hidden ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}
             >
               <div className="p-6">
-                <h1 className="text-2xl font-bold text-silver-100 mb-4">{project.title}</h1>
+                <h1 className={`text-2xl font-bold mb-4 ${isDark ? 'text-white' : 'text-silver-100'}`}>{project.title}</h1>
                 
                 <div className="flex flex-wrap items-center gap-4 mb-4">
                   <div className="flex items-center gap-2">
-                    <FiCalendar className="text-gray-400" />
-                    <span className="text-silver-200">Created on {formatDate(project.creationDate)}</span>
+                    <FiCalendar className={isDark ? 'text-gray-400' : 'text-gray-400'} />
+                    <span className={isDark ? 'text-gray-300' : 'text-silver-200'}>Created on {formatDate(project.creationDate)}</span>
                   </div>
                   
                   <div className="flex items-center gap-2">
-                    <FiClock className="text-gray-400" />
-                    <span className="text-silver-200">Last updated on {formatDate(project.LastEditDate)}</span>
+                    <FiClock className={isDark ? 'text-gray-400' : 'text-gray-400'} />
+                    <span className={isDark ? 'text-gray-300' : 'text-silver-200'}>Last updated on {formatDate(project.LastEditDate)}</span>
                   </div>
                 </div>
 
                 <div className="flex flex-wrap gap-4 mb-6">
                   <div className="flex items-center gap-2">
-                    <div className="text-silver-200">Status:</div>
+                    <div className={isDark ? 'text-gray-300' : 'text-silver-200'}>Status:</div>
                     <div className="relative inline-block">
                       <button 
                         type="button" 
-                        className={`inline-flex justify-between items-center rounded-full px-3 py-1.5 text-xs font-semibold ${getStatusClass(project.status)} hover:bg-opacity-90 focus:outline-none shadow-sm border border-white`}
+                        className={`inline-flex justify-between items-center rounded-full px-3 py-1.5 text-xs font-semibold ${getStatusClass(project.status)} hover:bg-opacity-90 focus:outline-none shadow-sm ${isDark ? 'border border-gray-700' : 'border border-white'}`}
                         id="status-button"
                         aria-expanded="true"
                         aria-haspopup="true"
@@ -238,14 +241,14 @@ const ProjectDetailsPage = () => {
                           }}></span>
                           {project.status}
                         </span>
-                        <svg className="h-4 w-4 ml-1 text-gray-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <svg className={`h-4 w-4 ml-1 ${isDark ? 'text-gray-400' : 'text-gray-600'}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
                         </svg>
                       </button>
                       
                       <div 
                         id="status-dropdown"
-                        className="absolute left-0 z-50 mt-1 w-40 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-gray-200 focus:outline-none hidden overflow-hidden"
+                        className={`absolute left-0 z-50 mt-1 w-40 origin-top-right rounded-md shadow-lg ring-1 focus:outline-none hidden overflow-hidden ${isDark ? 'bg-gray-800 ring-gray-700' : 'bg-white ring-gray-200'}`}
                         role="menu" 
                         aria-orientation="vertical" 
                         aria-labelledby="status-button"
@@ -260,7 +263,7 @@ const ProjectDetailsPage = () => {
                             return (
                               <button
                                 key={status}
-                                className={`w-full text-left flex items-center px-4 py-2 text-sm ${project.status === status ? 'bg-gray-50 font-medium' : 'text-gray-700 hover:bg-gray-50'}`}
+                                className={`w-full text-left flex items-center px-4 py-2 text-sm ${project.status === status ? (isDark ? 'bg-gray-700 font-medium text-white' : 'bg-gray-50 font-medium text-gray-700') : (isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-50')}`}
                                 role="menuitem"
                                 onClick={() => {
                                   if (project.status !== status) {
@@ -286,7 +289,7 @@ const ProjectDetailsPage = () => {
                   
                   <div className="flex items-center gap-2">
                     <FiTag className="text-gray-400" />
-                    <span className="text-silver-200">
+                    <span className={isDark ? 'text-gray-300' : 'text-silver-200'}>
                       Category: {project.categoryId?.name || 'Unknown'}
                     </span>
                   </div>
@@ -309,7 +312,7 @@ const ProjectDetailsPage = () => {
                             <button
                               key={index}
                               onClick={() => setActiveImage(index)}
-                              className={`w-16 h-16 rounded-md overflow-hidden border-2 ${index === activeImage ? 'border-coquelicot' : 'border-transparent'}`}
+                              className={`w-16 h-16 rounded-md overflow-hidden border-2 ${index === activeImage ? 'border-coquelicot' : (isDark ? 'border-gray-700' : 'border-transparent')}`}
                             >
                               <img 
                                 src={pic} 
@@ -329,13 +332,13 @@ const ProjectDetailsPage = () => {
                 </div>
 
                 <div className="mb-6">
-                  <h2 className="text-lg font-semibold text-silver-100 mb-2">Description</h2>
-                  <p className="text-silver-200 whitespace-pre-line">{project.description}</p>
+                  <h2 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-silver-100'}`}>Description</h2>
+                  <p className={`whitespace-pre-line ${isDark ? 'text-gray-300' : 'text-silver-200'}`}>{project.description}</p>
                 </div>
 
                 {project.location && project.location.coordinates && (
                   <div className="mb-6">
-                    <h2 className="text-lg font-semibold text-silver-100 mb-2">Location</h2>
+                    <h2 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-silver-100'}`}>Location</h2>
                     <div className="h-64 rounded-lg overflow-hidden">
                       {mapboxToken ? (
                         <Map
@@ -346,7 +349,7 @@ const ProjectDetailsPage = () => {
                             zoom: 14
                           }}
                           style={{ width: '100%', height: '100%' }}
-                          mapStyle="mapbox://styles/mapbox/streets-v11"
+                          mapStyle={isDark ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/streets-v11"}
                         >
                           <Marker
                             longitude={project.location.coordinates[0]}
@@ -355,14 +358,14 @@ const ProjectDetailsPage = () => {
                           />
                         </Map>
                       ) : (
-                        <div className="bg-gray-100 h-full flex items-center justify-center">
-                          <p className="text-gray-500">Mapbox token not available</p>
+                        <div className={`h-full flex items-center justify-center ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
+                          <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>Mapbox token not available</p>
                         </div>
                       )}
                     </div>
                     <div className="mt-2 flex items-center">
                       <FiMap className="text-gray-400 mr-2" />
-                      <span className="text-silver-200">
+                      <span className={isDark ? 'text-gray-300' : 'text-silver-200'}>
                         Coordinates: {project.location.coordinates[1]}, {project.location.coordinates[0]}
                       </span>
                     </div>
@@ -377,10 +380,10 @@ const ProjectDetailsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.1 }}
-              className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden mb-6"
+              className={`rounded-lg shadow-sm border overflow-hidden mb-6 ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}
             >
               <div className="p-6">
-                <h2 className="text-lg font-semibold text-silver-100 mb-4">User Information</h2>
+                <h2 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-silver-100'}`}>User Information</h2>
                 {project.userId ? (
                   <div>
                     <div className="flex items-center mb-4">
@@ -390,8 +393,8 @@ const ProjectDetailsPage = () => {
                         className="h-16 w-16 rounded-full mr-4"
                       />
                       <div>
-                        <h3 className="font-medium text-silver-100">{project.userId.name}</h3>
-                        <p className="text-silver-200 text-sm">
+                        <h3 className={`font-medium ${isDark ? 'text-white' : 'text-silver-100'}`}>{project.userId.name}</h3>
+                        <p className={`text-sm ${isDark ? 'text-gray-300' : 'text-silver-200'}`}>
                           {project.userId.role === 'admin' ? 'Administrator' : 'Client'}
                         </p>
                       </div>
@@ -400,28 +403,28 @@ const ProjectDetailsPage = () => {
                     <div className="space-y-3">
                       <div className="flex items-center">
                         <FiMail className="text-gray-400 mr-2" />
-                        <a href={`mailto:${project.userId.email}`} className="text-blue-600 hover:underline">
+                        <a href={`mailto:${project.userId.email}`} className={`hover:underline ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
                           {project.userId.email}
                         </a>
                       </div>
                       {project.userId.phoneNumber && (
                         <div className="flex items-center">
                           <FiPhone className="text-gray-400 mr-2" />
-                          <a href={`tel:${project.userId.phoneNumber}`} className="text-blue-600 hover:underline">
+                          <a href={`tel:${project.userId.phoneNumber}`} className={`hover:underline ${isDark ? 'text-blue-400' : 'text-blue-600'}`}>
                             {project.userId.phoneNumber}
                           </a>
                         </div>
                       )}
                       <div className="flex items-center">
                         <FiCalendar className="text-gray-400 mr-2" />
-                        <span className="text-silver-200">
+                        <span className={isDark ? 'text-gray-300' : 'text-silver-200'}>
                           Member since {new Date(project.userId.creationDate).toLocaleDateString()}
                         </span>
                       </div>
                     </div>
                   </div>
                 ) : (
-                  <p className="text-silver-200">No user information available</p>
+                  <p className={isDark ? 'text-gray-300' : 'text-silver-200'}>No user information available</p>
                 )}
               </div>
             </motion.div>
@@ -430,10 +433,10 @@ const ProjectDetailsPage = () => {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.3, delay: 0.2 }}
-              className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
+              className={`rounded-lg shadow-sm border overflow-hidden ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'}`}
             >
               <div className="p-6">
-                <h2 className="text-lg font-semibold text-silver-100 mb-4">Actions</h2>
+                <h2 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-silver-100'}`}>Actions</h2>
                 <div className="space-y-3">
                   <Link
                     to={`/admin/projects/edit/${project._id}`}
@@ -443,7 +446,7 @@ const ProjectDetailsPage = () => {
                   </Link>
                   <button
                     onClick={deleteProject}
-                    className="w-full flex items-center justify-center gap-2 bg-white hover:bg-red-50 text-red-600 border border-red-200 px-4 py-2 rounded-md transition-colors"
+                    className={`w-full flex items-center justify-center gap-2 border px-4 py-2 rounded-md transition-colors ${isDark ? 'bg-gray-800 hover:bg-gray-700 text-red-400 border-red-500' : 'bg-white hover:bg-red-50 text-red-600 border-red-200'}`}
                   >
                     <FiTrash2 /> Delete Project
                   </button>
@@ -453,7 +456,7 @@ const ProjectDetailsPage = () => {
           </div>
         </div>
       ) : (
-        <div className="p-4 text-center text-silver-200">Project not found</div>
+        <div className={`p-4 text-center ${isDark ? 'text-gray-400' : 'text-silver-200'}`}>Project not found</div>
       )}
     </div>
   );

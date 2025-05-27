@@ -456,20 +456,20 @@ const AddProjectPage = () => {
                 </div>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-silver-100 mb-1">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Assign to User*
                   </label>
                   <div className="relative">
                     {formData.userId ? (
-                      <div className="flex items-center justify-between px-3 py-2 border border-gray-300 rounded-md">
+                      <div className={`flex items-center justify-between px-3 py-2 border rounded-md ${isDark ? 'bg-gray-700 border-gray-600' : 'border-gray-300 bg-white'}`}>
                         <div className="flex items-center">
                           <img
                             src={findUserById(formData.userId)?.picture || 'https://via.placeholder.com/32x32?text=User'}
                             alt="User"
                             className="h-6 w-6 rounded-full mr-2"
                           />
-                          <span>{findUserById(formData.userId)?.name}</span>
-                          <span className="ml-2 text-gray-500 text-xs">{findUserById(formData.userId)?.email}</span>
+                          <span className={isDark ? 'text-white' : ''}>{findUserById(formData.userId)?.name}</span>
+                          <span className={`ml-2 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{findUserById(formData.userId)?.email}</span>
                         </div>
                         <button
                           type="button"
@@ -477,7 +477,7 @@ const AddProjectPage = () => {
                             setFormData(prev => ({ ...prev, userId: '' }));
                             setUserDropdownOpen(true);
                           }}
-                          className="text-blue-600 hover:text-blue-800"
+                          className={`${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}`}
                         >
                           Change
                         </button>
@@ -485,23 +485,23 @@ const AddProjectPage = () => {
                     ) : (
                       <div 
                         onClick={() => setUserDropdownOpen(true)}
-                        className="flex items-center px-3 py-2 border border-gray-300 rounded-md cursor-pointer"
+                        className={`flex items-center px-3 py-2 border rounded-md cursor-pointer ${isDark ? 'bg-gray-700 border-gray-600' : 'border-gray-300 bg-white'}`}
                       >
-                        <FiUser className="text-gray-400 mr-2" />
-                        <span className="text-gray-500">Select a user</span>
+                        <FiUser className={`${isDark ? 'text-gray-400' : 'text-gray-400'} mr-2`} />
+                        <span className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Select a user</span>
                       </div>
                     )}
                     
                     {userDropdownOpen && (
-                      <div className="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg border border-gray-200">
-                        <div className="p-2 border-b">
+                      <div className={`absolute z-10 mt-1 w-full rounded-md shadow-lg border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+                        <div className={`p-2 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                           <div className="relative">
                             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                             <input
                               type="text"
                               value={userSearchQuery}
                               onChange={(e) => setUserSearchQuery(e.target.value)}
-                              className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                              className={`w-full pl-9 pr-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                               placeholder="Search users..."
                               autoFocus
                             />
@@ -509,12 +509,12 @@ const AddProjectPage = () => {
                         </div>
                         <div className="max-h-60 overflow-y-auto">
                           {filteredUsers.length === 0 ? (
-                            <div className="p-4 text-center text-gray-500">No users found</div>
+                            <div className={`p-4 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No users found</div>
                           ) : (
                             filteredUsers.map((user) => (
                               <div
                                 key={user._id}
-                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                                className={`px-4 py-2 cursor-pointer flex items-center ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
                                 onClick={() => handleUserSelect(user)}
                               >
                                 <img
@@ -523,8 +523,8 @@ const AddProjectPage = () => {
                                   className="h-8 w-8 rounded-full mr-2"
                                 />
                                 <div>
-                                  <div className="font-medium">{user.name}</div>
-                                  <div className="text-sm text-gray-500">{user.email}</div>
+                                  <div className={`font-medium ${isDark ? 'text-white' : ''}`}>{user.name}</div>
+                                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{user.email}</div>
                                 </div>
                               </div>
                             ))
@@ -538,10 +538,10 @@ const AddProjectPage = () => {
               
               <div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-silver-100 mb-1">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Project Images
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-md p-4">
+                  <div className={`border-2 border-dashed rounded-md p-4 ${isDark ? 'border-gray-600' : 'border-gray-300'}`}>
                     <div className="flex flex-wrap gap-3 mb-4">
                       {imagePreviewUrls.map((url, index) => (
                         <div key={index} className="relative h-24 w-24">
@@ -561,7 +561,7 @@ const AddProjectPage = () => {
                       ))}
                       
                       {imagePreviewUrls.length === 0 && (
-                        <div className="w-full text-center text-gray-500 py-8">
+                        <div className={`w-full text-center ${isDark ? 'text-gray-400' : 'text-gray-500'} py-8`}>
                           No images selected
                         </div>
                       )}
@@ -569,8 +569,8 @@ const AddProjectPage = () => {
                     
                     <label className="flex flex-col items-center justify-center cursor-pointer">
                       <div className="flex flex-col items-center justify-center">
-                        <FiUpload className="h-8 w-8 text-gray-400" />
-                        <span className="mt-2 text-sm text-gray-500">
+                        <FiUpload className={`h-8 w-8 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
+                        <span className={`mt-2 text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                           Click to upload images (max 5MB each)
                         </span>
                       </div>
@@ -586,10 +586,10 @@ const AddProjectPage = () => {
                 </div>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-silver-100 mb-1">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Project Location
                   </label>
-                  <div className="h-60 rounded-md overflow-hidden border border-gray-300">
+                  <div className={`h-60 rounded-md overflow-hidden border ${isDark ? 'border-gray-600' : 'border-gray-300'}`}>
                     <Map
                       initialViewState={{
                         longitude: viewport.longitude,
@@ -597,7 +597,7 @@ const AddProjectPage = () => {
                         zoom: viewport.zoom
                       }}
                       style={{ width: '100%', height: '100%' }}
-                      mapStyle="mapbox://styles/mapbox/streets-v11"
+                      mapStyle={isDark ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/streets-v11"}
                       mapboxAccessToken={mapboxToken}
                       attributionControl={true}
                       onClick={handleMapClick}
@@ -616,20 +616,20 @@ const AddProjectPage = () => {
                       />
                     </Map>
                   </div>
-                  <div className="mt-2 text-sm text-gray-500 flex items-center">
+                  <div className={`mt-2 text-sm flex items-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                     <FiMapPin className="mr-1" /> Click on the map to set project location or drag the marker
                   </div>
-                  <div className="mt-1 text-xs text-gray-500">
+                  <div className={`mt-1 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                     Location: {location.coordinates[1].toFixed(6)}, {location.coordinates[0].toFixed(6)}
                   </div>
                 </div>
               </div>
             </div>
             
-            <div className="mt-6 pt-6 border-t border-gray-200 flex justify-end">
+            <div className={`mt-6 pt-6 border-t flex justify-end ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
               <Link
                 to="/admin/projects"
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 mr-2 hover:bg-gray-50"
+                className={`px-4 py-2 border rounded-md mr-2 ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
               >
                 Cancel
               </Link>
