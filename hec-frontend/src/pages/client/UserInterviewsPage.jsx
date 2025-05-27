@@ -13,6 +13,92 @@ import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import Swal from 'sweetalert2';
 import { format as formatDate, isToday, isTomorrow, addDays, isAfter, isBefore, parseISO } from 'date-fns';
+import { createGlobalStyle } from 'styled-components';
+
+// Custom styles for calendar dark mode
+const CalendarDarkModeStyles = createGlobalStyle`
+  .rbc-calendar-dark {
+    /* Calendar background and text */
+    background-color: #1f2937;
+    color: #e5e7eb;
+  }
+  
+  .rbc-calendar-dark .rbc-toolbar {
+    background-color: #111827;
+    color: #e5e7eb;
+    border-radius: 0.375rem;
+    padding: 8px;
+    margin-bottom: 10px;
+  }
+  
+  .rbc-calendar-dark .rbc-toolbar button {
+    color: #e5e7eb;
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+  
+  .rbc-calendar-dark .rbc-toolbar button:hover {
+    background-color: #4b5563;
+  }
+  
+  .rbc-calendar-dark .rbc-toolbar button.rbc-active {
+    background-color: #f97316;
+    color: white;
+    border-color: #f97316;
+  }
+  
+  /* Month view cells */
+  .rbc-calendar-dark .rbc-month-view {
+    border-color: #4b5563;
+  }
+  
+  .rbc-calendar-dark .rbc-month-row {
+    border-color: #4b5563;
+  }
+  
+  .rbc-calendar-dark .rbc-day-bg {
+    border-color: #4b5563;
+  }
+  
+  .rbc-calendar-dark .rbc-date-cell {
+    color: #e5e7eb;
+  }
+  
+  .rbc-calendar-dark .rbc-off-range {
+    color: #6b7280;
+  }
+  
+  .rbc-calendar-dark .rbc-today {
+    background-color: rgba(249, 115, 22, 0.15);
+  }
+  
+  /* Week and day view */
+  .rbc-calendar-dark .rbc-time-view {
+    border-color: #4b5563;
+  }
+  
+  .rbc-calendar-dark .rbc-time-header {
+    border-color: #4b5563;
+  }
+  
+  .rbc-calendar-dark .rbc-time-content {
+    border-color: #4b5563;
+  }
+  
+  .rbc-calendar-dark .rbc-time-slot {
+    color: #9ca3af;
+  }
+  
+  .rbc-calendar-dark .rbc-time-gutter {
+    background-color: #1f2937;
+    color: #e5e7eb;
+  }
+  
+  /* Event styling */
+  .rbc-calendar-dark .rbc-event {
+    border-radius: 4px;
+  }
+`;
 
 const UserInterviewsPage = () => {
   const { currentUser } = useAuth();
@@ -335,16 +421,19 @@ const UserInterviewsPage = () => {
   if (!currentUser) {
     return (
       <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
-        <div className="container mx-auto px-4 text-center py-20">
-          <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Please log in to view your interviews.</p>
-          <motion.button
-            onClick={() => window.location.href = '/login'}
-            className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
-            whileHover={{ scale: 1.05 }}
-            whileTap={{ scale: 0.95 }}
-          >
-            Log In
-          </motion.button>
+        <div className="container mx-auto px-4 py-8">
+          {isDark && <CalendarDarkModeStyles />}
+          <div className="text-center py-20">
+            <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Please log in to view your interviews.</p>
+            <motion.button
+              onClick={() => window.location.href = '/login'}
+              className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+            >
+              Log In
+            </motion.button>
+          </div>
         </div>
       </div>
     );
@@ -352,6 +441,7 @@ const UserInterviewsPage = () => {
   
   return (
     <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
+      {isDark && <CalendarDarkModeStyles />}
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -394,10 +484,14 @@ const UserInterviewsPage = () => {
           )}
           
           {/* Calendar View */}
-          <div className="bg-white rounded-lg shadow-md overflow-hidden mb-8">
+          <div className={`rounded-lg shadow-md overflow-hidden mb-8 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
             {loading ? (
               <div className="flex justify-center items-center py-20">
-                <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-coquelicot"></div>
+                <motion.div 
+                  className="rounded-full h-12 w-12 border-t-2 border-b-2 border-coquelicot"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                />
               </div>
             ) : (
               <div className="p-4">
@@ -414,6 +508,7 @@ const UserInterviewsPage = () => {
                   views={['month', 'week', 'day']}
                   defaultView="month"
                   tooltipAccessor={(event) => `${event.title} - ${event.statusInterview}`}
+                  className={isDark ? 'rbc-calendar-dark' : ''}
                 />
               </div>
             )}
@@ -523,11 +618,11 @@ const UserInterviewsPage = () => {
       
       {/* Interview Form Modal */}
       {showForm && (
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 bg-black bg-opacity-60 flex items-center justify-center z-50 p-4 backdrop-blur-sm">
           <motion.div 
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-lg shadow-xl w-full max-w-md p-6"
+            className={`rounded-lg shadow-xl w-full max-w-md p-6 ${isDark ? 'bg-gray-800 shadow-gray-900/50' : 'bg-white'}`}
           >
             <div className="flex justify-between items-center mb-4">
               <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
@@ -587,14 +682,14 @@ const UserInterviewsPage = () => {
                       name="time"
                       value={formatTimeString(formData.date)}
                       onChange={handleTimeChange}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot"
+                      className={`block w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                       required
                     />
                   </div>
                 </div>
                 
                 <div>
-                  <label htmlFor="note" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="note" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Notes (Optional)
                   </label>
                   <textarea
@@ -603,17 +698,17 @@ const UserInterviewsPage = () => {
                     value={formData.note}
                     onChange={handleInputChange}
                     rows="3"
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot"
+                    className={`block w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                     placeholder="Any additional details or topics to discuss"
                   ></textarea>
                 </div>
                 
                 {editMode && selectedInterview && (
                   <div>
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
+                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                       Status
                     </label>
-                    <div className="px-3 py-2 bg-gray-50 rounded-md text-gray-700">
+                    <div className={`px-3 py-2 rounded-md ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-50 text-gray-700'}`}>
                       <div className="flex items-center">
                         {(() => {
                           const statusInfo = getStatusInfo(selectedInterview.statusInterview);
@@ -633,20 +728,24 @@ const UserInterviewsPage = () => {
                 )}
                 
                 <div className="flex justify-end space-x-3 pt-4">
-                  <button
+                  <motion.button
                     type="button"
                     onClick={() => setShowForm(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot"
+                    className={`px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot ${isDark ? 'border-gray-600 text-gray-300 bg-gray-700 hover:bg-gray-600' : 'border-gray-300 text-gray-700 bg-white hover:bg-gray-50'}`}
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     Cancel
-                  </button>
+                  </motion.button>
                   
-                  <button
+                  <motion.button
                     type="submit"
                     className="px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-coquelicot hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot"
+                    whileHover={{ scale: 1.05, backgroundColor: '#FF5722' }}
+                    whileTap={{ scale: 0.95 }}
                   >
                     {editMode ? 'Update Interview' : 'Schedule Interview'}
-                  </button>
+                  </motion.button>
                 </div>
               </div>
             </form>
