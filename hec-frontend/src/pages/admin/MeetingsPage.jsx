@@ -6,11 +6,16 @@ import { motion } from 'framer-motion';
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { FiPlusCircle, FiCalendar, FiClock, FiUser, FiMessageSquare, FiCheckCircle, FiXCircle, FiEdit } from 'react-icons/fi';
+import { useTheme } from '../../context/ThemeContext';
 
 // Setup the localizer for react-big-calendar
 const localizer = momentLocalizer(moment);
 
 const MeetingsPage = () => {
+  // Get theme context
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   // State management
   const [meetings, setMeetings] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -320,20 +325,20 @@ const MeetingsPage = () => {
   const renderStatusBadge = (status) => {
     switch (status) {
       case 'accepted':
-        return <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-green-100 text-green-800 border border-green-200"><FiCheckCircle className="mr-1" /> Accepted</span>;
+        return <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${isDark ? 'bg-green-900 text-green-100 border-green-800' : 'bg-green-100 text-green-800 border-green-200'} border`}><FiCheckCircle className="mr-1" /> Accepted</span>;
       case 'declined':
-        return <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-red-100 text-red-800 border border-red-200"><FiXCircle className="mr-1" /> Declined</span>;
+        return <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${isDark ? 'bg-red-900 text-red-100 border-red-800' : 'bg-red-100 text-red-800 border-red-200'} border`}><FiXCircle className="mr-1" /> Declined</span>;
       default:
-        return <span className="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium bg-orange-100 text-orange-800 border border-orange-200"><FiClock className="mr-1" /> Pending</span>;
+        return <span className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium ${isDark ? 'bg-orange-900 text-orange-100 border-orange-800' : 'bg-orange-100 text-orange-800 border-orange-200'} border`}><FiClock className="mr-1" /> Pending</span>;
     }
   };
 
   return (
-    <div className="p-6">
+    <div className={`p-6 ${isDark ? 'bg-gray-900 text-white' : ''}`}>
       <div className="mb-6 flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-bold text-silver-100">Meetings Management</h1>
-          <p className="text-silver-200">Schedule and manage all meetings</p>
+          <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>Meetings Management</h1>
+          <p className={`${isDark ? 'text-gray-300' : 'text-silver-200'}`}>Schedule and manage all meetings</p>
         </div>
         <button
           onClick={openCreateModal}
@@ -346,60 +351,60 @@ const MeetingsPage = () => {
       {/* Meeting Stats */}
       <div className="mb-6 grid grid-cols-1 md:grid-cols-4 gap-4">
         <div 
-          className={`bg-white p-4 rounded-md shadow-sm border-l-4 border-coquelicot cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'all' ? 'ring-2 ring-coquelicot ring-opacity-50' : ''}`}
+          className={`${isDark ? 'bg-gray-800' : 'bg-white'} p-4 rounded-md shadow-sm border-l-4 border-coquelicot cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'all' ? 'ring-2 ring-coquelicot ring-opacity-50' : ''}`}
           onClick={() => setFilteredStatus('all')}
         >
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-silver-200 text-sm">Total Meetings</p>
-              <p className="text-2xl font-bold text-silver-100">{meetings.length}</p>
+              <p className={`${isDark ? 'text-gray-300' : 'text-silver-200'} text-sm`}>Total Meetings</p>
+              <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>{meetings.length}</p>
             </div>
-            <div className="bg-orange-100 p-3 rounded-full">
+            <div className={`${isDark ? 'bg-gray-700' : 'bg-orange-100'} p-3 rounded-full`}>
               <FiCalendar className="text-coquelicot h-6 w-6" />
             </div>
           </div>
         </div>
         
         <div 
-          className={`bg-white p-4 rounded-md shadow-sm border-l-4 border-orange-500 cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'pending' ? 'ring-2 ring-orange-500 ring-opacity-50' : ''}`}
+          className={`${isDark ? 'bg-gray-800' : 'bg-white'} p-4 rounded-md shadow-sm border-l-4 border-orange-500 cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'pending' ? 'ring-2 ring-orange-500 ring-opacity-50' : ''}`}
           onClick={() => setFilteredStatus('pending')}
         >
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-silver-200 text-sm">Pending</p>
-              <p className="text-2xl font-bold text-silver-100">{meetings.filter(m => m.statusInterview === 'pending').length}</p>
+              <p className={`${isDark ? 'text-gray-300' : 'text-silver-200'} text-sm`}>Pending</p>
+              <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>{meetings.filter(m => m.statusInterview === 'pending').length}</p>
             </div>
-            <div className="bg-orange-100 p-3 rounded-full">
+            <div className={`${isDark ? 'bg-gray-700' : 'bg-orange-100'} p-3 rounded-full`}>
               <FiClock className="text-orange-500 h-6 w-6" />
             </div>
           </div>
         </div>
         
         <div 
-          className={`bg-white p-4 rounded-md shadow-sm border-l-4 border-green-500 cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'accepted' ? 'ring-2 ring-green-500 ring-opacity-50' : ''}`}
+          className={`${isDark ? 'bg-gray-800' : 'bg-white'} p-4 rounded-md shadow-sm border-l-4 border-green-500 cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'accepted' ? 'ring-2 ring-green-500 ring-opacity-50' : ''}`}
           onClick={() => setFilteredStatus('accepted')}
         >
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-silver-200 text-sm">Accepted</p>
-              <p className="text-2xl font-bold text-silver-100">{meetings.filter(m => m.statusInterview === 'accepted').length}</p>
+              <p className={`${isDark ? 'text-gray-300' : 'text-silver-200'} text-sm`}>Accepted</p>
+              <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>{meetings.filter(m => m.statusInterview === 'accepted').length}</p>
             </div>
-            <div className="bg-green-100 p-3 rounded-full">
+            <div className={`${isDark ? 'bg-gray-700' : 'bg-green-100'} p-3 rounded-full`}>
               <FiCheckCircle className="text-green-500 h-6 w-6" />
             </div>
           </div>
         </div>
         
         <div 
-          className={`bg-white p-4 rounded-md shadow-sm border-l-4 border-red-500 cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'declined' ? 'ring-2 ring-red-500 ring-opacity-50' : ''}`}
+          className={`${isDark ? 'bg-gray-800' : 'bg-white'} p-4 rounded-md shadow-sm border-l-4 border-red-500 cursor-pointer transition-all hover:shadow-md ${filteredStatus === 'declined' ? 'ring-2 ring-red-500 ring-opacity-50' : ''}`}
           onClick={() => setFilteredStatus('declined')}
         >
           <div className="flex justify-between items-center">
             <div>
-              <p className="text-silver-200 text-sm">Declined</p>
-              <p className="text-2xl font-bold text-silver-100">{meetings.filter(m => m.statusInterview === 'declined').length}</p>
+              <p className={`${isDark ? 'text-gray-300' : 'text-silver-200'} text-sm`}>Declined</p>
+              <p className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>{meetings.filter(m => m.statusInterview === 'declined').length}</p>
             </div>
-            <div className="bg-red-100 p-3 rounded-full">
+            <div className={`${isDark ? 'bg-gray-700' : 'bg-red-100'} p-3 rounded-full`}>
               <FiXCircle className="text-red-500 h-6 w-6" />
             </div>
           </div>
@@ -407,7 +412,7 @@ const MeetingsPage = () => {
       </div>
 
       {/* Calendar View */}
-      <div className="bg-white p-4 rounded-md shadow-sm mb-6">
+      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} p-4 rounded-md shadow-sm mb-6`}>
         <div className="h-[600px]">
           {loading ? (
             <div className="flex justify-center items-center h-full">
@@ -434,6 +439,13 @@ const MeetingsPage = () => {
               selectable
               popup
               views={['month', 'week', 'day', 'agenda']}
+              className={isDark ? 'rbc-calendar-dark' : ''}
+              dayPropGetter={date => {
+                return {
+                  className: isDark ? 'rbc-day-dark' : '',
+                  style: isDark ? { backgroundColor: '#1f2937', color: '#fff' } : {}
+                };
+              }}
               components={{
                 event: (props) => {
                   const event = props.event;
@@ -579,32 +591,32 @@ const MeetingsPage = () => {
 
       {/* Meeting Create/Edit Modal */}
       {showModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-25">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50">
           <div
-            className="bg-white rounded-xl overflow-hidden w-full max-w-lg mx-auto border border-gray-100"
+            className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-xl overflow-hidden w-full max-w-lg mx-auto border ${isDark ? 'border-gray-700' : 'border-gray-100'}`}
             style={{
               maxHeight: '90vh',
-              boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+              boxShadow: isDark ? '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.2)' : '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
               borderTop: '4px solid #f97316'
             }}
           >
             <form onSubmit={handleSubmit}>
               {/* Modal header */}
-              <div className="bg-gradient-to-r from-orange-50 to-white px-6 py-4 border-b border-gray-100">
+              <div className={`${isDark ? 'bg-gray-700' : 'bg-gradient-to-r from-orange-50 to-white'} px-6 py-4 border-b ${isDark ? 'border-gray-600' : 'border-gray-100'}`}>
                 <div className="flex items-center justify-between">
                   <div className="flex items-center">
-                    <div className="bg-coquelicot bg-opacity-10 p-2.5 rounded-full mr-3">
+                    <div className={`${isDark ? 'bg-gray-600' : 'bg-coquelicot bg-opacity-10'} p-2.5 rounded-full mr-3`}>
                       {modalMode === 'create' ?
                         <FiPlusCircle className="h-6 w-6 text-coquelicot" /> :
                         <FiEdit className="h-6 w-6 text-coquelicot" />}
                     </div>
-                    <h3 className="text-xl font-semibold text-silver-100">
+                    <h3 className={`text-xl font-semibold ${isDark ? 'text-white' : 'text-silver-100'}`}>
                       {modalMode === 'create' ? 'Schedule New Meeting' : 'Edit Meeting'}
                     </h3>
                   </div>
                   <button
                     type="button"
-                    className="bg-gray-50 hover:bg-gray-100 p-2 rounded-full text-gray-400 hover:text-gray-600 focus:outline-none transition-colors"
+                    className={`${isDark ? 'bg-gray-600 hover:bg-gray-500 text-gray-300 hover:text-white' : 'bg-gray-50 hover:bg-gray-100 text-gray-400 hover:text-gray-600'} p-2 rounded-full focus:outline-none transition-colors`}
                     onClick={() => setShowModal(false)}
                   >
                     <span className="sr-only">Close</span>

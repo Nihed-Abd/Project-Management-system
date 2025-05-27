@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import axios from 'axios';
 import moment from 'moment';
+import { useTheme } from '../../context/ThemeContext';
 import { 
   FaUsers, 
   FaProjectDiagram, 
@@ -39,16 +40,19 @@ import {
 axios.defaults.baseURL = 'http://localhost:5000';
 
 const StatCard = ({ icon, title, value, bgColor, textColor }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   return (
     <motion.div
       whileHover={{ y: -5 }}
-      className={`rounded-lg ${bgColor} p-6 shadow-sm border border-gray-100`}
+      className={`rounded-lg ${isDark ? 'bg-gray-800 border-gray-700' : `${bgColor} border-gray-100`} p-6 shadow-sm border`}
     >
       <div className="flex items-center">
-        <div className={`mr-4 rounded-full ${bgColor} p-3`}>{icon}</div>
+        <div className={`mr-4 rounded-full ${isDark ? 'bg-gray-700' : bgColor} p-3`}>{icon}</div>
         <div>
-          <p className="text-sm font-medium text-gray-500">{title}</p>
-          <p className={`text-2xl font-semibold ${textColor}`}>{value}</p>
+          <p className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>{title}</p>
+          <p className={`text-2xl font-semibold ${isDark ? 'text-white' : textColor}`}>{value}</p>
         </div>
       </div>
     </motion.div>
@@ -56,9 +60,12 @@ const StatCard = ({ icon, title, value, bgColor, textColor }) => {
 };
 
 const RecentActivity = ({ activities = [] }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   return (
-    <div className="rounded-lg bg-white p-6 shadow-md">
-      <h2 className="mb-4 text-lg font-medium text-silver-100">Recent Activity</h2>
+    <div className={`rounded-lg ${isDark ? 'bg-gray-800' : 'bg-white'} p-6 shadow-md`}>
+      <h2 className={`mb-4 text-lg font-medium ${isDark ? 'text-white' : 'text-silver-100'}`}>Recent Activity</h2>
       <div className="space-y-4 max-h-96 overflow-y-auto">
         {activities.length > 0 ? (
           activities.map((activity, index) => (
@@ -67,35 +74,35 @@ const RecentActivity = ({ activities = [] }) => {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: index * 0.1 }}
-              className="flex items-center border-b border-gray-100 pb-3"
+              className={`flex items-center border-b ${isDark ? 'border-gray-700' : 'border-gray-100'} pb-3`}
             >
-              <div className="h-10 w-10 rounded-full bg-coquelicot-50 text-center text-coquelicot-600 flex items-center justify-center">
+              <div className={`h-10 w-10 rounded-full ${isDark ? 'bg-gray-700' : 'bg-coquelicot-50'} text-center ${isDark ? 'text-coquelicot-400' : 'text-coquelicot-600'} flex items-center justify-center`}>
                 {activity.user.charAt(0).toUpperCase()}
               </div>
               <div className="ml-3 flex-1">
-                <p className="text-sm">
+                <p className={`text-sm ${isDark ? 'text-gray-200' : ''}`}>
                   <span className="font-medium">{activity.user}</span> {activity.action}
                 </p>
-                <p className="text-xs text-gray-500">{activity.time}</p>
+                <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{activity.time}</p>
               </div>
               <div className="ml-2">
                 {activity.type === 'project' && (
-                  <FaProjectDiagram className="text-blue-500" />
+                  <FaProjectDiagram className={isDark ? 'text-blue-400' : 'text-blue-500'} />
                 )}
                 {activity.type === 'meeting' && (
-                  <FaCalendarAlt className="text-green-500" />
+                  <FaCalendarAlt className={isDark ? 'text-green-400' : 'text-green-500'} />
                 )}
                 {activity.type === 'reclamation' && (
-                  <FaExclamationTriangle className="text-amber-500" />
+                  <FaExclamationTriangle className={isDark ? 'text-amber-400' : 'text-amber-500'} />
                 )}
                 {activity.type === 'message' && (
-                  <FaEnvelope className="text-purple-500" />
+                  <FaEnvelope className={isDark ? 'text-purple-400' : 'text-purple-500'} />
                 )}
               </div>
             </motion.div>
           ))
         ) : (
-          <div className="text-center py-6 text-gray-500">No recent activities</div>
+          <div className={`text-center py-6 ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No recent activities</div>
         )}
       </div>
     </div>
@@ -103,22 +110,25 @@ const RecentActivity = ({ activities = [] }) => {
 };
 
 const UpcomingMeetings = ({ meetings = [] }) => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   return (
-    <div className="rounded-lg bg-white p-6 shadow-md">
-      <h2 className="mb-4 text-lg font-medium text-silver-100">Upcoming Meetings</h2>
+    <div className={`rounded-lg ${isDark ? 'bg-gray-800' : 'bg-white'} p-6 shadow-md`}>
+      <h2 className={`mb-4 text-lg font-medium ${isDark ? 'text-white' : 'text-silver-100'}`}>Upcoming Meetings</h2>
       <div className="space-y-4 max-h-80 overflow-y-auto">
         {meetings.length > 0 ? (
           meetings.map((meeting, index) => (
-            <div key={index} className="flex items-center border-b border-gray-100 pb-3">
-              <div className="flex h-10 w-10 items-center justify-center rounded-full bg-green-50">
-                <FaCalendarAlt className="text-green-600" />
+            <div key={index} className={`flex items-center border-b ${isDark ? 'border-gray-700' : 'border-gray-100'} pb-3`}>
+              <div className={`flex h-10 w-10 items-center justify-center rounded-full ${isDark ? 'bg-green-900/30' : 'bg-green-50'}`}>
+                <FaCalendarAlt className={isDark ? 'text-green-400' : 'text-green-600'} />
               </div>
               <div className="ml-3 flex-1">
-                <p className="font-medium">{meeting.title}</p>
-                <p className="text-sm text-gray-500">
+                <p className={`font-medium ${isDark ? 'text-white' : ''}`}>{meeting.title}</p>
+                <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                   {meeting.date} at {meeting.time}
                 </p>
-                <p className="text-xs text-gray-500">With {meeting.user}</p>
+                <p className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>With {meeting.user}</p>
               </div>
               <div className="ml-2">
                 {meeting.status === 'pending' && (
@@ -212,47 +222,53 @@ const ProjectDistributionChart = ({ stats }) => {
 
 // User Status Chart (Pie Chart)
 const UserStatusChart = ({ stats }) => {
-  // Demo data for when real data is missing
-  const demoData = {
-    active: 1,
-    inactive: 0,
-    total: 1
-  };
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   
-  // Use real data if available, otherwise use demo data
-  const useStats = stats.total > 0 ? stats : demoData;
-  
+  // Prepare data for the pie chart
   const data = [
-    { name: 'Active', value: useStats.active, color: COLORS[1] },
-    { name: 'Inactive', value: useStats.inactive, color: COLORS[3] }
-  ].filter(item => item.value > 0);
+    { name: 'Active', value: stats.active || 0, color: '#00C49F' },
+    { name: 'Inactive', value: stats.inactive || 0, color: '#FF8042' },
+  ];
+
+  // Filter out zero values
+  const filteredData = data.filter(item => item.value > 0);
 
   return (
     <div className="h-64">
-      {data.length > 0 ? (
+      {filteredData.length > 0 ? (
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={data}
+              data={filteredData}
               cx="50%"
               cy="50%"
-              labelLine={false}
+              innerRadius={60}
               outerRadius={80}
-              fill="#8884d8"
+              paddingAngle={5}
               dataKey="value"
-              nameKey="name"
-              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
             >
-              {data.map((entry, index) => (
+              {filteredData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip formatter={(value) => [`${value} users`, 'Count']} />
-            <Legend />
+            <Tooltip 
+              formatter={(value, name) => [`${value} users`, name]}
+              contentStyle={{ 
+                backgroundColor: isDark ? '#1f2937' : '#fff', 
+                borderRadius: '8px', 
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                color: isDark ? '#e5e7eb' : '#333'
+              }}
+            />
+            <Legend formatter={(value) => <span style={{ color: isDark ? '#e5e7eb' : '#333', fontSize: '12px' }}>{value}</span>} />
           </PieChart>
         </ResponsiveContainer>
       ) : (
-        <div className="flex items-center justify-center h-full text-gray-500">No user data available</div>
+        <div className="flex h-full items-center justify-center">
+          <p className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No user data available</p>
+        </div>
       )}
     </div>
   );
@@ -260,50 +276,54 @@ const UserStatusChart = ({ stats }) => {
 
 // Meeting Status Chart (Pie Chart)
 const MeetingStatusChart = ({ stats }) => {
-  // Demo data for when real data is missing
-  const demoData = {
-    pending: 1,
-    accepted: 1,
-    declined: 1,
-    total: 3
-  };
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   
-  // Use real data if available, otherwise use demo data
-  const useStats = stats.total > 0 && (stats.pending > 0 || stats.accepted > 0 || stats.declined > 0) ? 
-                  stats : demoData;
-  
+  // Prepare data for the pie chart
   const data = [
-    { name: 'Pending', value: useStats.pending, color: COLORS[0] },
-    { name: 'Accepted', value: useStats.accepted, color: COLORS[1] },
-    { name: 'Declined', value: useStats.declined, color: COLORS[3] }
-  ].filter(item => item.value > 0);
+    { name: 'Pending', value: stats.pending || 0, color: '#FFBB28' },
+    { name: 'Accepted', value: stats.accepted || 0, color: '#00C49F' },
+    { name: 'Declined', value: stats.declined || 0, color: '#FF8042' },
+  ];
+
+  // Filter out zero values
+  const filteredData = data.filter(item => item.value > 0);
 
   return (
     <div className="h-64">
-      {data.length > 0 ? (
+      {filteredData.length > 0 ? (
         <ResponsiveContainer width="100%" height="100%">
           <PieChart>
             <Pie
-              data={data}
+              data={filteredData}
               cx="50%"
               cy="50%"
-              labelLine={false}
+              innerRadius={60}
               outerRadius={80}
-              fill="#8884d8"
+              paddingAngle={5}
               dataKey="value"
-              nameKey="name"
-              label={({ name, percent }) => `${name}: ${(percent * 100).toFixed(0)}%`}
+              label={({ name, percent }) => `${name} ${(percent * 100).toFixed(0)}%`}
             >
-              {data.map((entry, index) => (
+              {filteredData.map((entry, index) => (
                 <Cell key={`cell-${index}`} fill={entry.color} />
               ))}
             </Pie>
-            <Tooltip formatter={(value) => [`${value} meetings`, 'Count']} />
-            <Legend />
+            <Tooltip 
+              formatter={(value, name) => [`${value} meetings`, name]}
+              contentStyle={{ 
+                backgroundColor: isDark ? '#1f2937' : '#fff', 
+                borderRadius: '8px', 
+                boxShadow: '0 2px 10px rgba(0,0,0,0.1)',
+                color: isDark ? '#e5e7eb' : '#333'
+              }}
+            />
+            <Legend formatter={(value) => <span style={{ color: isDark ? '#e5e7eb' : '#333', fontSize: '12px' }}>{value}</span>} />
           </PieChart>
         </ResponsiveContainer>
       ) : (
-        <div className="flex items-center justify-center h-full text-gray-500">No meeting data available</div>
+        <div className="flex h-full items-center justify-center">
+          <p className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No meeting data available</p>
+        </div>
       )}
     </div>
   );
@@ -441,6 +461,9 @@ const MonthlyActivityChart = ({ data = [] }) => {
 };
 
 const DashboardPage = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+
   // State for all statistics and data
   const [loading, setLoading] = useState(true);
   const [stats, setStats] = useState({
@@ -453,7 +476,7 @@ const DashboardPage = () => {
   const [recentActivities, setRecentActivities] = useState([]);
   const [upcomingMeetings, setUpcomingMeetings] = useState([]);
   const [monthlyStats, setMonthlyStats] = useState([]);
-  
+
   // Fetch all dashboard data
   useEffect(() => {
     const fetchDashboardData = async () => {
@@ -467,18 +490,18 @@ const DashboardPage = () => {
           axios.get('/api/reclamations'),
           axios.get('/api/messages')
         ]);
-        
+
         // Debug response data
         console.log('Users API response:', usersRes.data);
         console.log('Projects API response:', projectsRes.data);
         console.log('Meetings API response:', meetingsRes.data);
         console.log('Reclamations API response:', reclamationsRes.data);
         console.log('Messages API response:', messagesRes.data);
-        
+
         // Process users data - ensure it's an array
         const users = Array.isArray(usersRes.data) ? usersRes.data : [];
         const activeUsers = users.filter(user => user.isActive).length;
-        
+
         // Process projects data - handle the nested structure
         let projects = [];
         if (projectsRes.data && projectsRes.data.projects && Array.isArray(projectsRes.data.projects)) {
@@ -489,27 +512,27 @@ const DashboardPage = () => {
           projects = projectsRes.data;
         }
         console.log('Projects array extracted:', projects);
-        
+
         // Check project statuses and count them
         let pendingProjects = 0;
         let acceptedProjects = 0;
         let inProgressProjects = 0;
         let completedProjects = 0;
-        
+
         projects.forEach(project => {
           // Log the full project to debug its structure
           console.log('Project object:', project);
-          
+
           // Check status using the correct field name (status, not statusProject)
           const projectStatus = project.status || project.statusProject;
           console.log('Project status:', projectStatus);
-          
+
           if (projectStatus === 'Demandé') pendingProjects++;
           else if (projectStatus === 'Accepteé') acceptedProjects++;
           else if (projectStatus === 'En cours') inProgressProjects++;
           else if (projectStatus === 'terminé') completedProjects++;
         });
-        
+
         console.log('Project counts:', { 
           pending: pendingProjects, 
           accepted: acceptedProjects, 
@@ -517,7 +540,7 @@ const DashboardPage = () => {
           completed: completedProjects,
           total: projects.length
         });
-        
+
         // Process meetings data - ensure it's an array
         const meetings = Array.isArray(meetingsRes.data) ? meetingsRes.data : [];
         console.log('Meetings array:', meetings);
@@ -528,23 +551,23 @@ const DashboardPage = () => {
         const pendingMeetings = meetings.filter(meeting => meeting.statusInterview === 'pending').length;
         const acceptedMeetings = meetings.filter(meeting => meeting.statusInterview === 'accepted').length;
         const declinedMeetings = meetings.filter(meeting => meeting.statusInterview === 'declined').length;
-        
+
         // Process reclamations data - ensure it's an array
         const reclamations = Array.isArray(reclamationsRes.data) ? reclamationsRes.data : [];
         console.log('Reclamations array:', reclamations);
         const pendingReclamations = reclamations.filter(rec => rec.statusRec === 'pending').length;
         const answeredReclamations = reclamations.filter(rec => rec.statusRec === 'Answered').length;
-        
+
         // Process messages data - ensure it's an array
         const messages = Array.isArray(messagesRes.data) ? messagesRes.data : [];
         console.log('Messages array:', messages);
-        
+
         // Handle case where projectsRes.data.count might exist
         const projectsCount = projectsRes.data && projectsRes.data.count ? 
           projectsRes.data.count : projects.length;
 
         console.log('Setting total projects count to:', projectsCount);
-        
+
         // Update stats state with the correct counts
         setStats({
           users: { 
@@ -576,7 +599,7 @@ const DashboardPage = () => {
             total: messages.length 
           }
         });
-        
+
         // Set upcoming meetings
         setUpcomingMeetings(upcomingMeetingsData.map(meeting => ({
           title: meeting.interviewGoal || 'Meeting',
@@ -585,10 +608,10 @@ const DashboardPage = () => {
           status: meeting.statusInterview,
           user: meeting.userId?.name || 'Unknown User'
         })));
-        
+
         // Create recent activities from all collected data
         let activities = [];
-        
+
         try {
           // Add projects activity if we have projects
           if (projects.length > 0) {
@@ -602,7 +625,7 @@ const DashboardPage = () => {
               }))
             ];
           }
-          
+
           // Add meetings activity if we have meetings
           if (meetings.length > 0) {
             activities = [
@@ -615,7 +638,7 @@ const DashboardPage = () => {
               }))
             ];
           }
-          
+
           // Add reclamations activity if we have reclamations
           if (reclamations.length > 0) {
             activities = [
@@ -628,7 +651,7 @@ const DashboardPage = () => {
               }))
             ];
           }
-          
+
           // Add messages activity if we have messages
           if (messages.length > 0) {
             activities = [
@@ -645,14 +668,14 @@ const DashboardPage = () => {
           console.error('Error creating activities:', error);
           activities = [];
         }
-        
+
         // Sort activities by time (assuming they all have a timestamp) and take top 10
         const sortedActivities = activities.sort((a, b) => {
           return moment(b.time, 'fromNow').diff(moment(a.time, 'fromNow'));
         }).slice(0, 10);
-        
+
         setRecentActivities(sortedActivities);
-        
+
         // Generate monthly statistics for the past 12 months
         const last12Months = [];
         try {
@@ -661,9 +684,9 @@ const DashboardPage = () => {
             const monthName = month.format('MMM');
             const monthStart = month.startOf('month');
             const monthEnd = month.endOf('month');
-            
+
             console.log(`Processing month: ${monthName} (${monthStart.format('YYYY-MM-DD')} to ${monthEnd.format('YYYY-MM-DD')})`);
-            
+
             // Count projects in this month
             let projectsInMonth = 0;
             projects.forEach(p => {
@@ -678,7 +701,7 @@ const DashboardPage = () => {
                 }
               }
             });
-            
+
             // Count meetings in this month
             let meetingsInMonth = 0;
             meetings.forEach(m => {
@@ -689,7 +712,7 @@ const DashboardPage = () => {
                 }
               }
             });
-            
+
             // Count reclamations in this month
             let reclamationsInMonth = 0;
             reclamations.forEach(r => {
@@ -700,7 +723,7 @@ const DashboardPage = () => {
                 }
               }
             });
-            
+
             // Count messages in this month
             let messagesInMonth = 0;
             messages.forEach(m => {
@@ -711,10 +734,10 @@ const DashboardPage = () => {
                 }
               }
             });
-            
+
             // No random data - only use real values
             // Keep all values as they are, even if they're zero
-            
+
             // Add data for this month
             last12Months.push({
               name: monthName,
@@ -725,7 +748,7 @@ const DashboardPage = () => {
               messages: messagesInMonth
             });
           }
-          
+
           console.log('Monthly stats generated:', last12Months);
         } catch (error) {
           console.error('Error generating monthly stats:', error);
@@ -733,7 +756,7 @@ const DashboardPage = () => {
           setMonthlyStats([]);
           return;
         }
-        
+
         // Get the most recent 6 months by default for the initial view
         setMonthlyStats(last12Months.slice(-6));
       } catch (error) {
@@ -742,12 +765,12 @@ const DashboardPage = () => {
         setLoading(false);
       }
     };
-    
+
     fetchDashboardData();
   }, []);
-  
+
   return (
-    <div className="min-h-screen bg-transparent p-4">
+    <div className={`min-h-screen ${isDark ? 'bg-gray-900 text-white' : 'bg-isabelline-600 text-gray-800'}`}>
       <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
@@ -801,38 +824,38 @@ const DashboardPage = () => {
             {/* Charts and Main Content */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
               {/* Project Distribution Chart */}
-              <div className="bg-white rounded-lg shadow-md p-5 lg:col-span-1">
-                <h2 className="text-lg font-medium mb-4 text-silver-100">Project Status</h2>
-                <div className="mb-3 text-sm text-silver-200">Total Projects: {stats.projects.total}</div>
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-5 lg:col-span-1`}>
+                <h2 className={`text-lg font-medium mb-4 ${isDark ? 'text-white' : 'text-silver-100'}`}>Project Status</h2>
+                <div className={`mb-3 text-sm ${isDark ? 'text-gray-300' : 'text-silver-200'}`}>Total Projects: {stats.projects.total}</div>
                 <ProjectDistributionChart stats={stats.projects} />
               </div>
               
               {/* Monthly Activity Chart */}
-              <div className="bg-white rounded-lg shadow-md p-5 lg:col-span-2">
-                <h2 className="text-lg font-medium mb-4 text-silver-100">Monthly Activity</h2>
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-5 lg:col-span-2`}>
+                <h2 className={`text-lg font-medium mb-4 ${isDark ? 'text-white' : 'text-silver-100'}`}>Monthly Activity</h2>
                 <MonthlyActivityChart data={monthlyStats} />
               </div>
             </div>
 
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-6">
               {/* User Status Chart */}
-              <div className="bg-white rounded-lg shadow-md p-5">
-                <h2 className="text-lg font-medium mb-4 text-silver-100">User Status</h2>
-                <div className="mb-3 text-sm text-silver-200">Total Users: {stats.users.total}</div>
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-5`}>
+                <h2 className={`text-lg font-medium mb-4 ${isDark ? 'text-white' : 'text-silver-100'}`}>User Status</h2>
+                <div className={`mb-3 text-sm ${isDark ? 'text-gray-300' : 'text-silver-200'}`}>Total Users: {stats.users.total}</div>
                 <UserStatusChart stats={stats.users} />
               </div>
               
               {/* Meeting Status Chart */}
-              <div className="bg-white rounded-lg shadow-md p-5">
-                <h2 className="text-lg font-medium mb-4 text-silver-100">Meeting Status</h2>
-                <div className="mb-3 text-sm text-silver-200">Total Meetings: {stats.meetings.total}</div>
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-5`}>
+                <h2 className={`text-lg font-medium mb-4 ${isDark ? 'text-white' : 'text-silver-100'}`}>Meeting Status</h2>
+                <div className={`mb-3 text-sm ${isDark ? 'text-gray-300' : 'text-silver-200'}`}>Total Meetings: {stats.meetings.total}</div>
                 <MeetingStatusChart stats={stats.meetings} />
               </div>
               
               {/* Reclamation Status Chart */}
-              <div className="bg-white rounded-lg shadow-md p-5">
-                <h2 className="text-lg font-medium mb-4 text-silver-100">Reclamation Status</h2>
-                <div className="mb-3 text-sm text-silver-200">Total Reclamations: {stats.reclamations.total}</div>
+              <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow-md p-5`}>
+                <h2 className={`text-lg font-medium mb-4 ${isDark ? 'text-white' : 'text-silver-100'}`}>Reclamation Status</h2>
+                <div className={`mb-3 text-sm ${isDark ? 'text-gray-300' : 'text-silver-200'}`}>Total Reclamations: {stats.reclamations.total}</div>
                 <ReclamationStatusChart stats={stats.reclamations} />
               </div>
             </div>

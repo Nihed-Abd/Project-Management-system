@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FiSearch, FiPlus, FiFilter, FiEye, FiEdit, FiTrash2, FiUser, FiCalendar, FiTag, FiClock } from 'react-icons/fi';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import Swal from 'sweetalert2';
 
 // Add global styles for SweetAlert buttons when component loads
@@ -40,6 +41,8 @@ const ProjectsPage = () => {
   const [categories, setCategories] = useState([]);
   const navigate = useNavigate();
   const { currentUser } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   // Fetch projects and categories on component mount
   useEffect(() => {
@@ -358,11 +361,11 @@ const ProjectsPage = () => {
   const projectStatuses = ["Demandé", "Accepteé", "En cours", "terminé"];
 
   return (
-    <div className="p-6">
+    <div className={`p-6 ${isDark ? 'bg-gray-900 text-white' : ''}`}>
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center mb-6">
         <div>
-          <h1 className="text-2xl font-bold text-silver-100">Projects</h1>
-          <p className="text-silver-200">Manage all projects from one place</p>
+          <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>Projects</h1>
+          <p className={`${isDark ? 'text-gray-300' : 'text-silver-200'}`}>Manage all projects from one place</p>
         </div>
         <Link
           to="/admin/projects/add"
@@ -372,8 +375,8 @@ const ProjectsPage = () => {
         </Link>
       </div>
 
-      <div className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden">
-        <div className="p-4 border-b border-gray-100 flex flex-col md:flex-row gap-4">
+      <div className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-lg shadow-sm border overflow-hidden`}>
+        <div className={`p-4 border-b ${isDark ? 'border-gray-700' : 'border-gray-100'} flex flex-col md:flex-row gap-4`}>
           <div className="relative flex-grow">
             <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
               <FiSearch className="text-gray-400" />
@@ -383,14 +386,14 @@ const ProjectsPage = () => {
               placeholder="Search by user name, email or phone..."
               value={searchQuery}
               onChange={handleSearchChange}
-              className="block w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+              className={`block w-full pl-10 pr-4 py-2 border ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-200 text-gray-900'} rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500`}
             />
           </div>
           <div className="flex space-x-2">
             {/* Status filter */}
             <div className="relative">
               <select
-                className="bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className={`${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'} py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 value={statusFilter}
                 onChange={handleStatusFilterChange}
               >
@@ -400,15 +403,15 @@ const ProjectsPage = () => {
                 <option value="Terminé">Terminé</option>
                 <option value="Annulé">Annulé</option>
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <FiFilter />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                <FiFilter className={`${isDark ? 'text-gray-400' : 'text-gray-700'}`} />
               </div>
             </div>
             
             {/* Year filter */}
             <div className="relative">
               <select
-                className="bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className={`${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'} py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 value={yearFilter}
                 onChange={handleYearFilterChange}
               >
@@ -417,15 +420,15 @@ const ProjectsPage = () => {
                   <option key={year} value={year}>{year}</option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <FiCalendar />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                <FiCalendar className={`${isDark ? 'text-gray-400' : 'text-gray-700'}`} />
               </div>
             </div>
             
             {/* Category filter */}
             <div className="relative">
               <select
-                className="bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+                className={`${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'} py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
                 value={categoryFilter}
                 onChange={handleCategoryFilterChange}
               >
@@ -434,15 +437,15 @@ const ProjectsPage = () => {
                   <option key={category._id} value={category._id}>{category.name}</option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <FiTag />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                <FiTag className={`${isDark ? 'text-gray-400' : 'text-gray-700'}`} />
               </div>
             </div>
             
             {/* Month filter - only enabled if year is selected */}
             <div className="relative">
               <select
-                className={`bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${!yearFilter ? 'opacity-50 cursor-not-allowed' : ''}`}
+                className={`${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'} py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500 ${!yearFilter ? 'opacity-50 cursor-not-allowed' : ''}`}
                 value={monthFilter}
                 onChange={handleMonthFilterChange}
                 disabled={!yearFilter}
@@ -452,8 +455,8 @@ const ProjectsPage = () => {
                   <option key={month} value={month}>{getMonthName(month)}</option>
                 ))}
               </select>
-              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-                <FiClock />
+              <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2">
+                <FiClock className={`${isDark ? 'text-gray-400' : 'text-gray-700'}`} />
               </div>
             </div>
           </div>
@@ -464,10 +467,10 @@ const ProjectsPage = () => {
             <div className="animate-spin rounded-full h-10 w-10 border-b-2 border-coquelicot"></div>
           </div>
         ) : error ? (
-          <div className="p-4 text-center text-red-600">{error}</div>
+          <div className={`p-4 text-center ${isDark ? 'text-red-400' : 'text-red-600'}`}>{error}</div>
         ) : filteredProjects.length === 0 ? (
           <div className="p-16 text-center">
-            <p className="text-silver-200 mb-4">No projects found</p>
+            <p className={`${isDark ? 'text-gray-400' : 'text-silver-200'} mb-4`}>No projects found</p>
             <Link
               to="/admin/projects/add"
               className="inline-flex items-center gap-2 bg-coquelicot hover:bg-coquelicot-600 text-white px-4 py-2 rounded-md transition-colors"
@@ -477,37 +480,37 @@ const ProjectsPage = () => {
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className={`min-w-full divide-y ${isDark ? 'divide-gray-700' : 'divide-gray-200'}`}>
+              <thead className={`${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Project
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     User
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Category
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Status
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Created
                   </th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-right text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className={`${isDark ? 'bg-gray-800 divide-y divide-gray-700' : 'bg-white divide-y divide-gray-200'}`}>
                 {filteredProjects.map((project) => (
                   <motion.tr
                     key={project._id}
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ duration: 0.3 }}
-                    className="hover:bg-gray-50 cursor-pointer"
+                    className={`${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-50'} cursor-pointer`}
                     onClick={() => viewProjectDetails(project._id)}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -520,8 +523,8 @@ const ProjectsPage = () => {
                           />
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{project.title}</div>
-                          <div className="text-sm text-gray-500 truncate max-w-xs">{project.description.substring(0, 60)}...</div>
+                          <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{project.title}</div>
+                          <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'} truncate max-w-xs`}>{project.description.substring(0, 60)}...</div>
                         </div>
                       </div>
                     </td>
@@ -535,15 +538,15 @@ const ProjectsPage = () => {
                           />
                         </div>
                         <div>
-                          <div className="text-sm font-medium text-gray-900">{project.userId?.name}</div>
-                          <div className="text-sm text-gray-500">{project.userId?.email}</div>
+                          <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{project.userId?.name}</div>
+                          <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>{project.userId?.email}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-900">
+                      <div className={`text-sm ${isDark ? 'text-white' : 'text-gray-900'}`}>
                         <span className="inline-flex items-center gap-1">
-                          <FiTag className="text-gray-400" />
+                          <FiTag className={`${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
                           {project.categoryId?.name || 'Unknown'}
                         </span>
                       </div>
@@ -624,9 +627,9 @@ const ProjectsPage = () => {
                         </div>
                       </div>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                      <span className="inline-flex items-center gap-1">
-                        <FiCalendar className="text-gray-400" />
+                    <td className="px-6 py-4 whitespace-nowrap text-sm">
+                      <span className={`inline-flex items-center gap-1 ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+                        <FiCalendar className={`${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
                         {formatDate(project.creationDate)}
                       </span>
                     </td>

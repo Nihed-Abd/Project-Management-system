@@ -2,6 +2,7 @@ import React, { useEffect, useRef, useState, useMemo } from 'react';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import axios from 'axios';
+import { useTheme } from '../../context/ThemeContext';
 import { FaSpinner, FaLayerGroup, FaUser, FaCalendarAlt } from 'react-icons/fa';
 
 // Mapbox token
@@ -19,6 +20,9 @@ const getStatusColor = (status) => {
 };
 
 const MapPage = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   const mapContainer = useRef(null);
   const map = useRef(null);
   const markersRef = useRef([]);
@@ -58,7 +62,7 @@ const MapPage = () => {
 
     map.current = new mapboxgl.Map({
       container: mapContainer.current,
-      style: 'mapbox://styles/mapbox/streets-v12',
+      style: isDark ? 'mapbox://styles/mapbox/dark-v11' : 'mapbox://styles/mapbox/streets-v12',
       center: [10.183333, 36.8], // Center on Tunis
       zoom: 8,
       pitch: 45, // Tilt the map for 3D effect
@@ -255,17 +259,20 @@ const MapPage = () => {
   }, [filteredProjects, loading, mapLoaded]);
 
   return (
-    <div className="bg-white rounded-lg shadow-md p-6">
-      <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Projects Location Map</h1>
+    <div className={`p-6 ${isDark ? 'bg-gray-900 text-white' : ''}`}>
+      <div className="mb-6">
+        <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'} mb-2`}>Project Locations</h1>
+        <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>View all projects on the map</p>
+      </div>
+      
+      <div className={`mb-4 ${isDark ? 'bg-gray-800' : 'bg-white'} shadow-sm rounded-lg p-4 flex flex-wrap justify-between items-center`}>
         <div className="flex items-center gap-4">
           <div className="flex items-center">
-            <label htmlFor="statusFilter" className="mr-2 text-sm font-medium text-gray-700">Status:</label>
+            <FaLayerGroup className={`${isDark ? 'text-gray-400' : 'text-gray-500'} mr-2`} />
             <select
-              id="statusFilter"
+              className={`${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'} py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot-500 focus:border-coquelicot-500`}
               value={statusFilter}
               onChange={(e) => setStatusFilter(e.target.value)}
-              className="rounded-md border-gray-300 shadow-sm focus:border-coquelicot-500 focus:ring-coquelicot-500 text-sm"
             >
               {statuses.map(status => (
                 <option key={status} value={status}>
@@ -274,22 +281,22 @@ const MapPage = () => {
               ))}
             </select>
           </div>
-          <div className="text-sm text-gray-500">
-            {loading ? (
-              <span className="flex items-center">
-                <FaSpinner className="animate-spin mr-2" />
-                Loading projects...
-              </span>
-            ) : (
-              <span>
-                {filteredProjects.length} of {projects.length} projects shown
-              </span>
-            )}
-          </div>
+        </div>
+        <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
+          {loading ? (
+            <span className="flex items-center">
+              <FaSpinner className="animate-spin mr-2" />
+              Loading projects...
+            </span>
+          ) : (
+            <span>
+              {filteredProjects.length} of {projects.length} projects shown
+            </span>
+          )}
         </div>
       </div>
       
-      <div className="bg-gray-100 rounded-lg overflow-hidden relative">
+      <div className={`${isDark ? 'bg-gray-800' : 'bg-gray-100'} rounded-lg overflow-hidden relative`}>
         {/* Map container */}
         <div 
           ref={mapContainer} 
@@ -297,9 +304,9 @@ const MapPage = () => {
         />
         
         {/* Project list sidebar */}
-        <div className="absolute top-4 left-4 bg-white rounded-md shadow-md w-64 max-h-[calc(100%-32px)] overflow-y-auto">
-          <div className="p-3 border-b border-gray-200">
-            <h3 className="font-bold text-gray-700">Project Locations</h3>
+        <div className={`absolute top-4 left-4 ${isDark ? 'bg-gray-800' : 'bg-white'} rounded-md shadow-md w-64 max-h-[calc(100%-32px)] overflow-y-auto`}>
+          <div className={`p-3 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
+            <h3 className={`font-bold ${isDark ? 'text-white' : 'text-gray-700'}`}>Project Locations</h3>
             <div className="mt-2 flex flex-wrap gap-2">
               <div className="flex items-center text-xs">
                 <span className="inline-block w-3 h-3 rounded-full mr-1 bg-blue-600"></span>
@@ -325,7 +332,7 @@ const MapPage = () => {
                 <FaSpinner className="animate-spin text-coquelicot-500" />
               </div>
             ) : projects.filter(p => p.location && p.location.coordinates).length === 0 ? (
-              <p className="text-sm text-gray-500 p-2">No projects with location data</p>
+              <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} p-2`}>No projects with location data</p>
             ) : (
               <ul className="space-y-2">
                 {filteredProjects
@@ -336,7 +343,7 @@ const MapPage = () => {
                       className={`p-2 rounded-md cursor-pointer transition-all duration-200 text-sm ${
                         selectedProject === project._id 
                           ? 'bg-coquelicot-500 text-white' 
-                          : 'hover:bg-gray-100'
+                          : isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'
                       }`}
                       onClick={() => {
                         setSelectedProject(project._id);
@@ -353,7 +360,7 @@ const MapPage = () => {
                       }}
                     >
                       <div className="font-medium">{project.title}</div>
-                      <div className={`text-xs ${selectedProject === project._id ? 'text-white' : 'text-gray-500'}`}>
+                      <div className={`text-xs ${selectedProject === project._id ? 'text-white' : isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                         {project.status}
                       </div>
                     </li>

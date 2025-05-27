@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { FiSearch, FiFilter, FiCheck, FiX, FiEdit, FiUserX, FiUserCheck, FiCalendar, FiShield, FiMail, FiUserPlus } from 'react-icons/fi';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import Swal from 'sweetalert2';
 
 // Add global styles for SweetAlert buttons when component loads
@@ -36,6 +37,8 @@ const UsersPage = () => {
   const [yearFilter, setYearFilter] = useState('');
   const [availableYears, setAvailableYears] = useState([]);
   const { currentUser } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   
   // Add client form state
   const [addingUser, setAddingUser] = useState(false);
@@ -396,14 +399,14 @@ const UsersPage = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className={`p-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold">User Management</h1>
+        <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>User Management</h1>
         
         {/* Add New Client Button */}
         <button
           onClick={addNewClient}
-          className="flex items-center px-4 py-2 bg-coquelicot hover:bg-coquelicot-600 text-white rounded-md transition-colors"
+          className="flex items-center bg-coquelicot hover:bg-coquelicot-600 text-white py-2 px-4 rounded-md space-x-2"
           disabled={addingUser}
         >
           {addingUser ? (
@@ -424,14 +427,14 @@ const UsersPage = () => {
       <div className="mb-6 flex flex-wrap gap-4">
         <div className="relative flex-grow max-w-md">
           <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-            <FiSearch className="text-gray-400" />
+            <FiSearch className={`${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
           </div>
           <input
             type="text"
             placeholder="Search users by name or email..."
             value={searchQuery}
             onChange={handleSearchChange}
-            className="block w-full pl-10 pr-4 py-2 border border-gray-200 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+            className={`block w-full pl-10 pr-4 py-2 rounded-md border ${isDark ? 'border-gray-600 bg-gray-700 text-white placeholder-gray-400' : 'border-gray-200 bg-white text-gray-900'} focus:ring-coquelicot-500 focus:border-coquelicot-500`}
           />
         </div>
         
@@ -439,7 +442,7 @@ const UsersPage = () => {
           {/* Role filter */}
           <div className="relative">
             <select
-              className="bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={`${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'} border py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
               value={roleFilter}
               onChange={handleRoleFilterChange}
             >
@@ -448,14 +451,14 @@ const UsersPage = () => {
               ))}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <FiShield />
+              <FiShield className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
             </div>
           </div>
           
           {/* Status filter */}
           <div className="relative">
             <select
-              className="bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={`${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'} border py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
               value={statusFilter}
               onChange={handleStatusFilterChange}
             >
@@ -464,14 +467,14 @@ const UsersPage = () => {
               ))}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <FiFilter />
+              <FiFilter className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
             </div>
           </div>
           
           {/* Year filter */}
           <div className="relative">
             <select
-              className="bg-white border border-gray-300 text-gray-700 py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+              className={`${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'} border py-2 px-3 pr-8 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500`}
               value={yearFilter}
               onChange={handleYearFilterChange}
             >
@@ -481,7 +484,7 @@ const UsersPage = () => {
               ))}
             </select>
             <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-              <FiCalendar />
+              <FiCalendar className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
             </div>
           </div>
         </div>
@@ -489,55 +492,55 @@ const UsersPage = () => {
 
       {/* Display error if any */}
       {error && (
-        <div className="mb-4 p-4 bg-red-50 text-red-600 rounded-md">
+        <div className={`mb-4 p-4 ${isDark ? 'bg-red-900/50 text-red-200' : 'bg-red-50 text-red-600'} rounded-md`}>
           {error}
         </div>
       )}
 
       {/* Users table */}
-      <div className="bg-white rounded-lg shadow overflow-hidden">
+      <div className={`${isDark ? 'bg-gray-800' : 'bg-white'} rounded-lg shadow overflow-hidden`}>
         {loading ? (
           <div className="p-6 text-center">
             <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-coquelicot-500 mx-auto"></div>
-            <p className="mt-4 text-gray-600">Loading users...</p>
+            <p className={`mt-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Loading users...</p>
           </div>
         ) : filteredUsers.length === 0 ? (
           <div className="p-6 text-center">
-            <p className="text-gray-600">No users found matching your filters.</p>
+            <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>No users found matching your filters.</p>
           </div>
         ) : (
           <div className="overflow-x-auto">
-            <table className="min-w-full divide-y divide-gray-200">
-              <thead className="bg-gray-50">
+            <table className={`min-w-full divide-y ${isDark ? 'divide-gray-700' : 'divide-gray-200'}`}>
+              <thead className={`${isDark ? 'bg-gray-900' : 'bg-gray-50'}`}>
                 <tr>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     User
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Email
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Role
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Status
                   </th>
-                  <th scope="col" className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-left text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Created
                   </th>
-                  <th scope="col" className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                  <th scope="col" className={`px-6 py-3 text-right text-xs font-medium ${isDark ? 'text-gray-300' : 'text-gray-500'} uppercase tracking-wider`}>
                     Actions
                   </th>
                 </tr>
               </thead>
-              <tbody className="bg-white divide-y divide-gray-200">
+              <tbody className={`${isDark ? 'bg-gray-800 divide-y divide-gray-700' : 'bg-white divide-y divide-gray-200'}`}>
                 {filteredUsers.map((user, index) => (
                   <motion.tr 
                     key={user._id} 
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.3, delay: index * 0.05 }}
-                    className="hover:bg-gray-50 cursor-pointer"
+                    className={`${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-50'} cursor-pointer`}
                   >
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
@@ -549,14 +552,14 @@ const UsersPage = () => {
                           />
                         </div>
                         <div className="ml-4">
-                          <div className="text-sm font-medium text-gray-900">{user.name}</div>
+                          <div className={`text-sm font-medium ${isDark ? 'text-white' : 'text-gray-900'}`}>{user.name}</div>
                         </div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
                       <div className="flex items-center">
-                        <FiMail className="text-gray-400 mr-2" />
-                        <div className="text-sm text-gray-500">{user.email}</div>
+                        <FiMail className={`${isDark ? 'text-gray-400' : 'text-gray-400'} mr-2`} />
+                        <div className={`text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>{user.email}</div>
                       </div>
                     </td>
                     <td className="px-6 py-4 whitespace-nowrap">
@@ -571,9 +574,9 @@ const UsersPage = () => {
                         {user.isActive ? 'Active' : 'Banned'}
                       </span>
                     </td>
-                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                    <td className={`px-6 py-4 whitespace-nowrap text-sm ${isDark ? 'text-gray-300' : 'text-gray-500'}`}>
                       <span className="inline-flex items-center gap-1">
-                        <FiCalendar className="text-gray-400" />
+                        <FiCalendar className={`${isDark ? 'text-gray-400' : 'text-gray-400'}`} />
                         {formatDate(user.creationDate)}
                       </span>
                     </td>
@@ -581,7 +584,7 @@ const UsersPage = () => {
                       <div className="flex justify-end space-x-2">
                         {/* Role change button */}
                         <button 
-                          className="text-blue-600 hover:text-blue-900 p-2 hover:bg-blue-50 rounded-full transition-colors"
+                          className={`text-blue-600 p-2 rounded-full transition-colors ${isDark ? 'hover:text-blue-400 hover:bg-blue-900/30' : 'hover:text-blue-900 hover:bg-blue-50'}`}
                           onClick={(e) => {
                             e.stopPropagation();
                             changeUserRole(user);
@@ -595,8 +598,8 @@ const UsersPage = () => {
                         <button 
                           className={`p-2 rounded-full transition-colors ${
                             user.isActive 
-                              ? 'text-red-600 hover:text-red-800 hover:bg-red-50' 
-                              : 'text-green-600 hover:text-green-800 hover:bg-green-50'
+                              ? isDark ? 'text-red-400 hover:text-red-300 hover:bg-red-900/30' : 'text-red-600 hover:text-red-800 hover:bg-red-50' 
+                              : isDark ? 'text-green-400 hover:text-green-300 hover:bg-green-900/30' : 'text-green-600 hover:text-green-800 hover:bg-green-50'
                           }`}
                           onClick={(e) => {
                             e.stopPropagation();
