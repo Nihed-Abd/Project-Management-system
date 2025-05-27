@@ -1,12 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiUser, FiMail, FiPhone, FiLock, FiEdit, FiSave, FiX, FiCheckCircle } from 'react-icons/fi';
+import { FiUser, FiMail, FiPhone, FiLock, FiEdit, FiSave, FiX, FiCheckCircle, FiCamera } from 'react-icons/fi';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import Swal from 'sweetalert2';
 
 const UserProfilePage = () => {
   const { currentUser, setCurrentUser } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   
   // Profile form state
   const [profileData, setProfileData] = useState({
@@ -371,22 +374,24 @@ const UserProfilePage = () => {
   
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-white pt-24 pb-16">
+      <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
         <div className="container mx-auto px-4 text-center py-20">
-          <p className="text-gray-600 mb-4">Please log in to view your profile.</p>
-          <button
+          <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Please log in to view your profile.</p>
+          <motion.button
             onClick={() => window.location.href = '/login'}
-            className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
+            className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             Log In
-          </button>
+          </motion.button>
         </div>
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen bg-white pt-24 pb-16">
+    <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
       <div className="container mx-auto px-4">
         <motion.div
           initial="initial"
@@ -395,13 +400,13 @@ const UserProfilePage = () => {
           variants={pageVariants}
           className="max-w-4xl mx-auto"
         >
-          <h1 className="text-3xl font-bold text-gray-800 mb-8">My Profile</h1>
+          <h1 className={`text-3xl font-bold mb-8 ${isDark ? 'text-white' : 'text-gray-800'}`}>My Profile</h1>
           
-          <div className="bg-white rounded-lg shadow-md overflow-hidden">
+          <div className={`rounded-lg shadow-md overflow-hidden ${isDark ? 'bg-gray-800 shadow-gray-700/10' : 'bg-white'}`}>
             {/* Profile Header */}
-            <div className="bg-gradient-to-r from-coquelicot-50 to-coquelicot-100 p-6 flex flex-col md:flex-row items-center md:items-start gap-6">
+            <div className={`p-6 flex flex-col md:flex-row items-center md:items-start gap-6 ${isDark ? 'bg-gradient-to-r from-gray-800 to-gray-700 border-b border-gray-700' : 'bg-gradient-to-r from-coquelicot-50 to-coquelicot-100'}`}>
               <div className="relative">
-                <div className="h-32 w-32 rounded-full overflow-hidden bg-gray-200 border-4 border-white shadow-lg">
+                <div className={`h-32 w-32 rounded-full overflow-hidden shadow-lg ${isDark ? 'bg-gray-700 border-4 border-gray-700' : 'bg-gray-200 border-4 border-white'}`}>
                   {imagePreview || profileData.picture ? (
                     <img 
                       src={imagePreview || profileData.picture} 
@@ -417,42 +422,55 @@ const UserProfilePage = () => {
                 
                 {editMode && (
                   <div className="absolute bottom-0 right-0">
-                    <label className="flex items-center justify-center h-8 w-8 rounded-full bg-coquelicot text-white shadow cursor-pointer hover:bg-coquelicot-600 transition-colors">
-                      <FiEdit className="h-4 w-4" />
+                    <motion.label 
+                      className="flex items-center justify-center h-10 w-10 rounded-full bg-coquelicot text-white shadow cursor-pointer hover:bg-coquelicot-600 transition-all duration-300"
+                      whileHover={{ scale: 1.1 }}
+                      whileTap={{ scale: 0.9 }}
+                    >
+                      <FiCamera className="h-5 w-5" />
                       <input 
                         type="file" 
                         className="hidden" 
                         accept="image/*"
                         onChange={handleImageChange}
                       />
-                    </label>
+                    </motion.label>
+                    {errors.picture && (
+                      <div className="absolute top-10 right-0 w-48 text-xs text-red-500 bg-white dark:bg-gray-800 p-1 rounded shadow-md mt-1">
+                        {errors.picture}
+                      </div>
+                    )}
                   </div>
                 )}
               </div>
               
               <div className="text-center md:text-left flex-grow">
-                <h2 className="text-2xl font-bold text-gray-800">{currentUser.name}</h2>
-                <p className="text-gray-600">{currentUser.email}</p>
+                <h2 className={`text-2xl font-bold mb-1 ${isDark ? 'text-white' : 'text-gray-800'}`}>{currentUser.name}</h2>
+                <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{currentUser.email}</p>
                 {currentUser.phoneNumber && (
-                  <p className="text-gray-600">{currentUser.phoneNumber}</p>
+                  <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{currentUser.phoneNumber}</p>
                 )}
                 
                 {!editMode && !passwordMode && (
                   <div className="mt-4 flex flex-wrap gap-2 justify-center md:justify-start">
-                    <button
+                    <motion.button
                       onClick={() => setEditMode(true)}
-                      className="inline-flex items-center px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
+                      className="inline-flex items-center px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       <FiEdit className="mr-2 h-4 w-4" />
                       Edit Profile
-                    </button>
-                    <button
+                    </motion.button>
+                    <motion.button
                       onClick={() => setPasswordMode(true)}
-                      className="inline-flex items-center px-4 py-2 bg-gray-700 text-white rounded-md hover:bg-gray-800 transition-colors"
+                      className={`inline-flex items-center px-4 py-2 text-white rounded-md transition-all duration-300 shadow-md ${isDark ? 'bg-gray-700 hover:bg-gray-600' : 'bg-gray-700 hover:bg-gray-800'}`}
+                      whileHover={{ scale: 1.03 }}
+                      whileTap={{ scale: 0.97 }}
                     >
                       <FiLock className="mr-2 h-4 w-4" />
                       Change Password
-                    </button>
+                    </motion.button>
                   </div>
                 )}
               </div>
@@ -464,17 +482,17 @@ const UserProfilePage = () => {
                 initial="initial"
                 animate="animate"
                 variants={formVariants}
-                className="p-6"
+                className={`p-6 ${isDark ? 'border-t border-gray-700' : ''}`}
               >
                 <form onSubmit={handleProfileUpdate}>
                   <div className="space-y-4">
                     <div>
-                      <label htmlFor="name" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="name" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                         Full Name
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FiUser className="h-5 w-5 text-gray-400" />
+                          <FiUser className={`h-5 w-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                         </div>
                         <input
                           type="text"
@@ -482,7 +500,7 @@ const UserProfilePage = () => {
                           name="name"
                           value={profileData.name}
                           onChange={handleProfileChange}
-                          className={`block w-full pl-10 pr-3 py-2 rounded-md border ${errors.name ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
+                          className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.name ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
                           placeholder="Enter your full name"
                         />
                       </div>
@@ -492,12 +510,12 @@ const UserProfilePage = () => {
                     </div>
                     
                     <div>
-                      <label htmlFor="email" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="email" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                         Email Address
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FiMail className="h-5 w-5 text-gray-400" />
+                          <FiMail className={`h-5 w-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                         </div>
                         <input
                           type="email"
@@ -505,7 +523,7 @@ const UserProfilePage = () => {
                           name="email"
                           value={profileData.email}
                           onChange={handleProfileChange}
-                          className={`block w-full pl-10 pr-3 py-2 rounded-md border ${errors.email ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
+                          className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.email ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
                           placeholder="Enter your email address"
                         />
                       </div>
@@ -515,12 +533,12 @@ const UserProfilePage = () => {
                     </div>
                     
                     <div>
-                      <label htmlFor="phoneNumber" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="phoneNumber" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                         Phone Number (optional)
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FiPhone className="h-5 w-5 text-gray-400" />
+                          <FiPhone className={`h-5 w-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                         </div>
                         <input
                           type="tel"
@@ -528,7 +546,7 @@ const UserProfilePage = () => {
                           name="phoneNumber"
                           value={profileData.phoneNumber}
                           onChange={handleProfileChange}
-                          className={`block w-full pl-10 pr-3 py-2 rounded-md border ${errors.phoneNumber ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
+                          className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.phoneNumber ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
                           placeholder="Enter your phone number"
                         />
                       </div>
@@ -542,19 +560,23 @@ const UserProfilePage = () => {
                     )}
                     
                     <div className="flex justify-end space-x-3 pt-4">
-                      <button
+                      <motion.button
                         type="button"
                         onClick={handleCancelEdit}
-                        className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot"
+                        className={`inline-flex items-center px-4 py-2 border rounded-md ${isDark ? 'bg-gray-700 text-gray-200 border-gray-600 hover:bg-gray-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-all duration-300`}
                         disabled={loading}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
                       >
                         <FiX className="mr-2 h-4 w-4" />
                         Cancel
-                      </button>
-                      <button
+                      </motion.button>
+                      <motion.button
                         type="submit"
-                        className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-coquelicot hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot"
+                        className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-coquelicot hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-all duration-300"
                         disabled={loading}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
                       >
                         {loading ? (
                           <span className="flex items-center">
@@ -567,7 +589,7 @@ const UserProfilePage = () => {
                             Save Changes
                           </>
                         )}
-                      </button>
+                      </motion.button>
                     </div>
                   </div>
                 </form>
@@ -580,17 +602,17 @@ const UserProfilePage = () => {
                 initial="initial"
                 animate="animate"
                 variants={formVariants}
-                className="p-6"
+                className={`p-6 ${isDark ? 'border-t border-gray-700' : ''}`}
               >
                 <form onSubmit={handlePasswordReset}>
                   <div className="space-y-4">
                     <div>
-                      <label htmlFor="currentPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="currentPassword" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                         Current Password
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FiLock className="h-5 w-5 text-gray-400" />
+                          <FiLock className={`h-5 w-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                         </div>
                         <input
                           type="password"
@@ -598,7 +620,7 @@ const UserProfilePage = () => {
                           name="currentPassword"
                           value={passwordData.currentPassword}
                           onChange={handlePasswordChange}
-                          className={`block w-full pl-10 pr-3 py-2 rounded-md border ${errors.currentPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
+                          className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.currentPassword ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
                           placeholder="Enter your current password"
                         />
                       </div>
@@ -608,12 +630,12 @@ const UserProfilePage = () => {
                     </div>
                     
                     <div>
-                      <label htmlFor="newPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="newPassword" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                         New Password
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FiLock className="h-5 w-5 text-gray-400" />
+                          <FiLock className={`h-5 w-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                         </div>
                         <input
                           type="password"
@@ -621,7 +643,7 @@ const UserProfilePage = () => {
                           name="newPassword"
                           value={passwordData.newPassword}
                           onChange={handlePasswordChange}
-                          className={`block w-full pl-10 pr-3 py-2 rounded-md border ${errors.newPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
+                          className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.newPassword ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
                           placeholder="Enter your new password"
                         />
                       </div>
@@ -631,12 +653,12 @@ const UserProfilePage = () => {
                     </div>
                     
                     <div>
-                      <label htmlFor="confirmNewPassword" className="block text-sm font-medium text-gray-700 mb-1">
+                      <label htmlFor="confirmNewPassword" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                         Confirm New Password
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                          <FiCheckCircle className="h-5 w-5 text-gray-400" />
+                          <FiCheckCircle className={`h-5 w-5 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                         </div>
                         <input
                           type="password"
@@ -644,7 +666,7 @@ const UserProfilePage = () => {
                           name="confirmNewPassword"
                           value={passwordData.confirmNewPassword}
                           onChange={handlePasswordChange}
-                          className={`block w-full pl-10 pr-3 py-2 rounded-md border ${errors.confirmNewPassword ? 'border-red-500' : 'border-gray-300'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
+                          className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.confirmNewPassword ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
                           placeholder="Confirm your new password"
                         />
                       </div>
@@ -654,19 +676,23 @@ const UserProfilePage = () => {
                     </div>
                     
                     <div className="flex justify-end space-x-3 pt-4">
-                      <button
+                      <motion.button
                         type="button"
                         onClick={handleCancelPasswordChange}
-                        className="inline-flex items-center px-4 py-2 border border-gray-300 rounded-md text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot"
+                        className={`inline-flex items-center px-4 py-2 border rounded-md ${isDark ? 'bg-gray-700 text-gray-200 border-gray-600 hover:bg-gray-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'} focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-all duration-300`}
                         disabled={loading}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
                       >
                         <FiX className="mr-2 h-4 w-4" />
                         Cancel
-                      </button>
-                      <button
+                      </motion.button>
+                      <motion.button
                         type="submit"
-                        className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-coquelicot hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot"
+                        className="inline-flex items-center px-4 py-2 border border-transparent rounded-md shadow-sm text-white bg-coquelicot hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-all duration-300"
                         disabled={loading}
+                        whileHover={{ scale: 1.03 }}
+                        whileTap={{ scale: 0.97 }}
                       >
                         {loading ? (
                           <span className="flex items-center">
@@ -679,7 +705,7 @@ const UserProfilePage = () => {
                             Change Password
                           </>
                         )}
-                      </button>
+                      </motion.button>
                     </div>
                   </div>
                 </form>
@@ -688,35 +714,40 @@ const UserProfilePage = () => {
             
             {/* User Account Details */}
             {!editMode && !passwordMode && (
-              <div className="p-6">
-                <h3 className="text-lg font-semibold text-gray-800 mb-4">Account Information</h3>
+              <motion.div 
+                initial="initial"
+                animate="animate"
+                variants={formVariants}
+                className={`p-6 ${isDark ? 'border-t border-gray-700' : ''}`}
+              >
+                <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Account Information</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div>
-                    <p className="text-sm text-gray-500">Full Name</p>
-                    <p className="text-base font-medium text-gray-800">{currentUser.name}</p>
+                  <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</p>
+                    <p className={`text-base font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>{currentUser.name}</p>
                   </div>
                   
-                  <div>
-                    <p className="text-sm text-gray-500">Email</p>
-                    <p className="text-base font-medium text-gray-800">{currentUser.email}</p>
+                  <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Email</p>
+                    <p className={`text-base font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>{currentUser.email}</p>
                   </div>
                   
-                  <div>
-                    <p className="text-sm text-gray-500">Phone Number</p>
-                    <p className="text-base font-medium text-gray-800">
+                  <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Phone Number</p>
+                    <p className={`text-base font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>
                       {currentUser.phoneNumber || 'Not provided'}
                     </p>
                   </div>
                   
-                  <div>
-                    <p className="text-sm text-gray-500">Account Type</p>
-                    <p className="text-base font-medium text-gray-800 capitalize">
+                  <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Account Type</p>
+                    <p className={`text-base font-medium capitalize ${isDark ? 'text-white' : 'text-gray-800'}`}>
                       {currentUser.role || 'User'}
                     </p>
                   </div>
                 </div>
-              </div>
+              </motion.div>
             )}
           </div>
         </motion.div>

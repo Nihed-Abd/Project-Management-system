@@ -10,11 +10,14 @@ import enUS from 'date-fns/locale/en-US';
 import { FiPlus, FiCalendar, FiClock, FiMapPin, FiInfo, FiCheckCircle, FiXCircle, FiAlertCircle, FiEdit, FiTrash2, FiX } from 'react-icons/fi';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import Swal from 'sweetalert2';
 import { format as formatDate, isToday, isTomorrow, addDays, isAfter, isBefore, parseISO } from 'date-fns';
 
 const UserInterviewsPage = () => {
   const { currentUser } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -331,22 +334,24 @@ const UserInterviewsPage = () => {
   // If user is not logged in
   if (!currentUser) {
     return (
-      <div className="min-h-screen bg-white pt-24 pb-16">
+      <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
         <div className="container mx-auto px-4 text-center py-20">
-          <p className="text-gray-600 mb-4">Please log in to view your interviews.</p>
-          <button
+          <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Please log in to view your interviews.</p>
+          <motion.button
             onClick={() => window.location.href = '/login'}
-            className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
+            className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             Log In
-          </button>
+          </motion.button>
         </div>
       </div>
     );
   }
   
   return (
-    <div className="min-h-screen bg-white pt-24 pb-16">
+    <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -355,8 +360,8 @@ const UserInterviewsPage = () => {
           className="max-w-7xl mx-auto"
         >
           <div className="flex justify-between items-center mb-8">
-            <h1 className="text-3xl font-bold text-gray-800">My Interviews</h1>
-            <button
+            <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>My Interviews</h1>
+            <motion.button
               onClick={() => {
                 setShowForm(true);
                 setEditMode(false);
@@ -367,20 +372,22 @@ const UserInterviewsPage = () => {
                   note: ''
                 });
               }}
-              className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors flex items-center"
+              className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md flex items-center"
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               <FiPlus className="mr-2" /> Schedule Interview
-            </button>
+            </motion.button>
           </div>
           
           {error && (
-            <div className="bg-red-50 border-l-4 border-red-500 p-4 mb-6">
+            <div className={`p-4 mb-6 border-l-4 border-red-500 ${isDark ? 'bg-red-900/20' : 'bg-red-50'}`}>
               <div className="flex items-center">
                 <div className="flex-shrink-0">
                   <FiAlertCircle className="h-5 w-5 text-red-500" />
                 </div>
                 <div className="ml-3">
-                  <p className="text-sm text-red-700">{error}</p>
+                  <p className={`text-sm ${isDark ? 'text-red-400' : 'text-red-700'}`}>{error}</p>
                 </div>
               </div>
             </div>
@@ -413,8 +420,8 @@ const UserInterviewsPage = () => {
           </div>
           
           {/* Interview Legend */}
-          <div className="bg-white rounded-lg shadow-md p-4 mb-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-2">Status Legend</h3>
+          <div className={`rounded-lg shadow-md p-4 mb-8 ${isDark ? 'bg-gray-800' : 'bg-white'}`}>
+            <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>Status Legend</h3>
             <div className="flex flex-wrap gap-4">
               {statusOptions.map((status) => (
                 <div key={status.value} className="flex items-center">
@@ -422,21 +429,25 @@ const UserInterviewsPage = () => {
                     className="w-4 h-4 rounded-full mr-2"
                     style={{ backgroundColor: status.color }}
                   ></div>
-                  <span>{status.label}</span>
+                  <span className={isDark ? 'text-gray-300' : 'text-gray-700'}>{status.label}</span>
                 </div>
               ))}
             </div>
           </div>
           
           {/* Upcoming Interviews */}
-          <div className="bg-white rounded-lg shadow-md p-6 mb-8">
-            <h3 className="text-lg font-semibold text-gray-800 mb-4">Upcoming Interviews</h3>
+          <div className={`rounded-lg shadow-md p-6 mb-8 ${isDark ? 'bg-gray-800 shadow-gray-700/20' : 'bg-white'}`}>
+            <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Upcoming Interviews</h3>
             {loading ? (
               <div className="flex justify-center items-center py-4">
-                <div className="animate-spin rounded-full h-8 w-8 border-t-2 border-b-2 border-coquelicot"></div>
+                <motion.div 
+                  className="rounded-full h-8 w-8 border-t-2 border-b-2 border-coquelicot"
+                  animate={{ rotate: 360 }}
+                  transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                />
               </div>
             ) : interviews.length === 0 ? (
-              <p className="text-gray-500 italic">No upcoming interviews scheduled.</p>
+              <p className={`italic ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No upcoming interviews scheduled.</p>
             ) : (
               <div className="space-y-4">
                 {interviews
@@ -451,12 +462,13 @@ const UserInterviewsPage = () => {
                       <motion.div 
                         key={interview._id} 
                         variants={itemVariants}
-                        className="border rounded-lg p-4 hover:shadow-md transition-shadow"
+                        className={`rounded-lg p-4 transition-all duration-300 ${isDark ? 'border border-gray-700 hover:shadow-lg hover:shadow-gray-700/20 hover:border-gray-600' : 'border hover:shadow-md'}`}
+                        whileHover={{ scale: 1.02 }}
                       >
                         <div className="flex flex-col md:flex-row justify-between">
                           <div className="flex-grow">
                             <div className="flex items-center">
-                              <h4 className="text-md font-semibold text-gray-800">{interview.interviewGoal}</h4>
+                              <h4 className={`text-md font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>{interview.interviewGoal}</h4>
                               <span 
                                 className="ml-2 px-2 py-1 text-xs rounded-full" 
                                 style={{ backgroundColor: statusInfo.color, color: 'white' }}
@@ -464,7 +476,7 @@ const UserInterviewsPage = () => {
                                 {statusInfo.label}
                               </span>
                             </div>
-                            <div className="mt-2 flex items-center text-gray-600 text-sm">
+                            <div className={`mt-2 flex items-center text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                               <FiCalendar className="mr-1" />
                               <span className="mr-3">
                                 {isToday(interviewDate) ? 'Today' : 

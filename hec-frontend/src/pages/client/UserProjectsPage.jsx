@@ -4,10 +4,13 @@ import { FiSearch, FiFilter, FiCalendar, FiInfo, FiClock, FiMapPin, FiGrid, FiLi
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import Swal from 'sweetalert2';
 
 const UserProjectsPage = () => {
   const { currentUser } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -223,7 +226,11 @@ const UserProjectsPage = () => {
     if (loading) {
       return (
         <div className="flex justify-center items-center py-20">
-          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-coquelicot"></div>
+          <motion.div 
+            className="rounded-full h-12 w-12 border-t-2 border-b-2 border-coquelicot"
+            animate={{ rotate: 360 }}
+            transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+          />
         </div>
       );
     }
@@ -232,23 +239,27 @@ const UserProjectsPage = () => {
       return (
         <div className="text-center py-20">
           <p className="text-red-600 mb-4">{error}</p>
-          <button 
+          <motion.button 
             onClick={fetchUserProjects}
-            className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
+            className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
           >
             Try Again
-          </button>
+          </motion.button>
         </div>
       );
     }
 
     if (!currentUser) {
       return (
-        <div className="text-center py-20">
-          <p className="text-gray-600 mb-4">Please log in to view your projects.</p>
-          <Link to="/login" className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors">
-            Log In
-          </Link>
+        <div className={`text-center py-20 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
+          <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Please log in to view your projects.</p>
+          <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+            <Link to="/login" className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md">
+              Log In
+            </Link>
+          </motion.div>
         </div>
       );
     }
@@ -256,19 +267,21 @@ const UserProjectsPage = () => {
     if (filteredProjects.length === 0) {
       return (
         <div className="text-center py-20">
-          <p className="text-gray-600 mb-4">No projects found.</p>
+          <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>No projects found.</p>
           {(searchQuery || statusFilter || yearFilter || monthFilter) && (
-            <button 
+            <motion.button 
               onClick={() => {
                 setSearchQuery('');
                 setStatusFilter('');
                 setYearFilter('');
                 setMonthFilter('');
               }}
-              className="px-4 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300 transition-colors"
+              className={`px-4 py-2 rounded-md transition-all duration-300 ${isDark ? 'bg-gray-700 text-gray-200 hover:bg-gray-600' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
             >
               Clear Filters
-            </button>
+            </motion.button>
           )}
         </div>
       );
@@ -276,7 +289,7 @@ const UserProjectsPage = () => {
 
     // Project count display
     const projectCountDisplay = (
-      <div className="mb-6 text-sm text-gray-500">
+      <div className={`mb-6 text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
         Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
       </div>
     );
@@ -458,7 +471,7 @@ const UserProjectsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-24 pb-16">
+    <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
       <div className="container mx-auto px-4">
         {/* Header Section */}
         <motion.div
@@ -467,8 +480,8 @@ const UserProjectsPage = () => {
           transition={{ duration: 0.5 }}
           className="mb-8"
         >
-          <h1 className="text-3xl font-bold text-gray-800 mb-2">My Projects</h1>
-          <p className="text-gray-600">
+          <h1 className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>My Projects</h1>
+          <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
             View and manage all your electrical projects with HEC Tunisia.
           </p>
         </motion.div>
@@ -480,28 +493,28 @@ const UserProjectsPage = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mb-8"
         >
-          <div className="flex flex-col gap-4 bg-gray-50 p-4 rounded-lg">
+          <div className={`flex flex-col gap-4 p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
             <div className="flex flex-col md:flex-row gap-4">
               <div className="flex-grow">
                 <div className="relative">
-                  <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiSearch className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                   <input
                     type="text"
                     placeholder="Search projects..."
                     value={searchQuery}
                     onChange={handleSearchChange}
-                    className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500"
+                    className={`w-full pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-200 text-gray-700'}`}
                   />
                 </div>
               </div>
               
               <div className="w-full md:w-64">
                 <div className="relative">
-                  <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiFilter className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                   <select
                     value={statusFilter}
                     onChange={handleStatusFilterChange}
-                    className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500 appearance-none bg-white"
+                    className={`w-full pl-10 pr-4 py-2 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-700'}`}
                   >
                     {statusOptions.map(option => (
                       <option key={option.value} value={option.value}>
@@ -516,11 +529,11 @@ const UserProjectsPage = () => {
             <div className="flex flex-col md:flex-row gap-4">
               <div className="w-full md:w-1/2">
                 <div className="relative">
-                  <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiCalendar className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                   <select
                     value={yearFilter}
                     onChange={handleYearFilterChange}
-                    className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500 appearance-none bg-white"
+                    className={`w-full pl-10 pr-4 py-2 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-700'}`}
                   >
                     <option value="">All Years</option>
                     {availableYears.map(year => (
@@ -532,12 +545,12 @@ const UserProjectsPage = () => {
               
               <div className="w-full md:w-1/2">
                 <div className="relative">
-                  <FiCalendar className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                  <FiCalendar className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                   <select
                     value={monthFilter}
                     onChange={handleMonthFilterChange}
                     disabled={!yearFilter}
-                    className={`w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500 appearance-none bg-white ${!yearFilter ? 'opacity-50 cursor-not-allowed' : ''}`}
+                    className={`w-full pl-10 pr-4 py-2 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-700'} ${!yearFilter ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
                     <option value="">All Months</option>
                     <option value="1">January</option>
@@ -559,21 +572,25 @@ const UserProjectsPage = () => {
             
             {/* View Mode Toggle */}
             <div className="flex justify-end">
-              <div className="flex items-center space-x-2 bg-white border border-gray-200 rounded-md p-1">
-                <button
+              <div className={`flex items-center space-x-2 rounded-md p-1 ${isDark ? 'bg-gray-700 border border-gray-600' : 'bg-white border border-gray-200'}`}>
+                <motion.button
                   onClick={() => toggleViewMode('grid')}
-                  className={`p-2 rounded ${viewMode === 'grid' ? 'bg-coquelicot text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`p-2 rounded transition-all duration-300 ${viewMode === 'grid' ? 'bg-coquelicot text-white' : isDark ? 'text-gray-300 hover:bg-gray-600' : 'text-gray-500 hover:bg-gray-100'}`}
                   title="Grid View"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <FiGrid className="h-5 w-5" />
-                </button>
-                <button
+                </motion.button>
+                <motion.button
                   onClick={() => toggleViewMode('list')}
-                  className={`p-2 rounded ${viewMode === 'list' ? 'bg-coquelicot text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+                  className={`p-2 rounded transition-all duration-300 ${viewMode === 'list' ? 'bg-coquelicot text-white' : isDark ? 'text-gray-300 hover:bg-gray-600' : 'text-gray-500 hover:bg-gray-100'}`}
                   title="List View"
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
                   <FiList className="h-5 w-5" />
-                </button>
+                </motion.button>
               </div>
             </div>
           </div>
@@ -592,12 +609,17 @@ const UserProjectsPage = () => {
           viewport={{ once: true }}
           className="mt-16 text-center"
         >
-          <Link 
-            to="/request-project"
-            className="inline-flex items-center px-6 py-3 bg-coquelicot text-white rounded-md shadow-md hover:bg-coquelicot-600 transition-colors"
+          <motion.div
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.97 }}
           >
-            Request a New Project
-          </Link>
+            <Link 
+              to="/request-project"
+              className="inline-flex items-center px-6 py-3 bg-coquelicot text-white rounded-md shadow-md hover:bg-coquelicot-600 transition-all duration-300"
+            >
+              Request a New Project
+            </Link>
+          </motion.div>
         </motion.div>
       </div>
     </div>

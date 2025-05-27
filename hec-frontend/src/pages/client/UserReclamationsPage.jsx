@@ -3,10 +3,13 @@ import { motion } from 'framer-motion';
 import { FiSearch, FiFilter, FiCalendar, FiMessageSquare, FiPlus, FiAlertCircle, FiCheckCircle } from 'react-icons/fi';
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
 import Swal from 'sweetalert2';
 
 const UserReclamationsPage = () => {
   const { currentUser } = useAuth();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [reclamations, setReclamations] = useState([]);
   const [filteredReclamations, setFilteredReclamations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -319,7 +322,7 @@ const UserReclamationsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-24 pb-16">
+    <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
       <div className="container mx-auto px-4">
         {/* Header Section */}
         <motion.div
@@ -330,19 +333,21 @@ const UserReclamationsPage = () => {
         >
           <div className="flex flex-col md:flex-row md:justify-between md:items-center">
             <div>
-              <h1 className="text-3xl font-bold text-gray-800 mb-2">My Reclamations</h1>
-              <p className="text-gray-600">
+              <h1 className={`text-3xl font-bold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>My Reclamations</h1>
+              <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                 View and manage your reclamations with HEC Tunisia.
               </p>
             </div>
             <div className="mt-4 md:mt-0">
-              <button
+              <motion.button
                 onClick={() => setShowForm(!showForm)}
-                className="flex items-center px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
+                className="flex items-center px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
+                whileHover={{ scale: 1.05 }}
+                whileTap={{ scale: 0.95 }}
               >
                 <FiPlus className="mr-2" />
                 New Reclamation
-              </button>
+              </motion.button>
             </div>
           </div>
         </motion.div>
@@ -356,12 +361,12 @@ const UserReclamationsPage = () => {
             transition={{ duration: 0.3 }}
             className="mb-8"
           >
-            <div className="bg-white p-6 rounded-lg shadow-md border border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-800 mb-4">Submit a New Reclamation</h2>
+            <div className={`p-6 rounded-lg shadow-md ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+              <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Submit a New Reclamation</h2>
               
               <form onSubmit={handleSubmit}>
                 <div className="mb-4">
-                  <label htmlFor="object" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="object" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Subject
                   </label>
                   <input
@@ -370,14 +375,14 @@ const UserReclamationsPage = () => {
                     name="object"
                     value={formData.object}
                     onChange={handleFormChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot-500"
+                    className={`w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                     placeholder="Enter the subject of your reclamation"
                     required
                   />
                 </div>
                 
                 <div className="mb-4">
-                  <label htmlFor="message" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="message" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Message
                   </label>
                   <textarea
@@ -386,36 +391,47 @@ const UserReclamationsPage = () => {
                     value={formData.message}
                     onChange={handleFormChange}
                     rows="4"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot-500 resize-none"
+                    className={`w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot-500 resize-none ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                     placeholder="Describe your issue in detail"
                     required
                   ></textarea>
                 </div>
                 
                 <div className="flex justify-end space-x-3">
-                  <button
+                  <motion.button
                     type="button"
                     onClick={() => setShowForm(false)}
-                    className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 hover:bg-gray-50 transition-colors"
+                    className={`px-4 py-2 border rounded-md transition-all duration-300 ${isDark ? 'bg-gray-700 text-gray-200 border-gray-600 hover:bg-gray-600' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'}`}
                     disabled={submitting}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
                   >
                     Cancel
-                  </button>
-                  <button
+                  </motion.button>
+                  <motion.button
                     type="submit"
-                    className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors disabled:bg-coquelicot-300"
+                    className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md disabled:bg-coquelicot-300"
                     disabled={submitting}
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
                   >
                     {submitting ? (
                       <span className="flex items-center">
-                        <svg className="animate-spin -ml-1 mr-2 h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <motion.svg 
+                          className="-ml-1 mr-2 h-4 w-4 text-white" 
+                          xmlns="http://www.w3.org/2000/svg" 
+                          fill="none" 
+                          viewBox="0 0 24 24"
+                          animate={{ rotate: 360 }}
+                          transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
+                        >
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                        </svg>
+                        </motion.svg>
                         Submitting...
                       </span>
                     ) : 'Submit Reclamation'}
-                  </button>
+                  </motion.button>
                 </div>
               </form>
             </div>
@@ -429,27 +445,27 @@ const UserReclamationsPage = () => {
           transition={{ duration: 0.5, delay: 0.1 }}
           className="mb-8"
         >
-          <div className="flex flex-col md:flex-row gap-4 bg-gray-50 p-4 rounded-lg">
+          <div className={`flex flex-col md:flex-row gap-4 p-4 rounded-lg ${isDark ? 'bg-gray-800' : 'bg-gray-50'}`}>
             <div className="flex-grow">
               <div className="relative">
-                <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FiSearch className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                 <input
                   type="text"
                   placeholder="Search reclamations..."
                   value={searchQuery}
                   onChange={handleSearchChange}
-                  className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500"
+                  className={`w-full pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-200 text-gray-700'}`}
                 />
               </div>
             </div>
             
             <div className="w-full md:w-64">
               <div className="relative">
-                <FiFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+                <FiFilter className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                 <select
                   value={statusFilter}
                   onChange={handleStatusFilterChange}
-                  className="w-full pl-10 pr-4 py-2 rounded-md border border-gray-200 focus:outline-none focus:ring-2 focus:ring-coquelicot-500 appearance-none bg-white"
+                  className={`w-full pl-10 pr-4 py-2 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-700'}`}
                 >
                   {statusOptions.map(option => (
                     <option key={option.value} value={option.value}>

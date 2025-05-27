@@ -536,18 +536,64 @@ const ProjectsPage = () => {
         <motion.div
           initial={{ opacity: 0, y: 30 }}
           whileInView={{ opacity: 1, y: 0 }}
-          transition={{ duration: 0.5 }}
+          transition={{ duration: 0.5, type: 'spring', stiffness: 50 }}
           viewport={{ once: true }}
-          className="mt-16 bg-gradient-to-r from-coquelicot to-amber-500 rounded-xl overflow-hidden shadow-lg"
+          className={`mt-16 rounded-xl overflow-hidden shadow-lg relative ${isDark ? 'shadow-gray-900' : ''}`}
         >
-          <div className="px-6 py-12 text-center text-white">
-            <h2 className="text-2xl md:text-3xl font-bold mb-4">Need a similar project?</h2>
-            <p className="mb-8 max-w-2xl mx-auto">
+          {/* Background with gradient overlay for dark mode */}
+          <div className={`absolute inset-0 ${isDark ? 'bg-gradient-to-r from-coquelicot/80 to-gray-800' : 'bg-gradient-to-r from-coquelicot to-amber-500'}`}></div>
+          
+          {/* Decorative elements */}
+          <motion.div 
+            className="absolute top-0 right-0 w-32 h-32 rounded-full bg-white opacity-10"
+            initial={{ y: -100, x: 100, opacity: 0 }}
+            whileInView={{ y: 0, x: 0, opacity: 0.1 }}
+            transition={{ duration: 0.8, type: 'spring' }}
+            viewport={{ once: true }}
+          />
+          <motion.div 
+            className="absolute bottom-0 left-0 w-40 h-40 rounded-full bg-white opacity-10"
+            initial={{ y: 100, x: -100, opacity: 0 }}
+            whileInView={{ y: 0, x: 0, opacity: 0.1 }}
+            transition={{ duration: 0.8, type: 'spring', delay: 0.2 }}
+            viewport={{ once: true }}
+          />
+          
+          <div className="px-6 py-12 text-center text-white relative z-10">
+            <motion.h2 
+              className="text-2xl md:text-3xl font-bold mb-4"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.2, duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              Need a similar project?
+            </motion.h2>
+            <motion.p 
+              className="mb-8 max-w-2xl mx-auto"
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.4, duration: 0.5 }}
+              viewport={{ once: true }}
+            >
               Our team of experienced professionals is ready to bring your electrical project to life with quality and expertise.
-            </p>
-            <Link to="/request-project" className="px-8 py-3 bg-white text-coquelicot font-medium rounded-md shadow hover:bg-gray-100 transition-colors inline-block">
-              Request a Project
-            </Link>
+            </motion.p>
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.6, duration: 0.5 }}
+              viewport={{ once: true }}
+            >
+              <motion.div 
+                whileHover={{ scale: 1.05, boxShadow: '0 10px 25px -5px rgba(0, 0, 0, 0.1)' }}
+                whileTap={{ scale: 0.95 }}
+                className="inline-block"
+              >
+                <Link to="/request-project" className={`px-8 py-3 bg-white text-coquelicot font-medium rounded-md shadow transition-all duration-300 inline-block ${isDark ? 'hover:bg-gray-100' : 'hover:bg-gray-50'}`}>
+                  Request a Project
+                </Link>
+              </motion.div>
+            </motion.div>
           </div>
         </motion.div>
       </div>
