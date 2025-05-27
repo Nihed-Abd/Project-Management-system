@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import { motion } from 'framer-motion';
 import { FiSearch, FiFilter, FiCalendar, FiMessageSquare, FiPlus, FiAlertCircle, FiCheckCircle } from 'react-icons/fi';
 import axios from 'axios';
@@ -28,22 +28,11 @@ const UserReclamationsPage = () => {
     { value: 'Answered', label: 'Answered' }
   ];
 
-  // Fetch user reclamations on component mount
-  useEffect(() => {
-    if (currentUser) {
-      fetchUserReclamations();
-    }
-  }, [currentUser]);
-
-  // Filter reclamations when search query or status filter changes
-  useEffect(() => {
-    filterReclamations();
-  }, [searchQuery, statusFilter, reclamations]);
-
-  const fetchUserReclamations = async () => {
+  // Define fetchUserReclamations with useCallback
+  const fetchUserReclamations = useCallback(async () => {
     setLoading(true);
     try {
-      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/reclamations/user/${currentUser._id}`);
+      const response = await axios.get(`${process.env.REACT_APP_API_URL}/api/reclamations/user/${currentUser?._id}`);
       
       // Handle different API response formats
       if (response.data && Array.isArray(response.data)) {
@@ -59,9 +48,10 @@ const UserReclamationsPage = () => {
     } finally {
       setLoading(false);
     }
-  };
+  }, [currentUser]);
 
-  const filterReclamations = () => {
+  // Define filterReclamations with useCallback
+  const filterReclamations = useCallback(() => {
     let filtered = [...reclamations];
     
     // Apply search filter
@@ -79,7 +69,23 @@ const UserReclamationsPage = () => {
     }
     
     setFilteredReclamations(filtered);
-  };
+  }, [reclamations, searchQuery, statusFilter]);
+
+  // Fetch user reclamations on component mount
+  useEffect(() => {
+    if (currentUser) {
+      fetchUserReclamations();
+    }
+  }, [currentUser, fetchUserReclamations]);
+
+  // Filter reclamations when search query or status filter changes
+  useEffect(() => {
+    filterReclamations();
+  }, [filterReclamations]);
+
+  // fetchUserReclamations is now defined above with useCallback
+
+  // filterReclamations is now defined above with useCallback
 
   // Handle search input change
   const handleSearchChange = (e) => {

@@ -5,10 +5,14 @@ import { FaHome, FaProjectDiagram, FaUsers, FaCalendarAlt, FaExclamationTriangle
 import { Link, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAuth } from '../context/AuthContext';
+import { useTheme } from '../context/ThemeContext';
+import ThemeToggle from '../components/ThemeToggle';
 import Swal from 'sweetalert2';
 
 const Sidebar = ({ isOpen, toggleSidebar }) => {
   const location = useLocation();
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   
   const menuItems = [
     { title: 'Dashboard', path: '/admin/dashboard', icon: <FaHome /> },
@@ -24,9 +28,9 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
       initial={{ x: -300 }}
       animate={{ x: isOpen ? 0 : -300 }}
       transition={{ duration: 0.3 }}
-      className={`fixed left-0 top-0 z-40 h-full w-64 bg-white text-gray-800 shadow-lg ${isOpen ? 'block' : 'hidden md:block'}`}
+      className={`fixed left-0 top-0 z-40 h-full w-64 ${isDark ? 'bg-gray-800 text-gray-100' : 'bg-white text-gray-800'} shadow-lg ${isOpen ? 'block' : 'hidden md:block'}`}
     >
-      <div className="flex h-20 items-center justify-between px-6 border-b border-gray-200">
+      <div className={`flex h-20 items-center justify-between px-6 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
         <div className="flex items-center">
           <img src="/logo.png" alt="HEC Logo" className="h-10 w-10" />
         </div>
@@ -41,7 +45,7 @@ const Sidebar = ({ isOpen, toggleSidebar }) => {
             <li key={index}>
               <Link
                 to={item.path}
-                className={`flex items-center rounded-lg px-4 py-3 text-gray-700 transition-colors duration-200 hover:bg-coquelicot-500 hover:text-white ${
+                className={`flex items-center rounded-lg px-4 py-3 ${isDark ? 'text-gray-300 hover:bg-coquelicot-600' : 'text-gray-700 hover:bg-coquelicot-500'} transition-colors duration-200 hover:text-white ${
                   location.pathname === item.path ? 'bg-coquelicot-500 text-white' : ''
                 }`}
               >
@@ -61,6 +65,8 @@ const Header = ({ toggleSidebar, userData }) => {
   const navigate = useNavigate();
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const profileRef = useRef(null);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   
   // Close dropdown when clicking outside
   useEffect(() => {
@@ -103,22 +109,23 @@ const Header = ({ toggleSidebar, userData }) => {
   };
   
   return (
-    <header className="fixed top-0 z-30 flex h-16 w-full items-center justify-between bg-white px-4 border-b border-gray-200">
+    <header className={`fixed top-0 z-30 flex h-16 w-full items-center justify-between ${isDark ? 'bg-gray-900 border-gray-700' : 'bg-white border-gray-200'} px-4 border-b`}>
       <div className="flex items-center">
         <button
           onClick={toggleSidebar}
-          className="mr-4 rounded-md p-2 text-gray-600 hover:bg-gray-100 md:hidden"
+          className={`mr-4 rounded-md p-2 ${isDark ? 'text-gray-300 hover:bg-gray-800' : 'text-gray-600 hover:bg-gray-100'} md:hidden`}
         >
           <FiMenu className="h-6 w-6" />
         </button>
         <h1 className="text-xl font-bold text-coquelicot-500">HEC Admin Dashboard</h1>
       </div>
       <div className="flex items-center space-x-4">
+        <ThemeToggle className="mr-2" />
         {userData && (
           <div className="relative" ref={profileRef}>
             <button
               onClick={() => setIsProfileOpen(!isProfileOpen)}
-              className="flex items-center space-x-2 rounded-full focus:outline-none focus:ring-2 focus:ring-coquelicot-500 focus:ring-offset-2"
+              className={`flex items-center space-x-2 rounded-full focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'focus:ring-offset-gray-900' : 'focus:ring-offset-2'}`}
             >
               <img
                 src={userData.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(userData.name || 'Admin User')}&background=fe3201&color=fff`}
@@ -126,8 +133,8 @@ const Header = ({ toggleSidebar, userData }) => {
                 className="h-8 w-8 rounded-full border-2 border-white shadow-sm"
               />
               <div className="hidden md:flex items-center">
-                <span className="text-sm font-medium text-gray-700">{userData.name || userData.email?.split('@')[0] || 'Admin User'}</span>
-                <FiChevronDown className={`ml-1 h-4 w-4 text-gray-500 transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
+                <span className={`text-sm font-medium ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{userData.name || userData.email?.split('@')[0] || 'Admin User'}</span>
+                <FiChevronDown className={`ml-1 h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-500'} transition-transform ${isProfileOpen ? 'rotate-180' : ''}`} />
               </div>
             </button>
             
@@ -138,17 +145,17 @@ const Header = ({ toggleSidebar, userData }) => {
                   animate={{ opacity: 1, y: 0 }}
                   exit={{ opacity: 0, y: -10 }}
                   transition={{ duration: 0.2 }}
-                  className="absolute right-0 mt-2 w-48 origin-top-right rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  className={`absolute right-0 mt-2 w-48 origin-top-right rounded-md ${isDark ? 'bg-gray-800' : 'bg-white'} py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none`}
                 >
-                  <div className="border-b border-gray-100 px-4 py-2">
-                    <p className="text-sm font-semibold text-gray-700">{userData.name || 'Admin User'}</p>
-                    <p className="truncate text-xs text-gray-500">{userData.email || ''}</p>
+                  <div className={`border-b ${isDark ? 'border-gray-700' : 'border-gray-100'} px-4 py-2`}>
+                    <p className={`text-sm font-semibold ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{userData.name || 'Admin User'}</p>
+                    <p className={`truncate text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{userData.email || ''}</p>
                   </div>
                   <button
                     onClick={handleLogout}
-                    className="flex w-full items-center px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    className={`flex w-full items-center px-4 py-2 text-sm ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}`}
                   >
-                    <FiLogOut className="mr-2 h-4 w-4 text-gray-500" />
+                    <FiLogOut className={`mr-2 h-4 w-4 ${isDark ? 'text-gray-400' : 'text-gray-500'}`} />
                     Logout
                   </button>
                 </motion.div>
@@ -165,6 +172,8 @@ const AdminLayout = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(true);
   const { currentUser } = useAuth();
   const [userData, setUserData] = useState(null);
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   
   // Set user data from currentUser when it changes
   useEffect(() => {
@@ -188,11 +197,11 @@ const AdminLayout = () => {
   };
 
   return (
-    <div className="min-h-screen bg-isabelline-600">
+    <div className={`min-h-screen ${isDark ? 'bg-gray-900' : 'bg-isabelline-600'}`}>
       <Sidebar isOpen={isSidebarOpen} toggleSidebar={toggleSidebar} />
       <Header toggleSidebar={toggleSidebar} userData={userData} />
       <div className="ml-0 pt-16 md:ml-64">
-        <main className="p-4">
+        <main className="p-4" data-theme={theme}>
           <Outlet />
         </main>
       </div>

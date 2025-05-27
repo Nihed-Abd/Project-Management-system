@@ -3,6 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FiEye, FiEyeOff, FiUser, FiLock } from 'react-icons/fi';
 import { useAuth } from '../../context/AuthContext';
+import { useTheme } from '../../context/ThemeContext';
+import ThemeToggle from '../../components/ThemeToggle';
 
 const LoginPage = () => {
   const [credentials, setCredentials] = useState({
@@ -12,6 +14,8 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState('');
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   
   const navigate = useNavigate();
   const { login, currentUser, error: authError } = useAuth();
@@ -64,12 +68,12 @@ const LoginPage = () => {
   };
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-gradient-to-br from-timberwolf-500 to-isabelline-600 px-4 py-12 sm:px-6 lg:px-8">
+    <div className={`flex min-h-screen items-center justify-center ${isDark ? 'bg-gradient-to-br from-gray-900 to-gray-800' : 'bg-gradient-to-br from-timberwolf-500 to-isabelline-600'} px-4 py-12 sm:px-6 lg:px-8`}>
       <motion.div
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.5 }}
-        className="w-full max-w-md space-y-8 rounded-xl bg-white p-10 shadow-xl"
+        className={`w-full max-w-md space-y-8 rounded-xl ${isDark ? 'bg-gray-800' : 'bg-white'} p-10 shadow-xl`}
       >
         <div className="text-center">
           <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full">
@@ -83,8 +87,11 @@ const LoginPage = () => {
               }}
             />
           </div>
-          <h2 className="mt-6 text-3xl font-extrabold text-silver-100">Sign in to your account</h2>
-          <p className="mt-2 text-sm text-gray-600">
+          <div className="absolute top-4 right-4">
+            <ThemeToggle />
+          </div>
+          <h2 className={`mt-6 text-3xl font-extrabold ${isDark ? 'text-white' : 'text-silver-100'}`}>Sign in to your account</h2>
+          <p className={`mt-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
             Or{' '}
             <Link to="/register" className="font-medium text-coquelicot hover:text-coquelicot-600">
               create a new account
@@ -120,7 +127,7 @@ const LoginPage = () => {
                   required
                   value={credentials.email}
                   onChange={handleChange}
-                  className="block w-full rounded-md border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-coquelicot-500 sm:text-sm sm:leading-6"
+                  className={`block w-full rounded-md border-0 py-2 pl-10 ${isDark ? 'bg-gray-700 text-white ring-gray-600' : 'bg-white text-gray-900 ring-gray-300'} ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-coquelicot-500 sm:text-sm sm:leading-6`}
                   placeholder="Email address"
                 />
               </div>
@@ -142,7 +149,7 @@ const LoginPage = () => {
                   required
                   value={credentials.password}
                   onChange={handleChange}
-                  className="block w-full rounded-md border-0 py-2 pl-10 pr-10 text-gray-900 ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-coquelicot-500 sm:text-sm sm:leading-6"
+                  className={`block w-full rounded-md border-0 py-2 pl-10 pr-10 ${isDark ? 'bg-gray-700 text-white ring-gray-600' : 'bg-white text-gray-900 ring-gray-300'} ring-1 ring-inset placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-coquelicot-500 sm:text-sm sm:leading-6`}
                   placeholder="Password"
                 />
                 <button
@@ -168,7 +175,7 @@ const LoginPage = () => {
                 type="checkbox"
                 className="h-4 w-4 rounded border-gray-300 text-coquelicot focus:ring-coquelicot"
               />
-              <label htmlFor="remember-me" className="ml-2 block text-sm text-gray-900">
+              <label htmlFor="remember-me" className={`ml-2 block text-sm ${isDark ? 'text-gray-300' : 'text-gray-900'}`}>
                 Remember me
               </label>
             </div>

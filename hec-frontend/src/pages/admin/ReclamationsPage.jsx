@@ -586,9 +586,9 @@ const ReclamationsPage = () => {
 
       {/* Response Modal */}
       {showResponseModal && selectedReclamation && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-25">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-25 overflow-y-auto">
           <div
-            className="bg-white rounded-xl overflow-hidden w-full max-w-2xl mx-auto border border-gray-100"
+            className="bg-white rounded-xl w-full max-w-2xl mx-auto border border-gray-100 flex flex-col"
             style={{
               maxHeight: '90vh',
               boxShadow: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
@@ -620,8 +620,8 @@ const ReclamationsPage = () => {
             </div>
 
             {/* Reclamation Details */}
-            <div className="p-6 bg-gray-50">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div className="p-4 md:p-6 bg-gray-50 overflow-y-auto">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-2 md:gap-4">
                 <div>
                   <div className="flex items-center mb-2">
                     <FiUser className="text-silver-200 mr-2" />
@@ -699,8 +699,8 @@ const ReclamationsPage = () => {
 
             {/* Response Form */}
             {selectedReclamation.statusRec === 'pending' && (
-              <form onSubmit={handleSubmitResponse}>
-                <div className="px-6 py-4">
+              <form onSubmit={handleSubmitResponse} className="flex flex-col">
+                <div className="px-4 md:px-6 py-4 overflow-y-auto">
                   <label htmlFor="response" className="block text-sm font-medium text-silver-100 mb-2">
                     Your Response
                   </label>
@@ -722,10 +722,10 @@ const ReclamationsPage = () => {
                 </div>
                 
                 {/* Modal Footer */}
-                <div className="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-end space-x-3">
+                <div className="bg-gray-50 px-4 md:px-6 py-4 border-t border-gray-100 flex flex-wrap md:flex-nowrap justify-end gap-2 md:space-x-3 sticky bottom-0">
                   <button
                     type="button"
-                    className="px-4 py-2 bg-white border border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors"
+                    className="px-3 md:px-4 py-2 bg-white border border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors min-w-[80px] text-sm md:text-base"
                     onClick={() => {
                       Swal.fire({
                         title: 'Are you sure?',
@@ -746,7 +746,7 @@ const ReclamationsPage = () => {
                   </button>
                   <button
                     type="submit"
-                    className="px-4 py-2 bg-coquelicot border border-transparent rounded-md font-medium text-white hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors flex items-center"
+                    className="px-3 md:px-4 py-2 bg-coquelicot border border-transparent rounded-md font-medium text-white hover:bg-coquelicot-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors flex items-center min-w-[100px] text-sm md:text-base"
                   >
                     <FiSend className="mr-2" />
                     Send Response
@@ -757,10 +757,10 @@ const ReclamationsPage = () => {
 
             {/* View Only Footer */}
             {selectedReclamation.statusRec === 'Answered' && (
-              <div className="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-end">
+              <div className="bg-gray-50 px-4 md:px-6 py-4 border-t border-gray-100 flex justify-end sticky bottom-0">
                 <button
                   type="button"
-                  className="px-4 py-2 bg-white border border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors"
+                  className="px-3 md:px-4 py-2 bg-white border border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors min-w-[80px] text-sm md:text-base"
                   onClick={() => setShowResponseModal(false)}
                 >
                   Close

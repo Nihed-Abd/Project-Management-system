@@ -1,5 +1,6 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
+import { ThemeProvider } from './context/ThemeContext';
 
 // Layouts
 import AdminLayout from './layouts/AdminLayout';
@@ -55,8 +56,9 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
 function App() {
 
   return (
-    <AuthProvider>
-      <Router>
+    <ThemeProvider>
+      <AuthProvider>
+        <Router>
         <Routes>
           {/* Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
@@ -114,8 +116,9 @@ function App() {
             <Route path="contact" element={<ContactPage />} />
           </Route>
         </Routes>
-      </Router>
-    </AuthProvider>
+        </Router>
+      </AuthProvider>
+    </ThemeProvider>
   );
 }
 
