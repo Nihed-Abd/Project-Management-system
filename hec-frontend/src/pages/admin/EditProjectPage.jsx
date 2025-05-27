@@ -6,6 +6,7 @@ import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { Marker } from 'react-map-gl';
 import Swal from 'sweetalert2';
+import { useTheme } from '../../context/ThemeContext';
 
 // Add global styles for SweetAlert buttons when component loads
 const sweetAlertStyles = document.createElement('style');
@@ -31,6 +32,10 @@ const EditProjectPage = () => {
   const { projectId } = useParams();
   const navigate = useNavigate();
   const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
+  
+  // Theme context
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   // Project form state
   const [formData, setFormData] = useState({
@@ -443,33 +448,34 @@ const EditProjectPage = () => {
   }
 
   return (
-    <div className="p-6">
-      <div className="mb-6">
+    <div className={`p-6 ${isDark ? 'bg-gray-900 text-white' : ''}`}>
+      <div className="mb-6 flex items-center">
         <Link 
-          to={`/admin/projects/${projectId}`} 
-          className="flex items-center text-silver-200 hover:text-silver-100 transition-colors"
+          to="/admin/projects"
+          className={`flex items-center ${isDark ? 'text-gray-300 hover:text-white' : 'text-silver-100 hover:text-silver-200'} mr-4`}
         >
-          <FiArrowLeft className="mr-2" /> Back to Project Details
+          <FiArrowLeft className="mr-1" /> Back to Projects
         </Link>
+        <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>Edit Project</h1>
       </div>
 
       <motion.div 
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
+        className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-lg shadow-sm border overflow-hidden`}
       >
         <div className="p-6">
-          <h1 className="text-2xl font-bold text-silver-100 mb-6">Edit Project</h1>
+          <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-silver-100'} mb-6`}>Edit Project</h1>
           
           {error && (
-            <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-md">
+            <div className={`mb-6 p-4 ${isDark ? 'bg-red-900/20 text-red-400' : 'bg-red-50 text-red-600'} rounded-md`}>
               {error}
             </div>
           )}
           
           {success && (
-            <div className="mb-6 p-4 bg-green-50 text-green-600 rounded-md">
+            <div className={`mb-6 p-4 ${isDark ? 'bg-green-900/20 text-green-400' : 'bg-green-50 text-green-600'} rounded-md`}>
               {success}
             </div>
           )}
@@ -478,7 +484,7 @@ const EditProjectPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <div className="mb-4">
-                  <label htmlFor="title" className="block text-sm font-medium text-silver-100 mb-1">
+                  <label htmlFor="title" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Project Title*
                   </label>
                   <input
@@ -487,14 +493,14 @@ const EditProjectPage = () => {
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                    className={`w-full px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                     placeholder="Enter project title"
                     required
                   />
                 </div>
                 
                 <div className="mb-4">
-                  <label htmlFor="description" className="block text-sm font-medium text-silver-100 mb-1">
+                  <label htmlFor="description" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Description*
                   </label>
                   <textarea
@@ -503,14 +509,14 @@ const EditProjectPage = () => {
                     value={formData.description}
                     onChange={handleChange}
                     rows="5"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                    className={`w-full px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                     placeholder="Enter project description"
                     required
                   ></textarea>
                 </div>
                 
                 <div className="mb-4">
-                  <label htmlFor="status" className="block text-sm font-medium text-silver-100 mb-1">
+                  <label htmlFor="status" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Status
                   </label>
                   <select
@@ -518,7 +524,7 @@ const EditProjectPage = () => {
                     name="status"
                     value={formData.status}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                    className={`w-full px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                   >
                     <option value="Demandé">Demandé</option>
                     <option value="Accepteé">Accepteé</option>
@@ -528,7 +534,7 @@ const EditProjectPage = () => {
                 </div>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-silver-100 mb-1">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Category*
                   </label>
                   {showAddCategory ? (
@@ -537,7 +543,7 @@ const EditProjectPage = () => {
                         type="text"
                         value={newCategoryName}
                         onChange={(e) => setNewCategoryName(e.target.value)}
-                        className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                        className={`flex-grow px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                         placeholder="New category name"
                       />
                       <button
@@ -551,7 +557,7 @@ const EditProjectPage = () => {
                       <button
                         type="button"
                         onClick={() => setShowAddCategory(false)}
-                        className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+                        className={`px-3 py-2 rounded-md ${isDark ? 'bg-gray-600 text-white hover:bg-gray-500' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
                       >
                         Cancel
                       </button>
@@ -563,7 +569,7 @@ const EditProjectPage = () => {
                         name="categoryId"
                         value={formData.categoryId}
                         onChange={handleChange}
-                        className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                        className={`flex-grow px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                         required
                       >
                         <option value="">Select a category</option>
@@ -585,27 +591,27 @@ const EditProjectPage = () => {
                 </div>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-silver-100 mb-1">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Assigned User
                   </label>
                   <div className="relative">
                     {formData.userId ? (
-                      <div className="flex items-center justify-between px-3 py-2 border border-gray-300 rounded-md">
+                      <div className={`flex items-center justify-between px-3 py-2 border rounded-md ${isDark ? 'bg-gray-700 border-gray-600' : 'border-gray-300 bg-white'}`}>
                         <div className="flex items-center">
                           <img
                             src={findUserById(formData.userId)?.picture || 'https://via.placeholder.com/32x32?text=User'}
                             alt="User"
                             className="h-6 w-6 rounded-full mr-2"
                           />
-                          <span>{findUserById(formData.userId)?.name}</span>
-                          <span className="ml-2 text-gray-500 text-xs">{findUserById(formData.userId)?.email}</span>
+                          <span className={isDark ? 'text-white' : ''}>{findUserById(formData.userId)?.name}</span>
+                          <span className={`ml-2 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{findUserById(formData.userId)?.email}</span>
                         </div>
                         <button
                           type="button"
                           onClick={() => {
                             setUserDropdownOpen(true);
                           }}
-                          className="text-blue-600 hover:text-blue-800"
+                          className={`${isDark ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'}`}
                         >
                           Change
                         </button>
@@ -613,23 +619,23 @@ const EditProjectPage = () => {
                     ) : (
                       <div 
                         onClick={() => setUserDropdownOpen(true)}
-                        className="flex items-center px-3 py-2 border border-gray-300 rounded-md cursor-pointer"
+                        className={`flex items-center px-3 py-2 border rounded-md cursor-pointer ${isDark ? 'bg-gray-700 border-gray-600' : 'border-gray-300 bg-white'}`}
                       >
-                        <FiUser className="text-gray-400 mr-2" />
-                        <span className="text-gray-500">Select a user</span>
+                        <FiUser className={`${isDark ? 'text-gray-400' : 'text-gray-400'} mr-2`} />
+                        <span className={`${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Select a user</span>
                       </div>
                     )}
                     
                     {userDropdownOpen && (
-                      <div className="absolute z-10 mt-1 w-full bg-white rounded-md shadow-lg border border-gray-200">
-                        <div className="p-2 border-b">
+                      <div className={`absolute z-10 mt-1 w-full rounded-md shadow-lg border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}>
+                        <div className={`p-2 border-b ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
                           <div className="relative">
                             <FiSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
                             <input
                               type="text"
                               value={userSearchQuery}
                               onChange={(e) => setUserSearchQuery(e.target.value)}
-                              className="w-full pl-9 pr-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                              className={`w-full pl-9 pr-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                               placeholder="Search users..."
                               autoFocus
                             />
@@ -637,12 +643,12 @@ const EditProjectPage = () => {
                         </div>
                         <div className="max-h-60 overflow-y-auto">
                           {filteredUsers.length === 0 ? (
-                            <div className="p-4 text-center text-gray-500">No users found</div>
+                            <div className={`p-4 text-center ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>No users found</div>
                           ) : (
                             filteredUsers.map((user) => (
                               <div
                                 key={user._id}
-                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer flex items-center"
+                                className={`px-4 py-2 cursor-pointer flex items-center ${isDark ? 'hover:bg-gray-700' : 'hover:bg-gray-100'}`}
                                 onClick={() => handleUserSelect(user)}
                               >
                                 <img
@@ -651,8 +657,8 @@ const EditProjectPage = () => {
                                   className="h-8 w-8 rounded-full mr-2"
                                 />
                                 <div>
-                                  <div className="font-medium">{user.name}</div>
-                                  <div className="text-sm text-gray-500">{user.email}</div>
+                                  <div className={`font-medium ${isDark ? 'text-white' : ''}`}>{user.name}</div>
+                                  <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{user.email}</div>
                                 </div>
                               </div>
                             ))
@@ -666,10 +672,10 @@ const EditProjectPage = () => {
               
               <div>
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-silver-100 mb-1">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Project Images
                   </label>
-                  <div className="border-2 border-dashed border-gray-300 rounded-md p-4">
+                  <div className={`border-2 border-dashed rounded-md p-4 ${isDark ? 'border-gray-600' : 'border-gray-300'}`}>
                     <div className="flex flex-wrap gap-3 mb-4">
                       {/* Existing images */}
                       {existingImages.map((url, index) => (
@@ -708,7 +714,7 @@ const EditProjectPage = () => {
                       ))}
                       
                       {existingImages.length === 0 && imagePreviewUrls.length === 0 && (
-                        <div className="w-full text-center text-gray-500 py-8">
+                        <div className={`w-full text-center ${isDark ? 'text-gray-400' : 'text-gray-500'} py-8`}>
                           No images selected
                         </div>
                       )}
@@ -716,8 +722,8 @@ const EditProjectPage = () => {
                     
                     <label className="flex flex-col items-center justify-center cursor-pointer">
                       <div className="flex flex-col items-center justify-center">
-                        <FiUpload className="h-8 w-8 text-gray-400" />
-                        <span className="mt-2 text-sm text-gray-500">
+                        <FiUpload className={`h-8 w-8 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
+                        <span className={`mt-2 text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                           Click to upload new images (max 5MB each)
                         </span>
                       </div>
@@ -733,10 +739,10 @@ const EditProjectPage = () => {
                 </div>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-silver-100 mb-1">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Project Location
                   </label>
-                  <div className="h-60 rounded-md overflow-hidden border border-gray-300">
+                  <div className={`h-60 rounded-md overflow-hidden border ${isDark ? 'border-gray-600' : 'border-gray-300'}`}>
                     <Map
                       initialViewState={{
                         longitude: viewport.longitude,
@@ -744,7 +750,7 @@ const EditProjectPage = () => {
                         zoom: viewport.zoom
                       }}
                       style={{ width: '100%', height: '100%' }}
-                      mapStyle="mapbox://styles/mapbox/streets-v11"
+                      mapStyle={isDark ? "mapbox://styles/mapbox/dark-v10" : "mapbox://styles/mapbox/streets-v11"}
                       mapboxAccessToken={mapboxToken}
                       attributionControl={true}
                       onClick={handleMapClick}
@@ -763,25 +769,25 @@ const EditProjectPage = () => {
                       />
                     </Map>
                   </div>
-                  <div className="mt-2 text-sm text-gray-500 flex items-center">
+                  <div className={`mt-2 text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'} flex items-center`}>
                     <FiMapPin className="mr-1" /> Click on the map to set project location or drag the marker
                   </div>
-                  <div className="mt-1 text-xs text-gray-500">
+                  <div className={`mt-1 text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                     Location: {location.coordinates[1].toFixed(6)}, {location.coordinates[0].toFixed(6)}
                   </div>
                 </div>
                 
-                <div className="mt-6 p-4 bg-red-50 rounded-md">
-                  <h3 className="text-sm font-medium text-red-600 flex items-center">
+                <div className={`mt-6 p-4 rounded-md ${isDark ? 'bg-red-900/20' : 'bg-red-50'}`}>
+                  <h3 className={`text-sm font-medium ${isDark ? 'text-red-400' : 'text-red-600'} flex items-center`}>
                     <FiTrash2 className="mr-1" /> Danger Zone
                   </h3>
-                  <p className="text-xs text-red-500 mt-1">
+                  <p className={`text-xs ${isDark ? 'text-red-400' : 'text-red-500'} mt-1`}>
                     Deleting a project will remove all associated data and cannot be undone.
                   </p>
                   <button
                     type="button"
                     onClick={deleteProject}
-                    className="mt-2 px-3 py-1 bg-white border border-red-300 text-red-600 text-sm rounded hover:bg-red-50"
+                    className={`mt-2 px-3 py-1 text-sm rounded ${isDark ? 'bg-gray-700 border-red-500/50 text-red-400 hover:bg-gray-600' : 'bg-white border border-red-300 text-red-600 hover:bg-red-50'}`}
                   >
                     Delete Project
                   </button>
@@ -789,10 +795,10 @@ const EditProjectPage = () => {
               </div>
             </div>
             
-            <div className="mt-6 pt-6 border-t border-gray-200 flex justify-end">
+            <div className={`mt-6 pt-6 border-t flex justify-end ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
               <Link
                 to={`/admin/projects/${projectId}`}
-                className="px-4 py-2 border border-gray-300 rounded-md text-gray-700 mr-2 hover:bg-gray-50"
+                className={`px-4 py-2 border rounded-md mr-2 ${isDark ? 'border-gray-600 text-gray-300 hover:bg-gray-700' : 'border-gray-300 text-gray-700 hover:bg-gray-50'}`}
               >
                 Cancel
               </Link>

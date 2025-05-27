@@ -628,17 +628,17 @@ const MeetingsPage = () => {
               </div>
               
               {/* Modal body */}
-              <div className="px-6 py-4 max-h-[60vh] overflow-y-auto">
-                <div className="space-y-5">
+              <div className={`px-6 py-4 max-h-[60vh] overflow-y-auto ${isDark ? 'bg-gray-800' : ''}`}>
+                <div className="space-y-4">
                   <div>
-                    <label htmlFor="userId" className="block text-sm font-medium text-silver-100 mb-1">User</label>
+                    <label htmlFor="userId" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>User</label>
                     <div className="relative">
                       <select
                         id="userId"
                         name="userId"
                         value={formData.userId}
                         onChange={handleInputChange}
-                        className="appearance-none block w-full pl-3 pr-10 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                        className={`appearance-none block w-full pl-3 pr-10 py-2.5 text-base ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-800'} rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm`}
                         required
                       >
                         <option value="">Select a user</option>
@@ -655,7 +655,7 @@ const MeetingsPage = () => {
                   </div>
                   
                   <div>
-                    <label htmlFor="date" className="block text-sm font-medium text-silver-100 mb-1">Date and Time</label>
+                    <label htmlFor="date" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>Date and Time</label>
                     <div className="relative">
                       <input
                         type="datetime-local"
@@ -663,7 +663,7 @@ const MeetingsPage = () => {
                         name="date"
                         value={formData.date ? moment(formData.date).format('YYYY-MM-DDTHH:mm') : ''}
                         onChange={handleDateChange}
-                        className="appearance-none block w-full pl-3 pr-10 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                        className={`appearance-none block w-full pl-3 pr-10 py-2.5 text-base ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-800'} rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm`}
                       />
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
                         <FiCalendar className="w-5 h-5" />
@@ -672,7 +672,7 @@ const MeetingsPage = () => {
                   </div>
                   
                   <div>
-                    <label htmlFor="interviewGoal" className="block text-sm font-medium text-silver-100 mb-1">Meeting Purpose</label>
+                    <label htmlFor="interviewGoal" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>Meeting Purpose</label>
                     <div className="relative">
                       <input
                         type="text"
@@ -681,7 +681,7 @@ const MeetingsPage = () => {
                         value={formData.interviewGoal}
                         onChange={handleInputChange}
                         placeholder="Enter the purpose of this meeting"
-                        className="appearance-none block w-full pl-3 pr-10 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                        className={`appearance-none block w-full pl-3 pr-10 py-2.5 text-base ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-800'} rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm`}
                         required
                       />
                       <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-400">
@@ -691,14 +691,14 @@ const MeetingsPage = () => {
                   </div>
                   
                   <div>
-                    <label htmlFor="statusInterview" className="block text-sm font-medium text-silver-100 mb-1">Status</label>
+                    <label htmlFor="statusInterview" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>Status</label>
                     <div className="relative">
                       <select
                         id="statusInterview"
                         name="statusInterview"
                         value={formData.statusInterview}
                         onChange={handleInputChange}
-                        className="appearance-none block w-full pl-3 pr-10 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                        className={`appearance-none block w-full pl-3 pr-10 py-2.5 text-base ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-800'} rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm`}
                       >
                         <option value="pending">Pending</option>
                         <option value="accepted">Accepted</option>
@@ -713,7 +713,7 @@ const MeetingsPage = () => {
                   </div>
                   
                   <div>
-                    <label htmlFor="note" className="block text-sm font-medium text-silver-100 mb-1">Notes (Optional)</label>
+                    <label htmlFor="note" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>Notes (Optional)</label>
                     <textarea
                       id="note"
                       name="note"
@@ -721,17 +721,17 @@ const MeetingsPage = () => {
                       onChange={handleInputChange}
                       rows="3"
                       placeholder="Add any additional notes about this meeting"
-                      className="appearance-none block w-full pl-3 pr-3 py-2.5 text-base bg-white border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm"
+                      className={`appearance-none block w-full pl-3 pr-3 py-2.5 text-base ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-800'} rounded-lg focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot shadow-sm`}
                     ></textarea>
                   </div>
                 </div>
               </div>
               
               {/* Modal footer */}
-              <div className="bg-gray-50 px-6 py-4 border-t border-gray-100 flex justify-end space-x-3">
+              <div className={`${isDark ? 'bg-gray-700' : 'bg-gray-50'} px-6 py-4 border-t ${isDark ? 'border-gray-600' : 'border-gray-100'} flex justify-end space-x-3`}>
                 <button
                   type="button"
-                  className="px-4 py-2 bg-white border border-gray-300 rounded-md font-medium text-gray-700 hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors"
+                  className={`px-4 py-2 ${isDark ? 'bg-gray-600 text-white border-gray-500 hover:bg-gray-500' : 'bg-white text-gray-700 border-gray-300 hover:bg-gray-50'} border rounded-md font-medium focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-coquelicot transition-colors`}
                   onClick={() => setShowModal(false)}
                 >
                   Cancel

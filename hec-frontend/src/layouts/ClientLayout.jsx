@@ -78,7 +78,7 @@ const ClientLayout = () => {
               <img 
                 src="/logo.png" 
                 alt="HEC Logo" 
-                className="h-10 w-10" 
+                className="h-12 w-24" 
                 onError={(e) => {
                   e.target.onerror = null;
                   e.target.src = 'https://via.placeholder.com/40x40?text=HEC';

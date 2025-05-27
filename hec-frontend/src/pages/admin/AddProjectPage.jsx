@@ -5,10 +5,15 @@ import { FiSave, FiArrowLeft, FiUpload, FiX, FiMapPin, FiUser, FiSearch, FiPlus 
 import axios from 'axios';
 import 'mapbox-gl/dist/mapbox-gl.css';
 import Map, { Marker } from 'react-map-gl';
+import { useTheme } from '../../context/ThemeContext';
 
 const AddProjectPage = () => {
   const navigate = useNavigate();
   const mapboxToken = process.env.REACT_APP_MAPBOX_TOKEN;
+  
+  // Theme context
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
 
   // Project form state
   const [formData, setFormData] = useState({
@@ -309,11 +314,11 @@ const AddProjectPage = () => {
   };
 
   return (
-    <div className="p-6">
+    <div className={`p-6 ${isDark ? 'bg-gray-900 text-white' : ''}`}>
       <div className="mb-6">
         <Link 
           to="/admin/projects" 
-          className="flex items-center text-silver-200 hover:text-silver-100 transition-colors"
+          className={`flex items-center ${isDark ? 'text-gray-300 hover:text-white' : 'text-silver-200 hover:text-silver-100'} transition-colors`}
         >
           <FiArrowLeft className="mr-2" /> Back to Projects
         </Link>
@@ -323,19 +328,19 @@ const AddProjectPage = () => {
         initial={{ opacity: 0, y: 20 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3 }}
-        className="bg-white rounded-lg shadow-sm border border-gray-100 overflow-hidden"
+        className={`${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-100'} rounded-lg shadow-sm border overflow-hidden`}
       >
         <div className="p-6">
-          <h1 className="text-2xl font-bold text-silver-100 mb-6">Create New Project</h1>
+          <h1 className={`text-2xl font-bold ${isDark ? 'text-white' : 'text-silver-100'} mb-6`}>Create New Project</h1>
           
           {error && (
-            <div className="mb-6 p-4 bg-red-50 text-red-600 rounded-md">
+            <div className={`mb-6 p-4 ${isDark ? 'bg-red-900/20 text-red-400' : 'bg-red-50 text-red-600'} rounded-md`}>
               {error}
             </div>
           )}
           
           {success && (
-            <div className="mb-6 p-4 bg-green-50 text-green-600 rounded-md">
+            <div className={`mb-6 p-4 ${isDark ? 'bg-green-900/20 text-green-400' : 'bg-green-50 text-green-600'} rounded-md`}>
               {success}
             </div>
           )}
@@ -344,7 +349,7 @@ const AddProjectPage = () => {
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
               <div>
                 <div className="mb-4">
-                  <label htmlFor="title" className="block text-sm font-medium text-silver-100 mb-1">
+                  <label htmlFor="title" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Project Title*
                   </label>
                   <input
@@ -353,14 +358,14 @@ const AddProjectPage = () => {
                     name="title"
                     value={formData.title}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                    className={`w-full px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                     placeholder="Enter project title"
                     required
                   />
                 </div>
                 
                 <div className="mb-4">
-                  <label htmlFor="description" className="block text-sm font-medium text-silver-100 mb-1">
+                  <label htmlFor="description" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Description*
                   </label>
                   <textarea
@@ -369,14 +374,14 @@ const AddProjectPage = () => {
                     value={formData.description}
                     onChange={handleChange}
                     rows="5"
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                    className={`w-full px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                     placeholder="Enter project description"
                     required
                   ></textarea>
                 </div>
                 
                 <div className="mb-4">
-                  <label htmlFor="status" className="block text-sm font-medium text-silver-100 mb-1">
+                  <label htmlFor="status" className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Status
                   </label>
                   <select
@@ -384,7 +389,7 @@ const AddProjectPage = () => {
                     name="status"
                     value={formData.status}
                     onChange={handleChange}
-                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                    className={`w-full px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                   >
                     <option value="Demandé">Demandé</option>
                     <option value="Accepteé">Accepteé</option>
@@ -394,7 +399,7 @@ const AddProjectPage = () => {
                 </div>
                 
                 <div className="mb-4">
-                  <label className="block text-sm font-medium text-silver-100 mb-1">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
                     Category*
                   </label>
                   {showAddCategory ? (
@@ -403,7 +408,7 @@ const AddProjectPage = () => {
                         type="text"
                         value={newCategoryName}
                         onChange={(e) => setNewCategoryName(e.target.value)}
-                        className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                        className={`flex-grow px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                         placeholder="New category name"
                       />
                       <button
@@ -417,7 +422,7 @@ const AddProjectPage = () => {
                       <button
                         type="button"
                         onClick={() => setShowAddCategory(false)}
-                        className="px-3 py-2 bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+                        className={`px-3 py-2 rounded-md ${isDark ? 'bg-gray-600 text-white hover:bg-gray-500' : 'bg-gray-200 text-gray-700 hover:bg-gray-300'}`}
                       >
                         Cancel
                       </button>
@@ -429,7 +434,7 @@ const AddProjectPage = () => {
                         name="categoryId"
                         value={formData.categoryId}
                         onChange={handleChange}
-                        className="flex-grow px-3 py-2 border border-gray-300 rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500"
+                        className={`flex-grow px-3 py-2 border rounded-md focus:ring-coquelicot-500 focus:border-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                         required
                       >
                         <option value="">Select a category</option>
