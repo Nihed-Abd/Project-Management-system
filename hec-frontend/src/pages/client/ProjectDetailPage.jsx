@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FiArrowLeft, FiCalendar, FiTag, FiClock, FiMapPin } from 'react-icons/fi';
 import axios from 'axios';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import mapboxgl from 'mapbox-gl';
 import 'mapbox-gl/dist/mapbox-gl.css';
 
@@ -14,6 +15,7 @@ const ProjectDetailPage = () => {
   const { projectId } = useParams();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { t } = useTranslation(['common', 'projects']);
   const [project, setProject] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -33,11 +35,11 @@ const ProjectDetailPage = () => {
         if (response.data) {
           setProject(response.data.project || response.data);
         } else {
-          setError('Project not found');
+          setError(t('projects.errors.notFound'));
         }
       } catch (err) {
         console.error('Error fetching project details:', err);
-        setError('Failed to load project details. Please try again later.');
+        setError(t('projects.errors.failedToLoad'));
       } finally {
         setLoading(false);
       }
@@ -168,12 +170,12 @@ const ProjectDetailPage = () => {
       <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
         <div className="container mx-auto px-4">
           <div className="text-center py-20">
-            <p className={`mb-4 ${isDark ? 'text-red-400' : 'text-red-600'}`}>{error || 'Project not found'}</p>
+            <p className={`mb-4 ${isDark ? 'text-red-400' : 'text-red-600'}`}>{error || t('projects.errors.notFound')}</p>
             <Link 
               to="/projects"
               className="inline-flex items-center text-coquelicot hover:underline"
             >
-              <FiArrowLeft className="mr-2" /> Back to Projects
+              <FiArrowLeft className="mr-2" /> {t('projects.backToProjects')}
             </Link>
           </div>
         </div>
@@ -190,7 +192,7 @@ const ProjectDetailPage = () => {
             to="/projects"
             className="inline-flex items-center text-coquelicot hover:underline"
           >
-            <FiArrowLeft className="mr-2" /> Back to Projects
+            <FiArrowLeft className="mr-2" /> {t('projects.backToProjects')}
           </Link>
         </div>
 
@@ -200,7 +202,7 @@ const ProjectDetailPage = () => {
           <div className={`flex flex-wrap gap-3 text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
             <div className="flex items-center">
               <FiCalendar className="mr-1 text-gray-400" />
-              <span>Created: {new Date(project.creationDate || project.createdAt).toLocaleDateString()}</span>
+              <span>{t('common.created')}: {new Date(project.creationDate || project.createdAt).toLocaleDateString()}</span>
             </div>
             <div className="flex items-center">
               <FiTag className="mr-1 text-gray-400" />
@@ -217,7 +219,7 @@ const ProjectDetailPage = () => {
             {project.LastEditDate && (
               <div className="flex items-center">
                 <FiClock className="mr-1 text-gray-400" />
-                <span>Last updated: {new Date(project.LastEditDate).toLocaleDateString()}</span>
+                <span>{t('common.updated')}: {new Date(project.LastEditDate).toLocaleDateString()}</span>
               </div>
             )}
           </div>
@@ -259,7 +261,7 @@ const ProjectDetailPage = () => {
               </>
             ) : (
               <div className={`flex items-center justify-center h-64 rounded-xl ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                <p className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>No images available</p>
+                <p className={`${isDark ? 'text-gray-500' : 'text-gray-400'}`}>{t('projects.noImagesAvailable')}</p>
               </div>
             )}
           </div>
@@ -273,16 +275,16 @@ const ProjectDetailPage = () => {
             transition={{ duration: 0.5 }}
             className="md:col-span-2"
           >
-            <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Project Description</h2>
+            <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('projects.projectDescription')}</h2>
             <div className={`prose prose-lg max-w-none ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-              <p>{project.description || 'No description available.'}</p>
+              <p>{project.description || t('projects.noDescriptionAvailable')}</p>
             </div>
             
             {project.location && project.location.coordinates && (
               <div className="mt-10">
                 <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                   <div className="flex items-center">
-                    <FiMapPin className="mr-2" /> Project Location
+                    <FiMapPin className="mr-2" /> {t('projects.projectLocation')}
                   </div>
                 </h2>
                 <motion.div 

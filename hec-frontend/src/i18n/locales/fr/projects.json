@@ -25,19 +25,47 @@
       "completed": "Terminé",
       "cancelled": "Annulé",
       "requested": "Demandé",
-      "accepted": "Accepté"
+      "accepted": "Accepté",
+      "planned": "Planifié"
     },
     "filters": {
       "all": "Tous",
       "category": "Catégorie",
       "status": "Statut",
-      "date": "Date"
+      "date": "Date",
+      "residential": "Résidentiel",
+      "commercial": "Commercial",
+      "industrial": "Industriel"
+    },
+    "filter": {
+      "all": "Tous les projets",
+      "residential": "Résidentiel",
+      "commercial": "Commercial",
+      "industrial": "Industriel"
+    },
+    "sort": {
+      "newest": "Plus récents d'abord",
+      "oldest": "Plus anciens d'abord",
+      "nameAsc": "Nom (A-Z)",
+      "nameDesc": "Nom (Z-A)"
     },
     "actions": {
-      "viewDetails": "Voir les Détails",
+      "viewDetails": "Voir les détails",
       "edit": "Modifier",
       "delete": "Supprimer",
-      "request": "Demander"
+      "request": "Demander",
+      "editProject": "Modifier le projet",
+      "deleteProject": "Supprimer le projet",
+      "requestProject": "Demander un projet"
+    },
+    "errors": {
+      "projectNotCreated": "Le projet n'a pas pu être créé",
+      "projectDeleted": "Projet supprimé avec succès",
+      "projectRequested": "Projet demandé avec succès",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce projet ?",
+      "noProjects": "Aucun projet trouvé",
+      "notFound": "Projet non trouvé",
+      "failedToLoad": "Échec du chargement des détails du projet. Veuillez réessayer plus tard."
     },
     "messages": {
       "projectCreated": "Projet créé avec succès",
@@ -50,6 +78,7 @@
     "requestSimilar": "Demander un Projet Similaire",
     "back": "Retour aux Projets",
     "noImagesAvailable": "Aucune image disponible",
+    "noDescriptionAvailable": "Aucune description disponible.",
     "projectInfo": "Informations du Projet",
     "mapLocation": "Emplacement sur la Carte",
     "coordinates": "Coordonnées"

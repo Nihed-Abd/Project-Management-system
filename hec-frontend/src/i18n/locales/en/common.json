@@ -93,7 +93,16 @@
     "confirmation": "Confirmation",
     "areYouSure": "Are you sure?",
     "yes": "Yes",
-    "no": "No"
+    "no": "No",
+    "quickLinks": "Quick Links",
+    "followUs": "Follow Us",
+    "allRightsReserved": "All rights reserved",
+    "email": "Email",
+    "phone": "Phone",
+    "address": "Address",
+    "today": "Today",
+    "tomorrow": "Tomorrow",
+    "tryAgain": "Try Again"
   },
   "languages": {
     "english": "English",

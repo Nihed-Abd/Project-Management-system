@@ -19,7 +19,9 @@
       "pending": "Pending",
       "inProgress": "In Progress",
       "resolved": "Resolved",
-      "closed": "Closed"
+      "closed": "Closed",
+      "answered": "Answered",
+      "allStatuses": "All Statuses"
     },
     "priority": {
       "low": "Low",
@@ -40,6 +42,17 @@
       "confirmDelete": "Are you sure you want to delete this reclamation?",
       "noReclamations": "No reclamations found"
     },
+    "errors": {
+      "unexpectedResponse": "Unexpected API response format",
+      "failedToLoad": "Failed to load your reclamations. Please try again later.",
+      "failedToSubmit": "Failed to submit your reclamation. Please try again later."
+    },
+    "pleaseLogIn": "Please log in to view your reclamations.",
+    "noReclamationsFound": "No reclamations found matching your criteria.",
+    "noReclamationsSubmitted": "You haven't submitted any reclamations yet.",
+    "submitReclamation": "Submit a Reclamation",
+    "clearFilters": "Clear filters",
+    "notAnsweredYet": "Not answered yet",
     "filters": {
       "all": "All",
       "status": "Status",

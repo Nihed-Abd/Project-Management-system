@@ -33,6 +33,12 @@
       "confirmDelete": "Are you sure you want to delete this interview?",
       "noInterviews": "No interviews scheduled"
     },
+    "errors": {
+      "unexpectedResponse": "Unexpected API response format",
+      "failedToLoad": "Failed to load your interviews. Please try again later.",
+      "failedToDelete": "Failed to delete interview. Please try again."
+    },
+    "pleaseLogIn": "Please log in to view your interviews.",
     "calendar": {
       "today": "Today",
       "month": "Month",

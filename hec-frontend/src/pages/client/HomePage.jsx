@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { FaBolt, FaLightbulb, FaTools, FaShieldAlt, FaStar, FaAward, FaClock } from 'react-icons/fa';
 import { useInView } from 'react-intersection-observer';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const HomePage = () => {
   const { theme } = useTheme();

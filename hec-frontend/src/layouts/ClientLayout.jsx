@@ -4,7 +4,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FiMenu, FiX, FiUser, FiLogOut, FiCalendar, FiFolder, FiMessageSquare } from 'react-icons/fi';
 import { useAuth } from '../context/AuthContext';
 import { useTheme } from '../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import ThemeToggle from '../components/ThemeToggle';
+import LanguageSwitcher from '../components/LanguageSwitcher';
 import ChatBot from '../components/ChatBot';
 
 const ClientLayout = () => {
@@ -17,12 +19,13 @@ const ClientLayout = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const profileRef = useRef(null);
+  const { t } = useTranslation(['common']);
 
   const navItems = [
-    { name: 'Home', path: '/' },
-    { name: 'Projects', path: '/projects' },
-    { name: 'About Us', path: '/about' },
-    { name: 'Contact', path: '/contact' },
+    { name: t('navigation.home'), path: '/' },
+    { name: t('navigation.projects'), path: '/projects' },
+    { name: t('navigation.about'), path: '/about' },
+    { name: t('navigation.contact'), path: '/contact' },
   ];
 
   useEffect(() => {
@@ -116,22 +119,22 @@ const ClientLayout = () => {
               </ul>
             </nav>
 
-            {/* Auth Buttons or User Profile */}
-            <div className="hidden items-center space-x-4 md:flex">
-              <ThemeToggle />
+            {/* Desktop Actions */}
+            <div className="hidden items-center md:flex space-x-4">
+              <LanguageSwitcher />
+              <ThemeToggle className="" />
+              
               {currentUser ? (
                 <div className="relative" ref={profileRef}>
                   <button
                     onClick={() => setIsProfileOpen(!isProfileOpen)}
-                    className="flex items-center space-x-2 rounded-md px-4 py-2 text-sm font-medium text-gray-800 transition-colors hover:bg-gray-100"
+                    className={`flex items-center rounded-full p-1 transition-colors ${isProfileOpen ? 'bg-gray-200' : ''}`}
+                    aria-label={t('profile.personalInfo')}
                   >
-                    <img 
-                      src={currentUser.picture || `https://ui-avatars.com/api/?name=${encodeURIComponent(currentUser.name)}&background=fe3201&color=fff`} 
-                      alt={currentUser.name} 
-                      className="h-8 w-8 rounded-full"
-                    />
-                    <span className={`ml-2 text-sm font-medium ${isDark ? 'text-gray-200' : 'text-gray-800'}`}>
-                      {currentUser.name || currentUser.email.split('@')[0]}
+                    <span 
+                      className={`inline-flex h-9 w-9 items-center justify-center rounded-full text-sm font-medium ${isDark ? 'bg-gray-700 text-white' : 'bg-gray-200 text-gray-700'}`}
+                    >
+                      {currentUser.name ? currentUser.name.charAt(0).toUpperCase() : 'U'}
                     </span>
                   </button>
                   
@@ -146,22 +149,22 @@ const ClientLayout = () => {
                         className="absolute right-0 mt-2 w-48 rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5"
                       >
                         <Link to="/profile" className={`flex items-center px-4 py-2 text-sm ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}`}>
-                          <FiUser className="mr-3 h-4 w-4" /> Profile
+                          <FiUser className="mr-3 h-4 w-4" /> {t('navigation.profile')}
                         </Link>
                         <Link to="/user-projects" className={`flex items-center px-4 py-2 text-sm ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}`}>
-                          <FiFolder className="mr-3 h-4 w-4" /> My Projects
+                          <FiFolder className="mr-3 h-4 w-4" /> {t('navigation.myProjects')}
                         </Link>
                         <Link to="/interviews" className={`flex items-center px-4 py-2 text-sm ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}`}>
-                          <FiCalendar className="mr-3 h-4 w-4" /> My Interviews
+                          <FiCalendar className="mr-3 h-4 w-4" /> {t('navigation.myInterviews')}
                         </Link>
                         <Link to="/reclamations" className={`flex items-center px-4 py-2 text-sm ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}`}>
-                          <FiMessageSquare className="mr-3 h-4 w-4" /> My Reclamations
+                          <FiMessageSquare className="mr-3 h-4 w-4" /> {t('navigation.myReclamations')}
                         </Link>
                         <button 
                           onClick={handleLogout}
                           className={`flex w-full items-center px-4 py-2 text-sm text-left ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}`}
                         >
-                          <FiLogOut className="mr-3 h-4 w-4" /> Logout
+                          <FiLogOut className="mr-3 h-4 w-4" /> {t('navigation.logout')}
                         </button>
                       </motion.div>
                     )}
@@ -173,13 +176,13 @@ const ClientLayout = () => {
                     to="/login"
                     className="rounded-md px-4 py-2 text-sm font-medium text-coquelicot transition-colors hover:bg-coquelicot-100"
                   >
-                    Login
+                    {t('navigation.login')}
                   </Link>
                   <Link
                     to="/register"
                     className="rounded-md bg-coquelicot px-4 py-2 text-sm font-medium text-white transition-colors hover:bg-coquelicot-600"
                   >
-                    Sign Up
+                    {t('navigation.register')}
                   </Link>
                 </>
               )}
@@ -231,40 +234,41 @@ const ClientLayout = () => {
                           <ThemeToggle className="mx-auto" />
                         </div>
                         <Link to="/profile" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          <FiUser className="mr-3 h-4 w-4" /> Profile
+                          <FiUser className="mr-3 h-4 w-4" /> {t('navigation.profile')}
                         </Link>
                         <Link to="/user-projects" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          <FiFolder className="mr-3 h-4 w-4" /> My Projects
+                          <FiFolder className="mr-3 h-4 w-4" /> {t('navigation.myProjects')}
                         </Link>
                         <Link to="/interviews" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          <FiCalendar className="mr-3 h-4 w-4" /> My Interviews
+                          <FiCalendar className="mr-3 h-4 w-4" /> {t('navigation.myInterviews')}
                         </Link>
                         <Link to="/reclamations" className="flex items-center rounded-md px-4 py-2 text-gray-700 hover:bg-gray-100">
-                          <FiMessageSquare className="mr-3 h-4 w-4" /> My Reclamations
+                          <FiMessageSquare className="mr-3 h-4 w-4" /> {t('navigation.myReclamations')}
                         </Link>
                         <button 
                           onClick={handleLogout}
                           className="flex w-full items-center rounded-md px-4 py-2 text-left text-gray-700 hover:bg-gray-100"
                         >
-                          <FiLogOut className="mr-3 h-4 w-4" /> Logout
+                          <FiLogOut className="mr-3 h-4 w-4" /> {t('navigation.logout')}
                         </button>
                       </>
                     ) : (
                       <>
                         <div className="flex justify-center my-2">
                           <ThemeToggle className="mx-auto" />
+                          <LanguageSwitcher className="ml-2" />
                         </div>
                         <Link
                           to="/login"
                           className={`block py-2 px-4 ${location.pathname === '/login' ? 'text-coquelicot font-medium' : isDark ? 'text-gray-300 hover:text-coquelicot' : 'text-silver-100 hover:text-coquelicot'}`}
                         >
-                          Login
+                          {t('navigation.login')}
                         </Link>
                         <Link
                           to="/register"
                           className="rounded-md bg-coquelicot px-4 py-2 text-center text-white transition-colors hover:bg-coquelicot-600 w-full mb-2"
                         >
-                          Sign Up
+                          {t('navigation.register')}
                         </Link>
                       </>
                     )}
@@ -295,7 +299,7 @@ const ClientLayout = () => {
               </p>
             </div>
             <div>
-              <h3 className={`mb-4 text-lg font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>Quick Links</h3>
+              <h3 className={`mb-4 text-lg font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('common.quickLinks')}</h3>
               <ul className="space-y-2 text-sm">
                 {navItems.map((item) => (
                   <li key={item.name}>
@@ -307,15 +311,15 @@ const ClientLayout = () => {
               </ul>
             </div>
             <div>
-              <h3 className={`mb-4 text-lg font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>Contact</h3>
+              <h3 className={`mb-4 text-lg font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('navigation.contact')}</h3>
               <ul className={`space-y-2 text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                <li>Email: contact@hec.com</li>
-                <li>Phone: +123 456 7890</li>
-                <li>Address: 123 Main St, City</li>
+                <li>{t('common.email')}: contact@hec.com</li>
+                <li>{t('common.phone')}: +123 456 7890</li>
+                <li>{t('common.address')}: 123 Main St, City</li>
               </ul>
             </div>
             <div>
-              <h3 className={`mb-4 text-lg font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>Follow Us</h3>
+              <h3 className={`mb-4 text-lg font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('common.followUs')}</h3>
               <div className="flex space-x-4">
                 <a href="#" className="text-gray-600 hover:text-coquelicot">
                   Facebook
@@ -330,7 +334,7 @@ const ClientLayout = () => {
             </div>
           </div>
           <div className={`mt-8 border-t ${isDark ? 'border-gray-700' : 'border-gray-200'} pt-6 text-center text-sm ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-            <p>&copy; {new Date().getFullYear()} Hammemi Electricity Concept. All rights reserved.</p>
+            <p>&copy; {new Date().getFullYear()} Hammemi Electricity Concept. {t('common.allRightsReserved')}</p>
           </div>
         </div>
       </footer>

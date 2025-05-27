@@ -4,12 +4,14 @@ import { FiSearch, FiFilter, FiCalendar, FiMessageSquare, FiPlus, FiAlertCircle,
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 
 const UserReclamationsPage = () => {
   const { currentUser } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { t } = useTranslation(['common', 'reclamations']);
   const [reclamations, setReclamations] = useState([]);
   const [filteredReclamations, setFilteredReclamations] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,9 +28,9 @@ const UserReclamationsPage = () => {
   const [submitting, setSubmitting] = useState(false);
   
   const statusOptions = [
-    { value: '', label: 'All Statuses' },
-    { value: 'pending', label: 'Pending' },
-    { value: 'Answered', label: 'Answered' }
+    { value: '', label: t('reclamations.status.allStatuses') },
+    { value: 'pending', label: t('reclamations.status.pending') },
+    { value: 'Answered', label: t('reclamations.status.answered') }
   ];
 
   // Define fetchUserReclamations with useCallback
@@ -43,11 +45,11 @@ const UserReclamationsPage = () => {
       } else if (response.data && response.data.success && Array.isArray(response.data.reclamations)) {
         setReclamations(response.data.reclamations);
       } else {
-        setError('Unexpected API response format');
+        setError(t('reclamations.errors.unexpectedResponse'));
       }
     } catch (err) {
       console.error('Error fetching user reclamations:', err);
-      setError('Failed to load your reclamations. Please try again later.');
+      setError(t('reclamations.errors.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -159,8 +161,8 @@ const UserReclamationsPage = () => {
       console.error('Error submitting reclamation:', err);
       
       Swal.fire({
-        title: 'Error!',
-        text: 'Failed to submit your reclamation. Please try again later.',
+        title: t('common.error'),
+        text: t('reclamations.errors.failedToSubmit'),
         icon: 'error',
         confirmButtonColor: '#EF4444'
       });
@@ -193,7 +195,7 @@ const UserReclamationsPage = () => {
 
   // Function to format date
   const formatDate = (dateString) => {
-    if (!dateString) return 'Not answered yet';
+    if (!dateString) return t('reclamations.notAnsweredYet');
     const options = { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' };
     return new Date(dateString).toLocaleDateString(undefined, options);
   };
@@ -215,7 +217,7 @@ const UserReclamationsPage = () => {
             onClick={fetchUserReclamations}
             className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
           >
-            Try Again
+            {t('common.tryAgain')}
           </button>
         </div>
       );
@@ -224,9 +226,9 @@ const UserReclamationsPage = () => {
     if (!currentUser) {
       return (
         <div className="text-center py-20">
-          <p className="text-gray-600 mb-4">Please log in to view your reclamations.</p>
+          <p className="text-gray-600 mb-4">{t('reclamations.pleaseLogIn')}</p>
           <a href="/login" className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors">
-            Log In
+            {t('navigation.login')}
           </a>
         </div>
       );
@@ -235,7 +237,7 @@ const UserReclamationsPage = () => {
     if (filteredReclamations.length === 0) {
       return (
         <div className="text-center py-20">
-          <p className="text-gray-600 mb-2">No reclamations found matching your criteria.</p>
+          <p className="text-gray-600 mb-2">{t('reclamations.noReclamationsFound')}</p>
           {reclamations.length > 0 ? (
             <button 
               onClick={() => {
@@ -244,16 +246,16 @@ const UserReclamationsPage = () => {
               }}
               className="text-coquelicot hover:underline"
             >
-              Clear filters
+              {t('reclamations.clearFilters')}
             </button>
           ) : (
             <div className="mt-4">
-              <p className="text-gray-600 mb-4">You haven't submitted any reclamations yet.</p>
+              <p className="text-gray-600 mb-4">{t('reclamations.noReclamationsSubmitted')}</p>
               <button 
                 onClick={() => setShowForm(true)}
                 className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
               >
-                Submit a Reclamation
+                {t('reclamations.submitReclamation')}
               </button>
             </div>
           )}
@@ -283,9 +285,9 @@ const UserReclamationsPage = () => {
                     : 'bg-amber-100 text-amber-800'
                 }`}>
                   {reclamation.statusRec === 'Answered' ? (
-                    <><FiCheckCircle className="mr-1" /> Answered</>
+                    <><FiCheckCircle className="mr-1" /> {t('reclamations.status.answered')}</>
                   ) : (
-                    <><FiAlertCircle className="mr-1" /> Pending</>
+                    <><FiAlertCircle className="mr-1" /> {t('reclamations.status.pending')}</>
                   )}
                 </span>
               </div>

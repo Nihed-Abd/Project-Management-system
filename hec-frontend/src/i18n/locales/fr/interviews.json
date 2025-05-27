@@ -33,6 +33,12 @@
       "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet entretien ?",
       "noInterviews": "Aucun entretien planifié"
     },
+    "errors": {
+      "unexpectedResponse": "Format de réponse API inattendu",
+      "failedToLoad": "Échec du chargement de vos entretiens. Veuillez réessayer plus tard.",
+      "failedToDelete": "Échec de la suppression de l'entretien. Veuillez réessayer."
+    },
+    "pleaseLogIn": "Veuillez vous connecter pour voir vos entretiens.",
     "calendar": {
       "today": "Aujourd'hui",
       "month": "Mois",

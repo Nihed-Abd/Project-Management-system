@@ -19,7 +19,9 @@
       "pending": "En attente",
       "inProgress": "En cours",
       "resolved": "Résolu",
-      "closed": "Clôturé"
+      "closed": "Clôturé",
+      "answered": "Répondu",
+      "allStatuses": "Tous les statuts"
     },
     "priority": {
       "low": "Faible",
@@ -40,6 +42,17 @@
       "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette réclamation ?",
       "noReclamations": "Aucune réclamation trouvée"
     },
+    "errors": {
+      "unexpectedResponse": "Format de réponse API inattendu",
+      "failedToLoad": "Échec du chargement de vos réclamations. Veuillez réessayer plus tard.",
+      "failedToSubmit": "Échec de la soumission de votre réclamation. Veuillez réessayer plus tard."
+    },
+    "pleaseLogIn": "Veuillez vous connecter pour voir vos réclamations.",
+    "noReclamationsFound": "Aucune réclamation trouvée correspondant à vos critères.",
+    "noReclamationsSubmitted": "Vous n'avez pas encore soumis de réclamations.",
+    "submitReclamation": "Soumettre une réclamation",
+    "clearFilters": "Effacer les filtres",
+    "notAnsweredYet": "Pas encore répondu",
     "filters": {
       "all": "Tous",
       "status": "Statut",

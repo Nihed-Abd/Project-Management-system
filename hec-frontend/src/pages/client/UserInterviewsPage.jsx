@@ -11,6 +11,7 @@ import { FiPlus, FiCalendar, FiClock, FiMapPin, FiInfo, FiCheckCircle, FiXCircle
 import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { format as formatDate, isToday, isTomorrow, addDays, isAfter, isBefore, parseISO } from 'date-fns';
 import { createGlobalStyle } from 'styled-components';
@@ -104,6 +105,7 @@ const UserInterviewsPage = () => {
   const { currentUser } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { t } = useTranslation(['common', 'interviews']);
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -123,9 +125,9 @@ const UserInterviewsPage = () => {
   
   // Status options
   const statusOptions = [
-    { value: 'pending', label: 'Pending', color: '#F59E0B', icon: FiAlertCircle },
-    { value: 'accepted', label: 'Accepted', color: '#10B981', icon: FiCheckCircle },
-    { value: 'declined', label: 'Declined', color: '#EF4444', icon: FiXCircle }
+    { value: 'pending', label: t('interviews.status.pending'), color: '#F59E0B', icon: FiAlertCircle },
+    { value: 'accepted', label: t('interviews.status.accepted'), color: '#10B981', icon: FiCheckCircle },
+    { value: 'declined', label: t('interviews.status.declined'), color: '#EF4444', icon: FiXCircle }
   ];
   
   // Set up calendar localizer
@@ -174,11 +176,11 @@ const UserInterviewsPage = () => {
       } else if (response.data && response.data.success && Array.isArray(response.data.interviews)) {
         setInterviews(response.data.interviews);
       } else {
-        setError('Unexpected API response format');
+        setError(t('interviews.errors.unexpectedResponse'));
       }
     } catch (err) {
       console.error('Error fetching user interviews:', err);
-      setError('Failed to load your interviews. Please try again later.');
+      setError(t('interviews.errors.failedToLoad'));
     } finally {
       setLoading(false);
     }
@@ -348,8 +350,8 @@ const UserInterviewsPage = () => {
         } catch (err) {
           console.error('Error deleting interview:', err);
           Swal.fire({
-            title: 'Error',
-            text: 'Failed to delete interview. Please try again.',
+            title: t('common.error'),
+            text: t('interviews.errors.failedToDelete'),
             icon: 'error',
             confirmButtonColor: '#EF4444'
           });
@@ -424,14 +426,14 @@ const UserInterviewsPage = () => {
         <div className="container mx-auto px-4 py-8">
           {isDark && <CalendarDarkModeStyles />}
           <div className="text-center py-20">
-            <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Please log in to view your interviews.</p>
+            <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{t('interviews.pleaseLogIn')}</p>
             <motion.button
               onClick={() => window.location.href = '/login'}
               className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              Log In
+              {t('navigation.login')}
             </motion.button>
           </div>
         </div>
@@ -450,7 +452,7 @@ const UserInterviewsPage = () => {
           className="max-w-7xl mx-auto"
         >
           <div className="flex justify-between items-center mb-8">
-            <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>My Interviews</h1>
+            <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('interviews.myInterviews')}</h1>
             <motion.button
               onClick={() => {
                 setShowForm(true);
@@ -466,7 +468,7 @@ const UserInterviewsPage = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <FiPlus className="mr-2" /> Schedule Interview
+              <FiPlus className="mr-2" /> {t('interviews.scheduleInterview')}
             </motion.button>
           </div>
           
@@ -574,8 +576,8 @@ const UserInterviewsPage = () => {
                             <div className={`mt-2 flex items-center text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
                               <FiCalendar className="mr-1" />
                               <span className="mr-3">
-                                {isToday(interviewDate) ? 'Today' : 
-                                 isTomorrow(interviewDate) ? 'Tomorrow' : 
+                                {isToday(interviewDate) ? t('common.today') : 
+                                 isTomorrow(interviewDate) ? t('common.tomorrow') : 
                                  formatDate(interviewDate, 'EEE, MMM d, yyyy')}
                               </span>
                               <FiClock className="mr-1" />
