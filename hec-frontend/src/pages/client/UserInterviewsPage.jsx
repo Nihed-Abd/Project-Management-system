@@ -530,21 +530,23 @@ const UserInterviewsPage = () => {
             className="bg-white rounded-lg shadow-xl w-full max-w-md p-6"
           >
             <div className="flex justify-between items-center mb-4">
-              <h2 className="text-xl font-bold text-gray-800">
+              <h2 className={`text-xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>
                 {editMode ? 'Edit Interview' : 'Schedule New Interview'}
               </h2>
-              <button 
+              <motion.button 
                 onClick={() => setShowForm(false)}
-                className="text-gray-500 hover:text-gray-700"
+                className={`${isDark ? 'text-gray-400 hover:text-gray-200' : 'text-gray-500 hover:text-gray-700'}`}
+                whileHover={{ scale: 1.1 }}
+                whileTap={{ scale: 0.9 }}
               >
                 <FiX className="h-6 w-6" />
-              </button>
+              </motion.button>
             </div>
             
             <form onSubmit={handleSubmit}>
               <div className="space-y-4">
                 <div>
-                  <label htmlFor="interviewGoal" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="interviewGoal" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                     Interview Purpose/Goal*
                   </label>
                   <input
@@ -553,7 +555,7 @@ const UserInterviewsPage = () => {
                     name="interviewGoal"
                     value={formData.interviewGoal}
                     onChange={handleInputChange}
-                    className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot"
+                    className={`block w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                     placeholder="e.g., Project Discussion, Initial Consultation"
                     required
                   />
@@ -561,7 +563,7 @@ const UserInterviewsPage = () => {
                 
                 <div className="grid grid-cols-2 gap-4">
                   <div>
-                    <label htmlFor="date" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="date" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                       Date*
                     </label>
                     <input
@@ -570,13 +572,13 @@ const UserInterviewsPage = () => {
                       name="date"
                       value={formatDateString(formData.date)}
                       onChange={handleDateChange}
-                      className="block w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot"
+                      className={`block w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                       required
                     />
                   </div>
                   
                   <div>
-                    <label htmlFor="time" className="block text-sm font-medium text-gray-700 mb-1">
+                    <label htmlFor="time" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
                       Time*
                     </label>
                     <input
