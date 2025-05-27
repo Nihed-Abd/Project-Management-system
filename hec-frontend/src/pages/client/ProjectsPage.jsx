@@ -1,10 +1,14 @@
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FiGrid, FiList, FiChevronRight, FiFilter, FiX, FiCalendar, FiTag } from 'react-icons/fi';
+import { FiGrid, FiList, FiChevronRight, FiFilter, FiX, FiCalendar, FiTag, FiSearch } from 'react-icons/fi';
 import axios from 'axios';
 import { Link } from 'react-router-dom';
+import { useTheme } from '../../context/ThemeContext';
 
 const ProjectsPage = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
+  
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -195,14 +199,14 @@ const ProjectsPage = () => {
         animate="visible"
         className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6"
       >
-        {projects.map((project) => (
+        {filteredProjects.map((project) => (
           <Link 
             to={`/projects/${project._id}`}
             key={project._id}
           >
             <motion.div
               variants={itemVariants}
-              className="bg-white rounded-lg overflow-hidden shadow-md hover:shadow-lg transition-all border border-gray-100 h-full"
+              className={`rounded-lg overflow-hidden shadow-md transition-all h-full ${isDark ? 'bg-gray-800 border border-gray-700 hover:shadow-coquelicot/20' : 'bg-white border border-gray-100 hover:shadow-lg'}`}
               whileHover={{ y: -5 }}
             >
               <div className="relative h-48 overflow-hidden">
@@ -213,17 +217,17 @@ const ProjectsPage = () => {
                     className="w-full h-full object-cover transition-transform hover:scale-105"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                  <div className={`w-full h-full flex items-center justify-center ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
                     <span className="text-gray-400">No image available</span>
                   </div>
                 )}
                 <div className="absolute top-2 right-2">
                   <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                    project.status === 'terminé' ? 'bg-green-100 text-green-800' :
-                    project.status === 'En cours' ? 'bg-blue-100 text-blue-800' :
-                    project.status === 'Accepteé' ? 'bg-blue-100 text-blue-800' :
-                    project.status === 'Demandé' ? 'bg-amber-100 text-amber-800' :
-                    'bg-red-100 text-red-800'
+                    project.status === 'terminé' ? (isDark ? 'bg-green-900 text-green-200' : 'bg-green-100 text-green-800') :
+                    project.status === 'En cours' ? (isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800') :
+                    project.status === 'Accepteé' ? (isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800') :
+                    project.status === 'Demandé' ? (isDark ? 'bg-amber-900 text-amber-200' : 'bg-amber-100 text-amber-800') :
+                    (isDark ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-800')
                   }`}>
                     {project.status}
                   </span>
@@ -231,16 +235,16 @@ const ProjectsPage = () => {
               </div>
               
               <div className="p-4">
-                <h3 className="text-lg font-semibold text-gray-800 mb-2 truncate">{project.title}</h3>
-                <p className="text-gray-600 text-sm line-clamp-2 mb-3">
+                <h3 className={`text-lg font-semibold mb-2 truncate ${isDark ? 'text-white' : 'text-gray-800'}`}>{project.title}</h3>
+                <p className={`text-sm line-clamp-2 mb-3 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                   {project.description || 'No description available'}
                 </p>
                 <div className="flex justify-between items-center">
-                  <span className="text-xs text-gray-500">
+                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                     {new Date(project.creationDate || project.createdAt).toLocaleDateString()}
                   </span>
                   <span 
-                    className="text-coquelicot hover:text-coquelicot-700 text-sm font-medium flex items-center"
+                    className="text-coquelicot hover:text-coquelicot-400 text-sm font-medium flex items-center"
                   >
                     View Details 
                     <FiChevronRight className="ml-1 h-4 w-4" />
@@ -262,7 +266,7 @@ const ProjectsPage = () => {
         animate="visible"
         className="flex flex-col space-y-4"
       >
-        {projects.map((project) => (
+        {filteredProjects.map((project) => (
           <Link
             to={`/projects/${project._id}`}
             key={project._id}
@@ -270,7 +274,7 @@ const ProjectsPage = () => {
           >
             <motion.div
               variants={itemVariants}
-              className="bg-white rounded-lg overflow-hidden shadow-sm hover:shadow-md transition-all border border-gray-100 flex"
+              className={`rounded-lg overflow-hidden transition-all flex ${isDark ? 'bg-gray-800 border border-gray-700 shadow-sm hover:shadow-md hover:shadow-coquelicot/10' : 'bg-white shadow-sm hover:shadow-md border border-gray-100'}`}
               whileHover={{ x: 5 }}
             >
               <div className="w-32 sm:w-48 h-auto relative flex-shrink-0">
@@ -281,7 +285,7 @@ const ProjectsPage = () => {
                     className="w-full h-full object-cover"
                   />
                 ) : (
-                  <div className="w-full h-full flex items-center justify-center bg-gray-100">
+                  <div className={`w-full h-full flex items-center justify-center ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
                     <span className="text-gray-400 text-xs">No image</span>
                   </div>
                 )}
@@ -289,18 +293,18 @@ const ProjectsPage = () => {
               
               <div className="p-4 flex flex-col flex-grow">
                 <div className="flex justify-between items-start">
-                  <h3 className="text-lg font-semibold text-gray-800 mb-2">{project.title}</h3>
+                  <h3 className={`text-lg font-semibold mb-2 ${isDark ? 'text-white' : 'text-gray-800'}`}>{project.title}</h3>
                   <span className={`inline-flex px-2 py-1 rounded-full text-xs font-medium ${
-                    project.status === 'terminé' ? 'bg-green-100 text-green-800' :
-                    project.status === 'En cours' ? 'bg-blue-100 text-blue-800' :
-                    project.status === 'Accepteé' ? 'bg-blue-100 text-blue-800' :
-                    project.status === 'Demandé' ? 'bg-amber-100 text-amber-800' :
-                    'bg-red-100 text-red-800'
+                    project.status === 'terminé' ? (isDark ? 'bg-green-900 text-green-200' : 'bg-green-100 text-green-800') :
+                    project.status === 'En cours' ? (isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800') :
+                    project.status === 'Accepteé' ? (isDark ? 'bg-blue-900 text-blue-200' : 'bg-blue-100 text-blue-800') :
+                    project.status === 'Demandé' ? (isDark ? 'bg-amber-900 text-amber-200' : 'bg-amber-100 text-amber-800') :
+                    (isDark ? 'bg-red-900 text-red-200' : 'bg-red-100 text-red-800')
                   }`}>
                     {project.status}
                   </span>
                 </div>
-                <p className="text-gray-600 text-sm mb-3 flex-grow">
+                <p className={`text-sm mb-3 flex-grow ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
                   {project.description ? (
                     project.description.length > 150 
                       ? `${project.description.substring(0, 150)}...` 
@@ -308,11 +312,11 @@ const ProjectsPage = () => {
                   ) : 'No description available'}
                 </p>
                 <div className="flex justify-between items-center mt-auto">
-                  <span className="text-xs text-gray-500">
+                  <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                     {new Date(project.creationDate || project.createdAt).toLocaleDateString()}
                   </span>
                   <span 
-                    className="text-coquelicot hover:text-coquelicot-700 text-sm font-medium flex items-center"
+                    className="text-coquelicot hover:text-coquelicot-400 text-sm font-medium flex items-center"
                   >
                     View Details 
                     <FiChevronRight className="ml-1 h-4 w-4" />
@@ -337,14 +341,16 @@ const ProjectsPage = () => {
 
     if (error) {
       return (
-        <div className="text-center py-20">
-          <p className="text-red-600 mb-4">{error}</p>
-          <button 
+        <div className={`text-center py-20 ${isDark ? 'text-red-400' : 'text-red-600'}`}>
+          <p className="mb-4">{error}</p>
+          <motion.button 
             onClick={fetchProjects}
-            className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
+            whileHover={{ scale: 1.05 }}
+            whileTap={{ scale: 0.95 }}
+            className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
           >
             Try Again
-          </button>
+          </motion.button>
         </div>
       );
     }
@@ -352,7 +358,7 @@ const ProjectsPage = () => {
     if (filteredProjects.length === 0) {
       return (
         <div className="text-center py-20">
-          <p className="text-gray-600">No projects found.</p>
+          <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>No projects found.</p>
         </div>
       );
     }
@@ -361,18 +367,26 @@ const ProjectsPage = () => {
   };
 
   return (
-    <div className="min-h-screen bg-white pt-24 pb-16">
+    <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
       {/* Hero Banner */}
-      <div className="bg-gradient-to-r from-gray-100 to-gray-200 mb-10">
+      <div className={`mb-10 ${isDark ? 'bg-gradient-to-r from-gray-800 to-gray-900' : 'bg-gradient-to-r from-gray-100 to-gray-200'}`}>
         <div className="container mx-auto px-4 py-12">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5 }}
+            transition={{ duration: 0.5, type: 'spring' }}
             className="text-center max-w-4xl mx-auto"
           >
-            <h1 className="text-4xl md:text-5xl font-bold text-gray-800 mb-4">Project Gallery</h1>
-            <p className="text-gray-600 text-lg">
+            <motion.div
+              className={`inline-block p-3 rounded-full mb-4 ${isDark ? 'bg-gray-700' : 'bg-gray-200'}`}
+              initial={{ scale: 0, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              transition={{ duration: 0.5, delay: 0.2 }}
+            >
+              <FiGrid className="h-8 w-8 text-coquelicot" />
+            </motion.div>
+            <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Project Gallery</h1>
+            <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
               Explore our showcase of electrical excellence - from residential installations to industrial solutions.
             </p>
           </motion.div>
@@ -382,21 +396,25 @@ const ProjectsPage = () => {
       <div className="container mx-auto px-4">
         {/* View toggle */}
         <div className="flex justify-end mb-6">
-          <div className="flex items-center space-x-2 bg-white border border-gray-200 rounded-md p-1">
-            <button
+          <div className={`flex items-center space-x-2 rounded-md p-1 ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-white border border-gray-200'}`}>
+            <motion.button
               onClick={() => toggleViewMode('grid')}
-              className={`p-2 rounded ${viewMode === 'grid' ? 'bg-coquelicot text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`p-2 rounded transition-all duration-300 ${viewMode === 'grid' ? 'bg-coquelicot text-white' : `${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-500 hover:bg-gray-100'}`}`}
               title="Grid View"
             >
               <FiGrid className="h-5 w-5" />
-            </button>
-            <button
+            </motion.button>
+            <motion.button
               onClick={() => toggleViewMode('list')}
-              className={`p-2 rounded ${viewMode === 'list' ? 'bg-coquelicot text-white' : 'text-gray-500 hover:bg-gray-100'}`}
+              whileHover={{ scale: 1.05 }}
+              whileTap={{ scale: 0.95 }}
+              className={`p-2 rounded transition-all duration-300 ${viewMode === 'list' ? 'bg-coquelicot text-white' : `${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-500 hover:bg-gray-100'}`}`}
               title="List View"
             >
               <FiList className="h-5 w-5" />
-            </button>
+            </motion.button>
           </div>
         </div>
 
@@ -405,25 +423,29 @@ const ProjectsPage = () => {
           <div className="mb-6">
             <div className="flex flex-col md:flex-row md:items-center justify-between mb-4">
               <div className="flex items-center space-x-2 mb-4 md:mb-0">
-                <button 
+                <motion.button 
                   onClick={() => setShowFilters(!showFilters)}
-                  className="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
+                  whileHover={{ scale: 1.03 }}
+                  whileTap={{ scale: 0.97 }}
+                  className={`flex items-center px-3 py-2 rounded-md transition-all duration-300 ${isDark ? 'bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
                 >
                   <FiFilter className="mr-2" />
                   Filters
-                </button>
+                </motion.button>
                 {(categoryFilter || yearFilter) && (
-                  <button 
+                  <motion.button 
                     onClick={resetFilters}
-                    className="flex items-center px-3 py-2 bg-gray-100 hover:bg-gray-200 text-gray-700 rounded-md transition-colors"
+                    whileHover={{ scale: 1.03 }}
+                    whileTap={{ scale: 0.97 }}
+                    className={`flex items-center px-3 py-2 rounded-md transition-all duration-300 ${isDark ? 'bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
                     title="Reset filters"
                   >
                     <FiX className="mr-2" />
                     Clear
-                  </button>
+                  </motion.button>
                 )}
               </div>
-              <div className="text-gray-500 text-sm">
+              <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
                 Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
                 {(categoryFilter || yearFilter) && ' (filtered)'}
               </div>
@@ -436,15 +458,15 @@ const ProjectsPage = () => {
                 animate={{ height: 'auto', opacity: 1 }}
                 exit={{ height: 0, opacity: 0 }}
                 transition={{ duration: 0.3 }}
-                className="bg-gray-50 rounded-lg p-4 mb-4"
+                className={`rounded-lg p-4 mb-4 ${isDark ? 'bg-gray-800 border border-gray-700' : 'bg-gray-50'}`}
               >
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Category filter */}
                   <div className="relative">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Category</label>
                     <div className="relative">
                       <select
-                        className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-coquelicot focus:border-coquelicot"
+                        className={`block w-full pl-3 pr-10 py-2 text-base rounded-md focus:outline-none focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                         value={categoryFilter}
                         onChange={handleCategoryFilterChange}
                       >
@@ -453,7 +475,7 @@ const ProjectsPage = () => {
                           <option key={category._id} value={category._id}>{category.name}</option>
                         ))}
                       </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 ${isDark ? 'text-gray-400' : 'text-gray-700'}`}>
                         <FiTag className="h-4 w-4" />
                       </div>
                     </div>
@@ -461,10 +483,10 @@ const ProjectsPage = () => {
                   
                   {/* Year filter */}
                   <div className="relative">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Year</label>
+                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Year</label>
                     <div className="relative">
                       <select
-                        className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-coquelicot focus:border-coquelicot"
+                        className={`block w-full pl-3 pr-10 py-2 text-base rounded-md focus:outline-none focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                         value={yearFilter}
                         onChange={handleYearFilterChange}
                       >
@@ -473,7 +495,7 @@ const ProjectsPage = () => {
                           <option key={year} value={year}>{year}</option>
                         ))}
                       </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 ${isDark ? 'text-gray-400' : 'text-gray-700'}`}>
                         <FiCalendar className="h-4 w-4" />
                       </div>
                     </div>
@@ -481,10 +503,10 @@ const ProjectsPage = () => {
                   
                   {/* Month filter - only enabled if year is selected */}
                   <div className="relative">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">Month</label>
+                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Month</label>
                     <div className="relative">
                       <select
-                        className="block w-full pl-3 pr-10 py-2 text-base border border-gray-300 rounded-md focus:outline-none focus:ring-coquelicot focus:border-coquelicot disabled:bg-gray-100 disabled:text-gray-400"
+                        className={`block w-full pl-3 pr-10 py-2 text-base rounded-md focus:outline-none focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white disabled:bg-gray-800 disabled:text-gray-500' : 'bg-white border-gray-300 text-gray-700 disabled:bg-gray-100 disabled:text-gray-400'}`}
                         value={monthFilter}
                         onChange={handleMonthFilterChange}
                         disabled={!yearFilter}
@@ -494,7 +516,7 @@ const ProjectsPage = () => {
                           <option key={month} value={month}>{getMonthName(month)}</option>
                         ))}
                       </select>
-                      <div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                      <div className={`pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 ${isDark ? 'text-gray-400' : 'text-gray-700'}`}>
                         <FiCalendar className="h-4 w-4" />
                       </div>
                     </div>
