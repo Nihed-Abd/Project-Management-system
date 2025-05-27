@@ -1,0 +1,107 @@
+{
+  "app": {
+    "name": "HEC Engineering",
+    "tagline": "Votre partenaire de confiance en solutions d'ingénierie"
+  },
+  "navigation": {
+    "home": "Accueil",
+    "about": "À propos",
+    "projects": "Projets",
+    "services": "Services",
+    "contact": "Contact",
+    "login": "Connexion",
+    "register": "S'inscrire",
+    "logout": "Déconnexion",
+    "profile": "Profil",
+    "dashboard": "Tableau de bord",
+    "myProjects": "Mes Projets",
+    "myReclamations": "Mes Réclamations",
+    "myInterviews": "Mes Entretiens"
+  },
+  "buttons": {
+    "submit": "Soumettre",
+    "cancel": "Annuler",
+    "save": "Enregistrer",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "update": "Mettre à jour",
+    "create": "Créer",
+    "view": "Voir",
+    "search": "Rechercher",
+    "filter": "Filtrer",
+    "reset": "Réinitialiser",
+    "back": "Retour",
+    "next": "Suivant",
+    "previous": "Précédent"
+  },
+  "auth": {
+    "login": "Connexion",
+    "register": "Inscription",
+    "email": "Email",
+    "password": "Mot de passe",
+    "confirmPassword": "Confirmer le mot de passe",
+    "name": "Nom",
+    "username": "Nom d'utilisateur",
+    "phoneNumber": "Numéro de téléphone",
+    "address": "Adresse",
+    "forgotPassword": "Mot de passe oublié ?",
+    "alreadyHaveAccount": "Vous avez déjà un compte ?",
+    "dontHaveAccount": "Vous n'avez pas de compte ?",
+    "signIn": "Se connecter",
+    "signUp": "S'inscrire",
+    "createAccount": "Créer un compte",
+    "resetPassword": "Réinitialiser le mot de passe"
+  },
+  "profile": {
+    "personalInfo": "Informations personnelles",
+    "updateProfile": "Mettre à jour le profil",
+    "changePassword": "Changer le mot de passe",
+    "currentPassword": "Mot de passe actuel",
+    "newPassword": "Nouveau mot de passe",
+    "confirmNewPassword": "Confirmer le nouveau mot de passe"
+  },
+  "errors": {
+    "required": "Ce champ est obligatoire",
+    "invalidEmail": "Adresse email invalide",
+    "passwordMismatch": "Les mots de passe ne correspondent pas",
+    "passwordLength": "Le mot de passe doit contenir au moins 8 caractères",
+    "serverError": "Erreur serveur, veuillez réessayer plus tard",
+    "notFound": "Non trouvé",
+    "unauthorized": "Accès non autorisé",
+    "forbidden": "Accès interdit",
+    "networkError": "Erreur réseau, veuillez vérifier votre connexion"
+  },
+  "common": {
+    "status": "Statut",
+    "date": "Date",
+    "time": "Heure",
+    "category": "Catégorie",
+    "description": "Description",
+    "details": "Détails",
+    "location": "Emplacement",
+    "loading": "Chargement...",
+    "noResults": "Aucun résultat trouvé",
+    "created": "Créé",
+    "updated": "Mis à jour",
+    "createdAt": "Créé le",
+    "updatedAt": "Mis à jour le",
+    "noData": "Aucune donnée disponible",
+    "success": "Succès",
+    "error": "Erreur",
+    "warning": "Avertissement",
+    "info": "Information",
+    "confirmation": "Confirmation",
+    "areYouSure": "Êtes-vous sûr ?",
+    "yes": "Oui",
+    "no": "Non"
+  },
+  "languages": {
+    "english": "Anglais",
+    "french": "Français",
+    "changeLanguage": "Changer de langue"
+  },
+  "theme": {
+    "darkMode": "Mode sombre",
+    "lightMode": "Mode clair"
+  }
+}

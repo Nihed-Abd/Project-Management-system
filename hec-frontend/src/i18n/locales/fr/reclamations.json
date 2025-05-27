@@ -1,0 +1,54 @@
+{
+  "reclamations": {
+    "title": "Réclamations",
+    "myReclamations": "Mes Réclamations",
+    "createReclamation": "Créer une Réclamation",
+    "editReclamation": "Modifier la Réclamation",
+    "deleteReclamation": "Supprimer la Réclamation",
+    "reclamationDetails": "Détails de la Réclamation",
+    "fields": {
+      "subject": "Sujet",
+      "description": "Description",
+      "project": "Projet Associé",
+      "date": "Date",
+      "status": "Statut",
+      "priority": "Priorité",
+      "attachments": "Pièces jointes"
+    },
+    "status": {
+      "pending": "En attente",
+      "inProgress": "En cours",
+      "resolved": "Résolu",
+      "closed": "Clôturé"
+    },
+    "priority": {
+      "low": "Faible",
+      "medium": "Moyenne",
+      "high": "Haute",
+      "critical": "Critique"
+    },
+    "actions": {
+      "submit": "Soumettre",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "view": "Voir"
+    },
+    "messages": {
+      "reclamationCreated": "Réclamation soumise avec succès",
+      "reclamationUpdated": "Réclamation mise à jour avec succès",
+      "reclamationDeleted": "Réclamation supprimée avec succès",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette réclamation ?",
+      "noReclamations": "Aucune réclamation trouvée"
+    },
+    "filters": {
+      "all": "Tous",
+      "status": "Statut",
+      "priority": "Priorité",
+      "date": "Date"
+    },
+    "placeholders": {
+      "subject": "Bref sujet de votre réclamation",
+      "description": "Description détaillée du problème"
+    }
+  }
+}

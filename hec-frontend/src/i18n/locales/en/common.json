@@ -1,0 +1,107 @@
+{
+  "app": {
+    "name": "HEC Engineering",
+    "tagline": "Your trusted partner in engineering solutions"
+  },
+  "navigation": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "services": "Services",
+    "contact": "Contact",
+    "login": "Login",
+    "register": "Register",
+    "logout": "Logout",
+    "profile": "Profile",
+    "dashboard": "Dashboard",
+    "myProjects": "My Projects",
+    "myReclamations": "My Reclamations",
+    "myInterviews": "My Interviews"
+  },
+  "buttons": {
+    "submit": "Submit",
+    "cancel": "Cancel",
+    "save": "Save",
+    "edit": "Edit",
+    "delete": "Delete",
+    "update": "Update",
+    "create": "Create",
+    "view": "View",
+    "search": "Search",
+    "filter": "Filter",
+    "reset": "Reset",
+    "back": "Back",
+    "next": "Next",
+    "previous": "Previous"
+  },
+  "auth": {
+    "login": "Login",
+    "register": "Register",
+    "email": "Email",
+    "password": "Password",
+    "confirmPassword": "Confirm Password",
+    "name": "Name",
+    "username": "Username",
+    "phoneNumber": "Phone Number",
+    "address": "Address",
+    "forgotPassword": "Forgot Password?",
+    "alreadyHaveAccount": "Already have an account?",
+    "dontHaveAccount": "Don't have an account?",
+    "signIn": "Sign In",
+    "signUp": "Sign Up",
+    "createAccount": "Create Account",
+    "resetPassword": "Reset Password"
+  },
+  "profile": {
+    "personalInfo": "Personal Information",
+    "updateProfile": "Update Profile",
+    "changePassword": "Change Password",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password"
+  },
+  "errors": {
+    "required": "This field is required",
+    "invalidEmail": "Invalid email address",
+    "passwordMismatch": "Passwords do not match",
+    "passwordLength": "Password must be at least 8 characters",
+    "serverError": "Server error, please try again later",
+    "notFound": "Not found",
+    "unauthorized": "Unauthorized access",
+    "forbidden": "Forbidden access",
+    "networkError": "Network error, please check your connection"
+  },
+  "common": {
+    "status": "Status",
+    "date": "Date",
+    "time": "Time",
+    "category": "Category",
+    "description": "Description",
+    "details": "Details",
+    "location": "Location",
+    "loading": "Loading...",
+    "noResults": "No results found",
+    "created": "Created",
+    "updated": "Updated",
+    "createdAt": "Created at",
+    "updatedAt": "Updated at",
+    "noData": "No data available",
+    "success": "Success",
+    "error": "Error",
+    "warning": "Warning",
+    "info": "Information",
+    "confirmation": "Confirmation",
+    "areYouSure": "Are you sure?",
+    "yes": "Yes",
+    "no": "No"
+  },
+  "languages": {
+    "english": "English",
+    "french": "French",
+    "changeLanguage": "Change Language"
+  },
+  "theme": {
+    "darkMode": "Dark Mode",
+    "lightMode": "Light Mode"
+  }
+}

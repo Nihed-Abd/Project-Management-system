@@ -1,0 +1,50 @@
+{
+  "interviews": {
+    "title": "Entretiens",
+    "myInterviews": "Mes Entretiens",
+    "scheduleInterview": "Planifier un Entretien",
+    "editInterview": "Modifier l'Entretien",
+    "deleteInterview": "Supprimer l'Entretien",
+    "upcomingInterviews": "Entretiens à Venir",
+    "fields": {
+      "interviewGoal": "Objectif/But de l'Entretien",
+      "date": "Date",
+      "time": "Heure",
+      "notes": "Notes",
+      "status": "Statut"
+    },
+    "status": {
+      "pending": "En attente",
+      "accepted": "Accepté",
+      "declined": "Refusé"
+    },
+    "actions": {
+      "schedule": "Planifier",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "view": "Voir",
+      "accept": "Accepter",
+      "decline": "Refuser"
+    },
+    "messages": {
+      "interviewScheduled": "Entretien planifié avec succès",
+      "interviewUpdated": "Entretien mis à jour avec succès",
+      "interviewDeleted": "Entretien supprimé avec succès",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet entretien ?",
+      "noInterviews": "Aucun entretien planifié"
+    },
+    "calendar": {
+      "today": "Aujourd'hui",
+      "month": "Mois",
+      "week": "Semaine",
+      "day": "Jour",
+      "statusLegend": "Légende des Statuts"
+    },
+    "placeholders": {
+      "interviewGoal": "ex., Discussion de Projet, Consultation Initiale",
+      "notes": "Détails supplémentaires ou sujets à discuter"
+    },
+    "dragToRotate": "Faites glisser pour pivoter, défilez pour zoomer",
+    "loadingMap": "Chargement de la carte..."
+  }
+}

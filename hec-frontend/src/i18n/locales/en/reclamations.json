@@ -1,0 +1,54 @@
+{
+  "reclamations": {
+    "title": "Reclamations",
+    "myReclamations": "My Reclamations",
+    "createReclamation": "Create Reclamation",
+    "editReclamation": "Edit Reclamation",
+    "deleteReclamation": "Delete Reclamation",
+    "reclamationDetails": "Reclamation Details",
+    "fields": {
+      "subject": "Subject",
+      "description": "Description",
+      "project": "Related Project",
+      "date": "Date",
+      "status": "Status",
+      "priority": "Priority",
+      "attachments": "Attachments"
+    },
+    "status": {
+      "pending": "Pending",
+      "inProgress": "In Progress",
+      "resolved": "Resolved",
+      "closed": "Closed"
+    },
+    "priority": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "critical": "Critical"
+    },
+    "actions": {
+      "submit": "Submit",
+      "edit": "Edit",
+      "delete": "Delete",
+      "view": "View"
+    },
+    "messages": {
+      "reclamationCreated": "Reclamation submitted successfully",
+      "reclamationUpdated": "Reclamation updated successfully",
+      "reclamationDeleted": "Reclamation deleted successfully",
+      "confirmDelete": "Are you sure you want to delete this reclamation?",
+      "noReclamations": "No reclamations found"
+    },
+    "filters": {
+      "all": "All",
+      "status": "Status",
+      "priority": "Priority",
+      "date": "Date"
+    },
+    "placeholders": {
+      "subject": "Brief subject of your reclamation",
+      "description": "Detailed description of the issue"
+    }
+  }
+}

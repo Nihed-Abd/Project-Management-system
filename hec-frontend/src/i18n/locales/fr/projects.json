@@ -1,0 +1,57 @@
+{
+  "projects": {
+    "title": "Projets",
+    "myProjects": "Mes Projets",
+    "allProjects": "Tous les Projets",
+    "projectDetails": "Détails du Projet",
+    "createProject": "Créer un Projet",
+    "editProject": "Modifier le Projet",
+    "deleteProject": "Supprimer le Projet",
+    "requestProject": "Demander un Projet",
+    "fields": {
+      "title": "Titre",
+      "description": "Description",
+      "category": "Catégorie",
+      "status": "Statut",
+      "client": "Client",
+      "creationDate": "Date de Création",
+      "lastEditDate": "Date de Dernière Modification",
+      "location": "Emplacement",
+      "images": "Images"
+    },
+    "status": {
+      "pending": "En attente",
+      "inProgress": "En cours",
+      "completed": "Terminé",
+      "cancelled": "Annulé",
+      "requested": "Demandé",
+      "accepted": "Accepté"
+    },
+    "filters": {
+      "all": "Tous",
+      "category": "Catégorie",
+      "status": "Statut",
+      "date": "Date"
+    },
+    "actions": {
+      "viewDetails": "Voir les Détails",
+      "edit": "Modifier",
+      "delete": "Supprimer",
+      "request": "Demander"
+    },
+    "messages": {
+      "projectCreated": "Projet créé avec succès",
+      "projectUpdated": "Projet mis à jour avec succès",
+      "projectDeleted": "Projet supprimé avec succès",
+      "projectRequested": "Demande de projet envoyée avec succès",
+      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce projet ?",
+      "noProjects": "Aucun projet trouvé"
+    },
+    "requestSimilar": "Demander un Projet Similaire",
+    "back": "Retour aux Projets",
+    "noImagesAvailable": "Aucune image disponible",
+    "projectInfo": "Informations du Projet",
+    "mapLocation": "Emplacement sur la Carte",
+    "coordinates": "Coordonnées"
+  }
+}

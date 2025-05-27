@@ -1,6 +1,10 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { AuthProvider, useAuth } from './context/AuthContext';
 import { ThemeProvider } from './context/ThemeContext';
+import { LanguageProvider } from './context/LanguageContext';
+
+// Import i18n configuration
+import './i18n';
 
 // Layouts
 import AdminLayout from './layouts/AdminLayout';
@@ -54,12 +58,12 @@ const ProtectedRoute = ({ children, requireAdmin = false }) => {
 };
 
 function App() {
-
   return (
     <ThemeProvider>
-      <AuthProvider>
-        <Router>
-        <Routes>
+      <LanguageProvider>
+        <AuthProvider>
+          <Router>
+          <Routes>
           {/* Auth Routes */}
           <Route path="/login" element={<LoginPage />} />
           <Route path="/register" element={<RegisterPage />} />
@@ -116,8 +120,9 @@ function App() {
             <Route path="contact" element={<ContactPage />} />
           </Route>
         </Routes>
-        </Router>
-      </AuthProvider>
+          </Router>
+        </AuthProvider>
+      </LanguageProvider>
     </ThemeProvider>
   );
 }
