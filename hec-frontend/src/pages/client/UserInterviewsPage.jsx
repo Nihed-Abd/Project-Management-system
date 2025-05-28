@@ -654,7 +654,7 @@ const UserInterviewsPage = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    {t('common.cancel')}
+                    {t('cancel', { ns: 'common' })}
                   </motion.button>
                   
                   <motion.button
@@ -663,7 +663,7 @@ const UserInterviewsPage = () => {
                     whileHover={{ scale: 1.05, backgroundColor: '#FF5722' }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    {editMode ? t('interviews.actions.updateInterview') : t('interviews.actions.scheduleInterview')}
+                    {editMode ? t('actions.updateInterview', { ns: 'interviews' }) : t('actions.scheduleInterview', { ns: 'interviews' })}
                   </motion.button>
                 </div>
               </div>

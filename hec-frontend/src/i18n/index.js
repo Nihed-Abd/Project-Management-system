@@ -12,6 +12,7 @@ import homeEN from './locales/en/home.json';
 import aboutEN from './locales/en/about.json';
 import contactEN from './locales/en/contact.json';
 import requestEN from './locales/en/request.json';
+import profileEN from './locales/en/profile.json';
 
 import commonFR from './locales/fr/common.json';
 import projectsFR from './locales/fr/projects.json';
@@ -21,6 +22,7 @@ import homeFR from './locales/fr/home.json';
 import aboutFR from './locales/fr/about.json';
 import contactFR from './locales/fr/contact.json';
 import requestFR from './locales/fr/request.json';
+import profileFR from './locales/fr/profile.json';
 
 // Resources object containing all translations
 const resources = {
@@ -29,6 +31,7 @@ const resources = {
     projects: projectsEN,
     interviews: interviewsEN,
     reclamations: reclamationsEN,
+    profile: profileEN,
     home: homeEN,
     about: aboutEN,
     contact: contactEN,
@@ -39,6 +42,7 @@ const resources = {
     projects: projectsFR,
     interviews: interviewsFR,
     reclamations: reclamationsFR,
+    profile: profileFR,
     home: homeFR,
     about: aboutFR,
     contact: contactFR,

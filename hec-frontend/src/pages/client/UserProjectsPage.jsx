@@ -354,7 +354,7 @@ const UserProjectsPage = () => {
                       to={`/projects/${project._id}`}
                       className="flex-grow text-center px-3 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors inline-block"
                     >
-                      View Details
+                      {t('viewDetails', { ns: 'projects' })}
                     </Link>
                     
                     {project.status === 'Demandé' && (
@@ -364,7 +364,7 @@ const UserProjectsPage = () => {
                           handleWithdrawProject(project._id);
                         }}
                         className="px-3 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors inline-flex items-center justify-center"
-                        title="Withdraw Request"
+                        title={t('withdrawRequest', { ns: 'projects' })}
                       >
                         <FiTrash2 className="h-5 w-5" />
                       </button>
@@ -449,10 +449,10 @@ const UserProjectsPage = () => {
                       <button
                         onClick={() => handleWithdrawProject(project._id)}
                         className="inline-flex items-center px-4 py-2 bg-red-500 text-white rounded-md hover:bg-red-600 transition-colors"
-                        title="Withdraw Request"
+                        title={t('withdrawRequest', { ns: 'projects' })}
                       >
                         <FiTrash2 className="mr-2 h-4 w-4" />
-                        Withdraw
+                        {t('withdraw', { ns: 'projects' })}
                       </button>
                     )}
                     <Link 
@@ -460,7 +460,7 @@ const UserProjectsPage = () => {
                       className="inline-flex items-center px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
                     >
                       <FiInfo className="mr-2 h-4 w-4" />
-                      View Details
+                      {t('viewDetails', { ns: 'projects' })}
                     </Link>
                   </div>
                 </div>

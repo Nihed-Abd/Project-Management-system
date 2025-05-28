@@ -1,0 +1,50 @@
+{
+  "title": "Mon Profil",
+  "loginRequired": "Veuillez vous connecter pour voir votre profil",
+  "accountInformation": "Informations du Compte",
+  "fullName": "Nom Complet",
+  "email": "Email",
+  "phoneNumber": "Numéro de Téléphone",
+  "accountType": "Type de Compte",
+  "userRole": "Utilisateur",
+  "notProvided": "Non fourni",
+  "actions": {
+    "editProfile": "Modifier le Profil",
+    "changePassword": "Changer le Mot de Passe",
+    "saveChanges": "Enregistrer les Modifications"
+  },
+  "fields": {
+    "name": "Nom",
+    "emailAddress": "Adresse Email",
+    "phoneNumber": "Numéro de Téléphone",
+    "currentPassword": "Mot de Passe Actuel",
+    "newPassword": "Nouveau Mot de Passe",
+    "confirmNewPassword": "Confirmer le Nouveau Mot de Passe"
+  },
+  "placeholders": {
+    "name": "Entrez votre nom",
+    "email": "Entrez votre email",
+    "phone": "Entrez votre numéro de téléphone",
+    "currentPassword": "Entrez votre mot de passe actuel",
+    "newPassword": "Entrez votre nouveau mot de passe",
+    "confirmPassword": "Confirmez votre nouveau mot de passe"
+  },
+  "errors": {
+    "invalidImageFormat": "Veuillez sélectionner un fichier image valide (JPEG, PNG, etc.)",
+    "imageSizeExceeded": "La taille de l'image ne doit pas dépasser 2Mo",
+    "nameRequired": "Le nom est requis",
+    "emailRequired": "L'adresse email est requise",
+    "invalidEmail": "Veuillez entrer une adresse email valide",
+    "invalidPhoneNumber": "Veuillez entrer un numéro de téléphone valide",
+    "currentPasswordRequired": "Le mot de passe actuel est requis",
+    "newPasswordRequired": "Le nouveau mot de passe est requis",
+    "passwordsDoNotMatch": "Les nouveaux mots de passe ne correspondent pas",
+    "passwordTooShort": "Le mot de passe doit comporter au moins 6 caractères",
+    "updateFailed": "Échec de la mise à jour des informations du profil"
+  },
+  "success": {
+    "profileUpdated": "Profil mis à jour avec succès",
+    "passwordChanged": "Mot de passe changé avec succès"
+  },
+  "changePassword": "Changer le Mot de Passe"
+}

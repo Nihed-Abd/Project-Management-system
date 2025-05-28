@@ -402,7 +402,7 @@ const UserProfilePage = () => {
           variants={pageVariants}
           className="max-w-4xl mx-auto"
         >
-          <h1 className={`text-3xl font-bold mb-8 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('profile.title')}</h1>
+          <h1 className={`text-3xl font-bold mb-8 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('title', { ns: 'profile' })}</h1>
           
           <div className={`rounded-lg shadow-md overflow-hidden ${isDark ? 'bg-gray-800 shadow-gray-700/10' : 'bg-white'}`}>
             {/* Profile Header */}
@@ -462,7 +462,7 @@ const UserProfilePage = () => {
                       whileTap={{ scale: 0.97 }}
                     >
                       <FiEdit className="mr-2 h-4 w-4" />
-                      {t('profile.actions.editProfile')}
+                      {t('actions.editProfile', { ns: 'profile' })}
                     </motion.button>
                     <motion.button
                       onClick={() => setPasswordMode(true)}
@@ -471,7 +471,7 @@ const UserProfilePage = () => {
                       whileTap={{ scale: 0.97 }}
                     >
                       <FiLock className="mr-2 h-4 w-4" />
-                      {t('profile.actions.changePassword')}
+                      {t('actions.changePassword', { ns: 'profile' })}
                     </motion.button>
                   </div>
                 )}
@@ -583,12 +583,12 @@ const UserProfilePage = () => {
                         {loading ? (
                           <span className="flex items-center">
                             <span className="mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                            {t('common.saving')}
+                            {t('saving', { ns: 'common' })}
                           </span>
                         ) : (
                           <>
                             <FiSave className="mr-2 h-4 w-4" />
-                            {t('profile.actions.saveChanges')}
+                            {t('actions.saveChanges', { ns: 'profile' })}
                           </>
                         )}
                       </motion.button>
@@ -699,12 +699,12 @@ const UserProfilePage = () => {
                         {loading ? (
                           <span className="flex items-center">
                             <span className="mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                            Updating...
+                            {t('updating', { ns: 'common' })}
                           </span>
                         ) : (
                           <>
                             <FiSave className="mr-2 h-4 w-4" />
-                            Change Password
+                            {t('actions.changePassword', { ns: 'profile' })}
                           </>
                         )}
                       </motion.button>
@@ -722,30 +722,30 @@ const UserProfilePage = () => {
                 variants={formVariants}
                 className={`p-6 ${isDark ? 'border-t border-gray-700' : ''}`}
               >
-                <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Account Information</h3>
+                <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('accountInformation', { ns: 'profile' })}</h3>
                 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Full Name</p>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{t('fullName', { ns: 'profile' })}</p>
                     <p className={`text-base font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>{currentUser.name}</p>
                   </div>
                   
                   <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Email</p>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{t('email', { ns: 'profile' })}</p>
                     <p className={`text-base font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>{currentUser.email}</p>
                   </div>
                   
                   <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Phone Number</p>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{t('phoneNumber', { ns: 'profile' })}</p>
                     <p className={`text-base font-medium ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                      {currentUser.phoneNumber || 'Not provided'}
+                      {currentUser.phoneNumber || t('notProvided', { ns: 'profile' })}
                     </p>
                   </div>
                   
                   <div className={`p-4 rounded-lg ${isDark ? 'bg-gray-800/50' : 'bg-gray-50'}`}>
-                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Account Type</p>
+                    <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{t('accountType', { ns: 'profile' })}</p>
                     <p className={`text-base font-medium capitalize ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                      {currentUser.role || 'User'}
+                      {currentUser.role || t('userRole', { ns: 'profile' })}
                     </p>
                   </div>
                 </div>

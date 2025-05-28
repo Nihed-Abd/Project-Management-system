@@ -1,0 +1,50 @@
+{
+  "title": "My Profile",
+  "loginRequired": "Please log in to view your profile",
+  "accountInformation": "Account Information",
+  "fullName": "Full Name",
+  "email": "Email",
+  "phoneNumber": "Phone Number",
+  "accountType": "Account Type",
+  "userRole": "User",
+  "notProvided": "Not provided",
+  "actions": {
+    "editProfile": "Edit Profile",
+    "changePassword": "Change Password",
+    "saveChanges": "Save Changes"
+  },
+  "fields": {
+    "name": "Name",
+    "emailAddress": "Email Address",
+    "phoneNumber": "Phone Number",
+    "currentPassword": "Current Password",
+    "newPassword": "New Password",
+    "confirmNewPassword": "Confirm New Password"
+  },
+  "placeholders": {
+    "name": "Enter your name",
+    "email": "Enter your email",
+    "phone": "Enter your phone number",
+    "currentPassword": "Enter your current password",
+    "newPassword": "Enter your new password",
+    "confirmPassword": "Confirm your new password"
+  },
+  "errors": {
+    "invalidImageFormat": "Please select a valid image file (JPEG, PNG, etc.)",
+    "imageSizeExceeded": "Image size should not exceed 2MB",
+    "nameRequired": "Name is required",
+    "emailRequired": "Email address is required",
+    "invalidEmail": "Please enter a valid email address",
+    "invalidPhoneNumber": "Please enter a valid phone number",
+    "currentPasswordRequired": "Current password is required",
+    "newPasswordRequired": "New password is required",
+    "passwordsDoNotMatch": "New passwords do not match",
+    "passwordTooShort": "Password must be at least 6 characters long",
+    "updateFailed": "Failed to update profile information"
+  },
+  "success": {
+    "profileUpdated": "Profile updated successfully",
+    "passwordChanged": "Password changed successfully"
+  },
+  "changePassword": "Change Password"
+}

@@ -1,67 +1,69 @@
 {
-  "reclamations": {
-    "title": "Réclamations",
-    "myReclamations": "Mes Réclamations",
-    "createReclamation": "Créer une Réclamation",
-    "editReclamation": "Modifier la Réclamation",
-    "deleteReclamation": "Supprimer la Réclamation",
-    "reclamationDetails": "Détails de la Réclamation",
-    "fields": {
-      "subject": "Sujet",
-      "description": "Description",
-      "project": "Projet Associé",
-      "date": "Date",
-      "status": "Statut",
-      "priority": "Priorité",
-      "attachments": "Pièces jointes"
-    },
-    "status": {
-      "pending": "En attente",
-      "inProgress": "En cours",
-      "resolved": "Résolu",
-      "closed": "Clôturé",
-      "answered": "Répondu",
-      "allStatuses": "Tous les statuts"
-    },
-    "priority": {
-      "low": "Faible",
-      "medium": "Moyenne",
-      "high": "Haute",
-      "critical": "Critique"
-    },
-    "actions": {
-      "submit": "Soumettre",
-      "edit": "Modifier",
-      "delete": "Supprimer",
-      "view": "Voir"
-    },
-    "messages": {
-      "reclamationCreated": "Réclamation soumise avec succès",
-      "reclamationUpdated": "Réclamation mise à jour avec succès",
-      "reclamationDeleted": "Réclamation supprimée avec succès",
-      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette réclamation ?",
-      "noReclamations": "Aucune réclamation trouvée"
-    },
-    "errors": {
-      "unexpectedResponse": "Format de réponse API inattendu",
-      "failedToLoad": "Échec du chargement de vos réclamations. Veuillez réessayer plus tard.",
-      "failedToSubmit": "Échec de la soumission de votre réclamation. Veuillez réessayer plus tard."
-    },
-    "pleaseLogIn": "Veuillez vous connecter pour voir vos réclamations.",
-    "noReclamationsFound": "Aucune réclamation trouvée correspondant à vos critères.",
-    "noReclamationsSubmitted": "Vous n'avez pas encore soumis de réclamations.",
-    "submitReclamation": "Soumettre une réclamation",
-    "clearFilters": "Effacer les filtres",
-    "notAnsweredYet": "Pas encore répondu",
-    "filters": {
-      "all": "Tous",
-      "status": "Statut",
-      "priority": "Priorité",
-      "date": "Date"
-    },
-    "placeholders": {
-      "subject": "Bref sujet de votre réclamation",
-      "description": "Description détaillée du problème"
-    }
+  "title": "Réclamations",
+  "myReclamations": "Mes Réclamations",
+  "createReclamation": "Créer une Réclamation",
+  "editReclamation": "Modifier la Réclamation",
+  "deleteReclamation": "Supprimer la Réclamation",
+  "reclamationDetails": "Détails de la Réclamation",
+  "fields": {
+    "subject": "Sujet",
+    "description": "Description",
+    "project": "Projet Concerné",
+    "date": "Date",
+    "status": "Statut",
+    "priority": "Priorité",
+    "attachments": "Pièces jointes"
+  },
+  "status": {
+    "pending": "En attente",
+    "inProgress": "En cours",
+    "resolved": "Résolu",
+    "closed": "Fermé",
+    "answered": "Répondu",
+    "allStatuses": "Tous les statuts"
+  },
+  "priority": {
+    "low": "Faible",
+    "medium": "Moyenne",
+    "high": "Élevée",
+    "critical": "Critique"
+  },
+  "actions": {
+    "submit": "Soumettre",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "view": "Voir"
+  },
+  "messages": {
+    "reclamationCreated": "Réclamation soumise avec succès",
+    "reclamationUpdated": "Réclamation mise à jour avec succès",
+    "reclamationDeleted": "Réclamation supprimée avec succès",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cette réclamation ?",
+    "noReclamations": "Aucune réclamation trouvée"
+  },
+  "errors": {
+    "unexpectedResponse": "Format de réponse API inattendu",
+    "failedToLoad": "Échec du chargement de vos réclamations. Veuillez réessayer plus tard.",
+    "failedToSubmit": "Échec de la soumission de votre réclamation. Veuillez réessayer plus tard.",
+    "fillAllFields": "Veuillez remplir tous les champs obligatoires"
+  },
+  "pleaseLogIn": "Veuillez vous connecter pour voir vos réclamations.",
+  "noReclamationsFound": "Aucune réclamation trouvée correspondant à vos critères.",
+  "noReclamationsSubmitted": "Vous n'avez pas encore soumis de réclamations.",
+  "submitReclamation": "Soumettre une Réclamation",
+  "clearFilters": "Effacer les filtres",
+  "notAnsweredYet": "Pas encore répondu",
+  "filters": {
+    "all": "Tous",
+    "status": "Statut",
+    "priority": "Priorité",
+    "date": "Date"
+  },
+  "placeholders": {
+    "subject": "Bref sujet de votre réclamation",
+    "description": "Description détaillée du problème"
+  },
+  "form": {
+    "submitSuccess": "Votre réclamation a été soumise avec succès"
   }
 }

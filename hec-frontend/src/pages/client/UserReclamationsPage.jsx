@@ -28,9 +28,9 @@ const UserReclamationsPage = () => {
   const [submitting, setSubmitting] = useState(false);
   
   const statusOptions = [
-    { value: '', label: t('reclamations.status.allStatuses') },
-    { value: 'pending', label: t('reclamations.status.pending') },
-    { value: 'Answered', label: t('reclamations.status.answered') }
+    { value: '', label: t('status.allStatuses', { ns: 'reclamations' }) },
+    { value: 'pending', label: t('status.pending', { ns: 'reclamations' }) },
+    { value: 'Answered', label: t('status.answered', { ns: 'reclamations' }) }
   ];
 
   // Define fetchUserReclamations with useCallback
@@ -45,11 +45,11 @@ const UserReclamationsPage = () => {
       } else if (response.data && response.data.success && Array.isArray(response.data.reclamations)) {
         setReclamations(response.data.reclamations);
       } else {
-        setError(t('reclamations.errors.unexpectedResponse'));
+        setError(t('errors.unexpectedResponse', { ns: 'reclamations' }));
       }
     } catch (err) {
       console.error('Error fetching user reclamations:', err);
-      setError(t('reclamations.errors.failedToLoad'));
+      setError(t('errors.failedToLoad', { ns: 'reclamations' }));
     } finally {
       setLoading(false);
     }
@@ -117,8 +117,8 @@ const UserReclamationsPage = () => {
     
     if (!formData.object || !formData.message) {
       Swal.fire({
-        title: t('common.error'),
-        text: t('reclamations.errors.fillAllFields'),
+        title: t('error', { ns: 'common' }),
+        text: t('errors.fillAllFields', { ns: 'reclamations' }),
         icon: 'error',
         confirmButtonColor: '#fe3201'
       });
@@ -139,8 +139,8 @@ const UserReclamationsPage = () => {
       if (response.data) {
         // Show success message
         Swal.fire({
-          title: 'Success!',
-          text: 'Your reclamation has been submitted successfully',
+          title: t('success', { ns: 'common' }),
+          text: t('form.submitSuccess', { ns: 'reclamations' }),
           icon: 'success',
           confirmButtonColor: '#10B981'
         });
@@ -161,8 +161,8 @@ const UserReclamationsPage = () => {
       console.error('Error submitting reclamation:', err);
       
       Swal.fire({
-        title: t('common.error'),
-        text: t('reclamations.errors.failedToSubmit'),
+        title: t('error', { ns: 'common' }),
+        text: t('errors.submitFailed', { ns: 'reclamations' }),
         icon: 'error',
         confirmButtonColor: '#EF4444'
       });
@@ -217,7 +217,7 @@ const UserReclamationsPage = () => {
             onClick={fetchUserReclamations}
             className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors"
           >
-            {t('common.tryAgain')}
+            {t('tryAgain', { ns: 'common' })}
           </button>
         </div>
       );
@@ -226,9 +226,9 @@ const UserReclamationsPage = () => {
     if (!currentUser) {
       return (
         <div className="text-center py-20">
-          <p className="text-gray-600 mb-4">{t('reclamations.pleaseLogIn')}</p>
+          <p className="text-gray-600 mb-4">{t('pleaseLogIn', { ns: 'reclamations' })}</p>
           <a href="/login" className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-colors">
-            {t('navigation.login')}
+            {t('login', { ns: 'navigation' })}
           </a>
         </div>
       );
@@ -237,7 +237,7 @@ const UserReclamationsPage = () => {
     if (filteredReclamations.length === 0) {
       return (
         <div className="text-center py-20">
-          <p className="text-gray-600 mb-2">{t('reclamations.noReclamationsFound')}</p>
+          <p className="text-gray-600 mb-2">{t('noReclamationsFound', { ns: 'reclamations' })}</p>
           {reclamations.length > 0 ? (
             <button 
               onClick={() => {
@@ -246,7 +246,7 @@ const UserReclamationsPage = () => {
               }}
               className="text-coquelicot hover:underline"
             >
-              {t('reclamations.clearFilters')}
+              {t('clearFilters', { ns: 'reclamations' })}
             </button>
           ) : (
             <div className="mt-4">

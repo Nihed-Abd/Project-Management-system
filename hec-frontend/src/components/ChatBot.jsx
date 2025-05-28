@@ -2,8 +2,11 @@ import React, { useState, useEffect, useRef } from 'react';
 import axios from 'axios';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FiMessageSquare, FiSend, FiX, FiChevronDown } from 'react-icons/fi';
+import { useTheme } from '../context/ThemeContext';
 
 const ChatBot = () => {
+  const { theme } = useTheme();
+  const isDark = theme === 'dark';
   const [isOpen, setIsOpen] = useState(false);
   const [messages, setMessages] = useState([
     { id: 1, text: "Hello! I'm HEC Assistant. How can I help you with your electrical needs today?", sender: 'bot' }
@@ -104,7 +107,7 @@ const ChatBot = () => {
       <AnimatePresence>
         {isOpen && (
           <motion.div
-            className="absolute bottom-20 right-0 w-80 md:w-96 bg-white rounded-lg shadow-xl overflow-hidden border border-gray-200"
+            className={`absolute bottom-20 right-0 w-80 md:w-96 rounded-lg shadow-xl overflow-hidden border ${isDark ? 'bg-gray-800 border-gray-700' : 'bg-white border-gray-200'}`}
             initial={{ opacity: 0, y: 20, height: 0 }}
             animate={{ opacity: 1, y: 0, height: 'auto' }}
             exit={{ opacity: 0, y: 20, height: 0 }}
@@ -132,7 +135,7 @@ const ChatBot = () => {
 
             {/* Chat messages */}
             <div 
-              className="h-80 p-4 overflow-y-auto bg-gray-50" 
+              className={`h-80 p-4 overflow-y-auto ${isDark ? 'bg-gray-900' : 'bg-gray-50'}`} 
               ref={chatContainerRef}
             >
               {messages.map((message) => (
@@ -146,7 +149,7 @@ const ChatBot = () => {
                     className={`max-w-3/4 p-3 rounded-lg ${
                       message.sender === 'user'
                         ? 'bg-coquelicot text-white rounded-tr-none'
-                        : 'bg-white border border-gray-200 rounded-tl-none'
+                        : `${isDark ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'} rounded-tl-none`
                     }`}
                   >
                     <p className="text-sm">{message.text}</p>
@@ -157,7 +160,7 @@ const ChatBot = () => {
               {/* Typing indicator */}
               {isTyping && (
                 <div className="flex mb-4">
-                  <div className="bg-white border border-gray-200 p-3 rounded-lg rounded-tl-none">
+                  <div className={`p-3 rounded-lg rounded-tl-none ${isDark ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-200'}`}>
                     <div className="flex space-x-1">
                       <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0s' }}></div>
                       <div className="w-2 h-2 bg-gray-300 rounded-full animate-bounce" style={{ animationDelay: '0.2s' }}></div>
@@ -171,14 +174,14 @@ const ChatBot = () => {
             </div>
 
             {/* Chat input */}
-            <form onSubmit={handleSendMessage} className="border-t border-gray-200 p-3 flex">
+            <form onSubmit={handleSendMessage} className={`border-t p-3 flex ${isDark ? 'border-gray-700' : 'border-gray-200'}`}>
               <input
                 type="text"
                 value={newMessage}
                 onChange={(e) => setNewMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Type your message..."
-                className="flex-1 p-2 border border-gray-300 rounded-l-md focus:outline-none focus:ring-1 focus:ring-coquelicot focus:border-coquelicot"
+                className={`flex-1 p-2 border rounded-l-md focus:outline-none focus:ring-1 focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
                 disabled={isTyping}
               />
               <button
