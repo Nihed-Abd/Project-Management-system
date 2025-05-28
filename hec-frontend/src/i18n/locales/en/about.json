@@ -1,0 +1,105 @@
+{
+  "hero": {
+    "title": "About Us",
+    "subtitle": "Your Trusted Electrical Service Provider",
+    "description": "With over 10 years of experience, we've established ourselves as a leading electrical contractor in the region. Our team of certified professionals is dedicated to providing safe, reliable, and efficient solutions for all your electrical needs."
+  },
+  "mission": {
+    "title": "Our Mission",
+    "description": "To deliver high-quality electrical services that exceed customer expectations while maintaining the highest standards of safety and professionalism."
+  },
+  "history": {
+    "title": "Our History",
+    "description": "Founded in 2012, our company started as a small family business focused on residential services. Today, we've grown to serve both residential and commercial clients across the entire region, while maintaining our commitment to personalized service and quality workmanship."
+  },
+  "values": {
+    "title": "Our Core Values",
+    "items": {
+      "quality": {
+        "title": "Quality",
+        "description": "We never compromise on the quality of our work or materials used."
+      },
+      "safety": {
+        "title": "Safety",
+        "description": "Safety is our top priority in every project we undertake."
+      },
+      "integrity": {
+        "title": "Integrity",
+        "description": "We conduct our business with honesty, transparency, and ethical practices."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "We continuously seek better ways to solve electrical challenges."
+      }
+    }
+  },
+  "services": {
+    "title": "Our Services",
+    "description": "We offer comprehensive electrical services for both residential and commercial properties.",
+    "industrial": {
+      "title": "Industrial Electrical",
+      "description": "Comprehensive electrical solutions for industrial facilities and manufacturing plants."
+    },
+    "powerPlants": {
+      "title": "Power Plants",
+      "description": "Design, installation and maintenance services for power generation facilities."
+    },
+    "maintenance": {
+      "title": "Maintenance Services",
+      "description": "Regular maintenance and emergency repair services for all electrical systems."
+    },
+    "lighting": {
+      "title": "Lighting Solutions",
+      "description": "Energy-efficient lighting design and installation for all environments."
+    },
+    "networks": {
+      "title": "Electrical Networks",
+      "description": "Design and implementation of reliable electrical distribution networks."
+    },
+    "items": {
+      "residential": {
+        "title": "Residential Services",
+        "description": "Complete electrical solutions for homes, from installation to maintenance."
+      },
+      "commercial": {
+        "title": "Commercial Services",
+        "description": "Specialized electrical services for businesses and commercial buildings."
+      },
+      "smart": {
+        "title": "Smart Systems",
+        "description": "Modern smart home and building automation solutions."
+      }
+    }
+  },
+  "team": {
+    "title": "Our Team",
+    "description": "Meet the skilled professionals behind our excellent service.",
+    "members": {
+      "member1": {
+        "name": "John Smith",
+        "position": "Founder & CEO",
+        "bio": "With 20+ years in the electrical industry, John leads our company with expertise and vision."
+      },
+      "member2": {
+        "name": "Sarah Johnson",
+        "position": "Lead Technician",
+        "bio": "Sarah brings 15 years of hands-on experience and specializes in complex electrical systems."
+      },
+      "member3": {
+        "name": "Michael Brown",
+        "position": "Project Manager",
+        "bio": "Michael oversees our projects, ensuring timely completion and client satisfaction."
+      },
+      "member4": {
+        "name": "Emily Davis",
+        "position": "Customer Relations",
+        "bio": "Emily ensures our clients receive exceptional service from initial contact to project completion."
+      }
+    }
+  },
+  "cta": {
+    "title": "Ready to Work With Us?",
+    "description": "Contact our team today to discuss your electrical project needs.",
+    "button": "Get in Touch"
+  }
+}

@@ -1,86 +1,111 @@
 {
-  "projects": {
-    "title": "Projets",
-    "myProjects": "Mes Projets",
-    "allProjects": "Tous les Projets",
-    "projectDetails": "Détails du Projet",
-    "createProject": "Créer un Projet",
-    "editProject": "Modifier le Projet",
-    "deleteProject": "Supprimer le Projet",
-    "requestProject": "Demander un Projet",
-    "fields": {
-      "title": "Titre",
-      "description": "Description",
-      "category": "Catégorie",
-      "status": "Statut",
-      "client": "Client",
-      "creationDate": "Date de Création",
-      "lastEditDate": "Date de Dernière Modification",
-      "location": "Emplacement",
-      "images": "Images"
+  "title": "Projets",
+  "description": "Notre portfolio de projets électriques réalisés et en cours",
+  "myProjects": "Mes Projets",
+  "allProjects": "Tous les Projets",
+  "projectDetails": "Détails du Projet",
+  "createProject": "Créer un Projet",
+  "editProject": "Modifier le Projet",
+  "deleteProject": "Supprimer le Projet",
+  "requestProject": "Demander un Projet",
+  "viewDetails": "Voir les détails",
+  "noProjectsFound": "Aucun projet trouvé",
+  "noImage": "Aucune image",
+  "noDescription": "Aucune description disponible",
+  "fields": {
+    "title": "Titre",
+    "description": "Description",
+    "category": "Catégorie",
+    "status": "Statut",
+    "client": "Client",
+    "creationDate": "Date de Création",
+    "lastEditDate": "Date de Dernière Modification",
+    "location": "Emplacement",
+    "images": "Images"
+  },
+  "status": {
+    "pending": "En attente",
+    "inProgress": "En cours",
+    "completed": "Terminé",
+    "cancelled": "Annulé",
+    "requested": "Demandé",
+    "accepted": "Accepté",
+    "planned": "Planifié"
+  },
+  "filters": {
+    "title": "Filtrer les projets",
+    "showing": "Affichage de {{count}} projets",
+    "filtered": "(filtrés)",
+    "clear": "Effacer les filtres",
+    "all": "Tous",
+    "category": {
+      "label": "Catégorie",
+      "all": "Toutes les catégories"
     },
     "status": {
-      "pending": "En attente",
-      "inProgress": "En cours",
-      "completed": "Terminé",
-      "cancelled": "Annulé",
-      "requested": "Demandé",
-      "accepted": "Accepté",
-      "planned": "Planifié"
+      "label": "Statut",
+      "all": "Tous les statuts"
     },
-    "filters": {
-      "all": "Tous",
-      "category": "Catégorie",
-      "status": "Statut",
-      "date": "Date",
-      "residential": "Résidentiel",
-      "commercial": "Commercial",
-      "industrial": "Industriel"
+    "year": {
+      "label": "Année",
+      "all": "Toutes les années"
     },
-    "filter": {
-      "all": "Tous les projets",
-      "residential": "Résidentiel",
-      "commercial": "Commercial",
-      "industrial": "Industriel"
+    "month": {
+      "label": "Mois",
+      "all": "Tous les mois"
     },
-    "sort": {
-      "newest": "Plus récents d'abord",
-      "oldest": "Plus anciens d'abord",
-      "nameAsc": "Nom (A-Z)",
-      "nameDesc": "Nom (Z-A)"
-    },
-    "actions": {
-      "viewDetails": "Voir les détails",
-      "edit": "Modifier",
-      "delete": "Supprimer",
-      "request": "Demander",
-      "editProject": "Modifier le projet",
-      "deleteProject": "Supprimer le projet",
-      "requestProject": "Demander un projet"
-    },
-    "errors": {
-      "projectNotCreated": "Le projet n'a pas pu être créé",
-      "projectDeleted": "Projet supprimé avec succès",
-      "projectRequested": "Projet demandé avec succès",
-      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce projet ?",
-      "noProjects": "Aucun projet trouvé",
-      "notFound": "Projet non trouvé",
-      "failedToLoad": "Échec du chargement des détails du projet. Veuillez réessayer plus tard."
-    },
-    "messages": {
-      "projectCreated": "Projet créé avec succès",
-      "projectUpdated": "Projet mis à jour avec succès",
-      "projectDeleted": "Projet supprimé avec succès",
-      "projectRequested": "Demande de projet envoyée avec succès",
-      "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce projet ?",
-      "noProjects": "Aucun projet trouvé"
-    },
-    "requestSimilar": "Demander un Projet Similaire",
-    "back": "Retour aux Projets",
-    "noImagesAvailable": "Aucune image disponible",
-    "noDescriptionAvailable": "Aucune description disponible.",
-    "projectInfo": "Informations du Projet",
-    "mapLocation": "Emplacement sur la Carte",
-    "coordinates": "Coordonnées"
-  }
+    "residential": "Résidentiel",
+    "commercial": "Commercial",
+    "industrial": "Industriel"
+  },
+  "filter": {
+    "all": "Tous les projets",
+    "residential": "Résidentiel",
+    "commercial": "Commercial",
+    "industrial": "Industriel"
+  },
+  "sort": {
+    "newest": "Plus récents d'abord",
+    "oldest": "Plus anciens d'abord",
+    "nameAsc": "Nom (A-Z)",
+    "nameDesc": "Nom (Z-A)"
+  },
+  "actions": {
+    "viewDetails": "Voir les détails",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "request": "Demander",
+    "editProject": "Modifier le projet",
+    "deleteProject": "Supprimer le projet",
+    "requestProject": "Demander un projet"
+  },
+  "errors": {
+    "projectNotCreated": "Le projet n'a pas pu être créé",
+    "projectDeleted": "Projet supprimé avec succès",
+    "projectRequested": "Projet demandé avec succès",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce projet ?",
+    "noProjects": "Aucun projet trouvé",
+    "notFound": "Projet non trouvé",
+    "failedToLoad": "Échec du chargement des détails du projet. Veuillez réessayer plus tard."
+  },
+  "messages": {
+    "projectCreated": "Projet créé avec succès",
+    "projectUpdated": "Projet mis à jour avec succès",
+    "projectDeleted": "Projet supprimé avec succès",
+    "projectRequested": "Demande de projet envoyée avec succès",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer ce projet ?",
+    "noProjects": "Aucun projet trouvé"
+  },
+  "cta": {
+    "title": "Besoin d'un projet sur mesure ?",
+    "description": "Notre équipe peut vous aider à planifier et exécuter votre prochain projet électrique avec précision et qualité.",
+    "button": "Demander un devis"
+  },
+  "requestSimilar": "Demander un Projet Similaire",
+  "back": "Retour aux Projets",
+  "noImagesAvailable": "Aucune image disponible",
+  "noDescriptionAvailable": "Aucune description disponible.",
+  "projectInfo": "Informations du Projet",
+  "mapLocation": "Emplacement sur la Carte",
+  "coordinates": "Coordonnées"
 }

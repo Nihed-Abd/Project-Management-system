@@ -2,10 +2,12 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import { FaBolt, FaBuilding, FaTools, FaHammer, FaLightbulb, FaUsers, FaStar } from 'react-icons/fa';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const AboutPage = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { t } = useTranslation(['common', 'about']);
   
   // Animation variants
   const containerVariants = {
@@ -50,28 +52,28 @@ const AboutPage = () => {
   const serviceItems = [
     {
       icon: <FaBolt className="h-10 w-10 text-coquelicot" />,
-      title: "Électricité Industrielle",
-      description: "Installations électriques sur mesure pour sites industriels avec solutions d'automatisation et de contrôle."
+      title: t('services.industrial.title', { ns: 'about' }),
+      description: t('services.industrial.description', { ns: 'about' })
     },
     {
       icon: <FaBuilding className="h-10 w-10 text-coquelicot" />,
-      title: "Centrales Électriques",
-      description: "Construction et maintenance de centrales électriques, avec un accent sur l'efficacité et la fiabilité."
+      title: t('services.powerPlants.title', { ns: 'about' }),
+      description: t('services.powerPlants.description', { ns: 'about' })
     },
     {
       icon: <FaTools className="h-10 w-10 text-coquelicot" />,
-      title: "Maintenance Électrique",
-      description: "Services complets de maintenance préventive et corrective pour tous systèmes électriques."
+      title: t('services.maintenance.title', { ns: 'about' }),
+      description: t('services.maintenance.description', { ns: 'about' })
     },
     {
       icon: <FaLightbulb className="h-10 w-10 text-coquelicot" />,
-      title: "Solutions Éclairage",
-      description: "Conception et installation de systèmes d'éclairage économiques et écologiques pour tout espace."
+      title: t('services.lighting.title', { ns: 'about' }),
+      description: t('services.lighting.description', { ns: 'about' })
     },
     {
       icon: <FaHammer className="h-10 w-10 text-coquelicot" />,
-      title: "Construction Réseaux",
-      description: "Mise en place de réseaux électriques complets pour projets résidentiels et commerciaux."
+      title: t('services.networks.title', { ns: 'about' }),
+      description: t('services.networks.description', { ns: 'about' })
     }
   ];
 
@@ -107,7 +109,7 @@ const AboutPage = () => {
               transition={{ delay: 0.2, duration: 0.6 }}
               className={`text-4xl md:text-5xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-900'}`}
             >
-              À Propos de HEC TUNISIA
+              {t('hero.title', { ns: 'about' })}
             </motion.h1>
             <motion.p 
               initial={{ opacity: 0, y: 20 }}
@@ -115,7 +117,7 @@ const AboutPage = () => {
               transition={{ delay: 0.4, duration: 0.6 }}
               className={`text-xl mb-8 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}
             >
-              Nous sommes spécialisés dans les travaux d'électricité industrielle, la construction de centrales et réseaux électriques, et la maintenance électrique.
+              {t('hero.description', { ns: 'about' })}
             </motion.p>
             <motion.div 
               className="flex justify-center"
@@ -128,7 +130,7 @@ const AboutPage = () => {
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-3 bg-coquelicot text-white rounded-md font-medium shadow-lg hover:bg-coquelicot-600 transition-all duration-300"
               >
-                Contactez-nous
+                {t('hero.contactButton', { ns: 'about' })}
               </motion.button>
             </motion.div>
           </motion.div>
@@ -175,15 +177,15 @@ const AboutPage = () => {
               viewport={{ once: true }}
               className="flex-1"
             >
-              <h2 className={`text-3xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>Notre Histoire</h2>
+              <h2 className={`text-3xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('history.title', { ns: 'about' })}</h2>
               <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                Fondée en 2010, Hammemi Electricity Concept (HEC) est devenue une référence dans le domaine des installations électriques en Tunisie. Notre engagement envers l'excellence technique et le service client nous a permis de construire une réputation solide.
+                {t('history.description', { ns: 'about' })}
               </p>
               <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                Avec plus de 500 projets réalisés avec succès, notre équipe de 25 experts qualifiés apporte des solutions innovantes et efficaces pour tous types de projets électriques.
+                {t('values.title', { ns: 'about' })}
               </p>
               <p className={`${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                Notre expertise couvre tous les aspects des installations électriques, des petits travaux résidentiels aux grands projets industriels, en passant par la maintenance préventive et corrective.
+                {t('mission.description', { ns: 'about' })}
               </p>
             </motion.div>
           </div>
@@ -200,9 +202,9 @@ const AboutPage = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <h2 className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Nos Services</h2>
+            <h2 className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('services.title', { ns: 'about' })}</h2>
             <p className={`max-w-3xl mx-auto ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-              Nous offrons une gamme complète de services électriques pour répondre à tous vos besoins, qu'ils soient résidentiels, commerciaux ou industriels.
+              {t('services.description', { ns: 'about' })}
             </p>
           </motion.div>
 
@@ -248,9 +250,9 @@ const AboutPage = () => {
             >
               <FaUsers className="h-8 w-8 text-coquelicot" />
             </motion.div>
-            <h2 className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Notre Équipe</h2>
+            <h2 className={`text-3xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('team.title', { ns: 'about' })}</h2>
             <p className={`max-w-3xl mx-auto ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-              Notre force réside dans notre équipe d'experts passionnés, dédiés à offrir des solutions électriques exceptionnelles.
+              {t('team.description', { ns: 'about' })}
             </p>
           </motion.div>
 
@@ -278,14 +280,14 @@ const AboutPage = () => {
                 </div>
                 <div className="p-4">
                   <h3 className={`text-lg font-semibold ${isDark ? 'text-white' : 'text-gray-800'}`}>
-                    {index === 0 ? "Mohamed Hammemi" : 
-                     index === 1 ? "Samira Taleb" : 
-                     index === 2 ? "Karim Bouzid" : "Leila Mansour"}
+                    {index === 0 ? t('team.members.member1.name', { ns: 'about' }) : 
+                     index === 1 ? t('team.members.member2.name', { ns: 'about' }) : 
+                     index === 2 ? t('team.members.member3.name', { ns: 'about' }) : t('team.members.member4.name', { ns: 'about' })}
                   </h3>
                   <p className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-600'}`}>
-                    {index === 0 ? "Directeur Général" : 
-                     index === 1 ? "Responsable Technique" : 
-                     index === 2 ? "Ingénieur Électrique" : "Chef de Projet"}
+                    {index === 0 ? t('team.members.member1.position', { ns: 'about' }) : 
+                     index === 1 ? t('team.members.member2.position', { ns: 'about' }) : 
+                     index === 2 ? t('team.members.member3.position', { ns: 'about' }) : t('team.members.member4.position', { ns: 'about' })}
                   </p>
                 </div>
               </motion.div>
@@ -328,7 +330,7 @@ const AboutPage = () => {
               transition={{ delay: 0.2, duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Prêt à Transformer Votre Projet Électrique?
+              {t('cta.title', { ns: 'about' })}
             </motion.h2>
             <motion.p 
               className="text-xl mb-8 max-w-3xl mx-auto"
@@ -337,7 +339,7 @@ const AboutPage = () => {
               transition={{ delay: 0.4, duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Découvrez comment notre expertise peut vous aider à réaliser vos projets avec efficacité et professionnalisme.
+              {t('cta.description', { ns: 'about' })}
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -350,7 +352,7 @@ const AboutPage = () => {
                 whileTap={{ scale: 0.95 }}
                 className="px-8 py-3 bg-white text-coquelicot rounded-md font-medium shadow-lg hover:bg-gray-100 transition-all duration-300"
               >
-                Demander un Devis
+                {t('cta.button', { ns: 'about' })}
               </motion.button>
             </motion.div>
           </motion.div>

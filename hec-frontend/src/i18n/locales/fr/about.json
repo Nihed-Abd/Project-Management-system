@@ -1,0 +1,105 @@
+{
+  "hero": {
+    "title": "À Propos de Nous",
+    "subtitle": "Votre Prestataire de Services Électriques de Confiance",
+    "description": "Avec plus de 10 ans d'expérience, nous nous sommes établis comme un entrepreneur électrique de premier plan dans la région. Notre équipe de professionnels certifiés est dédiée à fournir des solutions sûres, fiables et efficaces pour tous vos besoins électriques."
+  },
+  "mission": {
+    "title": "Notre Mission",
+    "description": "Fournir des services électriques de haute qualité qui dépassent les attentes des clients tout en maintenant les normes les plus élevées de sécurité et de professionnalisme."
+  },
+  "history": {
+    "title": "Notre Histoire",
+    "description": "Fondée en 2012, notre entreprise a commencé comme une petite entreprise familiale axée sur les services résidentiels. Aujourd'hui, nous avons grandi pour servir à la fois des clients résidentiels et commerciaux dans toute la région, tout en maintenant notre engagement envers un service personnalisé et un travail de qualité."
+  },
+  "values": {
+    "title": "Nos Valeurs Fondamentales",
+    "items": {
+      "quality": {
+        "title": "Qualité",
+        "description": "Nous ne compromettons jamais la qualité de notre travail ou des matériaux utilisés."
+      },
+      "safety": {
+        "title": "Sécurité",
+        "description": "La sécurité est notre priorité absolue dans chaque projet que nous entreprenons."
+      },
+      "integrity": {
+        "title": "Intégrité",
+        "description": "Nous menons nos affaires avec honnêteté, transparence et pratiques éthiques."
+      },
+      "innovation": {
+        "title": "Innovation",
+        "description": "Nous recherchons continuellement de meilleures façons de résoudre les défis électriques."
+      }
+    }
+  },
+  "services": {
+    "title": "Nos Services",
+    "description": "Nous offrons des services électriques complets pour les propriétés résidentielles et commerciales.",
+    "industrial": {
+      "title": "Électricité Industrielle",
+      "description": "Solutions électriques complètes pour les installations industrielles et les usines de fabrication."
+    },
+    "powerPlants": {
+      "title": "Centrales Électriques",
+      "description": "Services de conception, d'installation et de maintenance pour les installations de production d'énergie."
+    },
+    "maintenance": {
+      "title": "Services de Maintenance",
+      "description": "Services de maintenance régulière et de réparation d'urgence pour tous les systèmes électriques."
+    },
+    "lighting": {
+      "title": "Solutions d'Éclairage",
+      "description": "Conception et installation d'éclairage écoénergétique pour tous les environnements."
+    },
+    "networks": {
+      "title": "Réseaux Électriques",
+      "description": "Conception et mise en œuvre de réseaux de distribution électrique fiables."
+    },
+    "items": {
+      "residential": {
+        "title": "Services Résidentiels",
+        "description": "Solutions électriques complètes pour les maisons, de l'installation à la maintenance."
+      },
+      "commercial": {
+        "title": "Services Commerciaux",
+        "description": "Services électriques spécialisés pour les entreprises et les bâtiments commerciaux."
+      },
+      "smart": {
+        "title": "Systèmes Intelligents",
+        "description": "Solutions modernes de maison intelligente et d'automatisation de bâtiments."
+      }
+    }
+  },
+  "team": {
+    "title": "Notre Équipe",
+    "description": "Rencontrez les professionnels qualifiés derrière notre excellent service.",
+    "members": {
+      "member1": {
+        "name": "John Smith",
+        "position": "Fondateur et PDG",
+        "bio": "Avec plus de 20 ans dans l'industrie électrique, John dirige notre entreprise avec expertise et vision."
+      },
+      "member2": {
+        "name": "Sarah Johnson",
+        "position": "Technicienne Principale",
+        "bio": "Sarah apporte 15 ans d'expérience pratique et se spécialise dans les systèmes électriques complexes."
+      },
+      "member3": {
+        "name": "Michael Brown",
+        "position": "Chef de Projet",
+        "bio": "Michael supervise nos projets, assurant l'achèvement en temps opportun et la satisfaction du client."
+      },
+      "member4": {
+        "name": "Emily Davis",
+        "position": "Relations Clients",
+        "bio": "Emily s'assure que nos clients reçoivent un service exceptionnel du contact initial à l'achèvement du projet."
+      }
+    }
+  },
+  "cta": {
+    "title": "Prêt à Travailler Avec Nous?",
+    "description": "Contactez notre équipe aujourd'hui pour discuter de vos besoins de projet électrique.",
+    "button": "Contactez-Nous"
+  }
+}

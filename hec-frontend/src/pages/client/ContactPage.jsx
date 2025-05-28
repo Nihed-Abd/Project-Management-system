@@ -4,10 +4,12 @@ import { FiMapPin, FiPhone, FiMail, FiClock, FiSend, FiMessageCircle } from 'rea
 import axios from 'axios';
 import Swal from 'sweetalert2';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 
 const ContactPage = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { t } = useTranslation(['common', 'contact']);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -20,23 +22,23 @@ const ContactPage = () => {
   const contactInfo = [
     {
       icon: <FiMapPin className="h-6 w-6 text-coquelicot" />,
-      title: "Notre Adresse",
-      content: "123 Rue de Tunis, Tunis 1002, Tunisie"
+      title: t('contact.address.label', { ns: 'contact' }),
+      content: t('contact.address.value', { ns: 'contact' })
     },
     {
       icon: <FiPhone className="h-6 w-6 text-coquelicot" />,
-      title: "Téléphone",
-      content: "+216 71 123 456"
+      title: t('contact.phone.label', { ns: 'contact' }),
+      content: t('contact.phone.value', { ns: 'contact' })
     },
     {
       icon: <FiMail className="h-6 w-6 text-coquelicot" />,
-      title: "Email",
-      content: "contact@hec-tunisie.com"
+      title: t('contact.email.label', { ns: 'contact' }),
+      content: t('contact.email.value', { ns: 'contact' })
     },
     {
       icon: <FiClock className="h-6 w-6 text-coquelicot" />,
-      title: "Heures d'Ouverture",
-      content: "Lundi - Vendredi: 8h00 - 18h00"
+      title: t('contact.hours.label', { ns: 'contact' }),
+      content: t('contact.hours.value', { ns: 'contact' })
     }
   ];
 
@@ -63,8 +65,8 @@ const ContactPage = () => {
       
       // Show success message as requested
       Swal.fire({
-        title: 'Message Envoyé!',
-        text: 'Merci pour votre confiance, un agent vous contactera dans les plus brefs délais.',
+        title: t('success.title', { ns: 'contact' }),
+        text: t('success.message', { ns: 'contact' }),
         icon: 'success',
         confirmButtonColor: '#fe3201'
       });
@@ -81,8 +83,8 @@ const ContactPage = () => {
       
       // Show error message
       Swal.fire({
-        title: 'Erreur!',
-        text: 'Un problème est survenu lors de l\'envoi de votre message. Veuillez réessayer.',
+        title: t('error.title', { ns: 'contact' }),
+        text: t('error.message', { ns: 'contact' }),
         icon: 'error',
         confirmButtonColor: '#fe3201'
       });
@@ -111,9 +113,9 @@ const ContactPage = () => {
             >
               <FiMessageCircle className="h-8 w-8 text-coquelicot" />
             </motion.div>
-            <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>Contactez-Nous</h1>
+            <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-900'}`}>{t('hero.title', { ns: 'contact' })}</h1>
             <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-              Notre équipe est prête à répondre à toutes vos questions concernant nos services d'électricité.
+              {t('hero.description', { ns: 'contact' })}
             </p>
           </motion.div>
         </div>
@@ -131,7 +133,7 @@ const ContactPage = () => {
               className="lg:w-2/5"
             >
               <div className={`p-8 rounded-xl h-full shadow-md ${isDark ? 'bg-gray-800 shadow-gray-700/10' : 'bg-gray-50'}`}>
-                <h2 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>Informations de Contact</h2>
+                <h2 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('contact.title', { ns: 'contact' })}</h2>
                 
                 <div className="space-y-6">
                   {contactInfo.map((item, index) => (
@@ -154,7 +156,7 @@ const ContactPage = () => {
                 </div>
                 
                 <div className={`mt-8 pt-6 ${isDark ? 'border-t border-gray-700' : 'border-t border-gray-200'}`}>
-                  <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Suivez-nous</h3>
+                  <h3 className={`text-lg font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('social.title', { ns: 'contact' })}</h3>
                   <div className="flex space-x-4">
                     <motion.a 
                       whileHover={{ y: -5, backgroundColor: '#fe3201', color: '#ffffff' }} 
@@ -205,12 +207,12 @@ const ContactPage = () => {
               className="lg:w-3/5"
             >
               <div className={`p-8 rounded-xl shadow-md h-full ${isDark ? 'bg-gray-800 shadow-gray-700/10' : 'bg-white shadow-gray-200/50'}`}>
-                <h2 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>Envoyez-nous un Message</h2>
+                <h2 className={`text-2xl font-bold mb-6 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('form.title', { ns: 'contact' })}</h2>
                 
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div>
-                      <label htmlFor="name" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Nom Complet</label>
+                      <label htmlFor="name" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{t('form.name', { ns: 'contact' })}</label>
                       <input
                         type="text"
                         id="name"
@@ -219,11 +221,11 @@ const ContactPage = () => {
                         onChange={handleChange}
                         required
                         className={`w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border border-gray-300 text-gray-700 placeholder-gray-500'}`}
-                        placeholder="Votre nom"
+                        placeholder={t('form.name', { ns: 'contact' })}
                       />
                     </div>
                     <div>
-                      <label htmlFor="email" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Email</label>
+                      <label htmlFor="email" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{t('form.email', { ns: 'contact' })}</label>
                       <input
                         type="email"
                         id="email"
@@ -232,13 +234,13 @@ const ContactPage = () => {
                         onChange={handleChange}
                         required
                         className={`w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border border-gray-300 text-gray-700 placeholder-gray-500'}`}
-                        placeholder="votre@email.com"
+                        placeholder={t('form.email', { ns: 'contact' })}
                       />
                     </div>
                   </div>
                   
                   <div>
-                    <label htmlFor="subject" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Sujet</label>
+                    <label htmlFor="subject" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{t('form.subject', { ns: 'contact' })}</label>
                     <input
                       type="text"
                       id="subject"
@@ -247,12 +249,12 @@ const ContactPage = () => {
                       onChange={handleChange}
                       required
                       className={`w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-transparent ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border border-gray-300 text-gray-700 placeholder-gray-500'}`}
-                      placeholder="Sujet de votre message"
+                      placeholder={t('form.subject', { ns: 'contact' })}
                     />
                   </div>
                   
                   <div>
-                    <label htmlFor="message" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Message</label>
+                    <label htmlFor="message" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{t('form.message', { ns: 'contact' })}</label>
                     <textarea
                       id="message"
                       name="message"
@@ -261,7 +263,7 @@ const ContactPage = () => {
                       required
                       rows={6}
                       className={`w-full px-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-transparent resize-none ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border border-gray-300 text-gray-700 placeholder-gray-500'}`}
-                      placeholder="Décrivez votre projet ou votre question..."
+                      placeholder={t('form.message', { ns: 'contact' })}
                     />
                   </div>
                   
@@ -279,12 +281,12 @@ const ContactPage = () => {
                             <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                             <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                           </svg>
-                          Envoi en cours...
+                          {t('form.sending', { ns: 'contact' })}
                         </span>
                       ) : (
                         <span className="flex items-center justify-center">
                           <FiSend className="mr-2" />
-                          Envoyer le Message
+                          {t('form.send', { ns: 'contact' })}
                         </span>
                       )}
                     </motion.button>

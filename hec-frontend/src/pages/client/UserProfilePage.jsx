@@ -5,11 +5,13 @@ import axios from 'axios';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
 import Swal from 'sweetalert2';
+import { useTranslation } from 'react-i18next';
 
 const UserProfilePage = () => {
   const { currentUser, setCurrentUser } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { t } = useTranslation(['common', 'profile']);
   
   // Profile form state
   const [profileData, setProfileData] = useState({
@@ -92,7 +94,7 @@ const UserProfilePage = () => {
       if (!file.type.match('image.*')) {
         setErrors({
           ...errors,
-          picture: 'Please select an image file (jpg, png, etc.)'
+          picture: t('profile.errors.invalidImageFormat')
         });
         return;
       }
@@ -101,7 +103,7 @@ const UserProfilePage = () => {
       if (file.size > 2 * 1024 * 1024) {
         setErrors({
           ...errors,
-          picture: 'Image size should not exceed 2MB'
+          picture: t('profile.errors.imageSizeExceeded')
         });
         return;
       }
@@ -158,17 +160,17 @@ const UserProfilePage = () => {
     const newErrors = {};
     
     if (!profileData.name.trim()) {
-      newErrors.name = 'Name is required';
+      newErrors.name = t('profile.validation.nameRequired');
     }
     
     if (!profileData.email.trim()) {
-      newErrors.email = 'Email is required';
+      newErrors.email = t('profile.validation.emailRequired');
     } else if (!/\S+@\S+\.\S+/.test(profileData.email)) {
-      newErrors.email = 'Email is invalid';
+      newErrors.email = t('profile.validation.emailInvalid');
     }
     
     if (profileData.phoneNumber && !/^\+?[0-9]{8,15}$/.test(profileData.phoneNumber.replace(/[\s-]/g, ''))) {
-      newErrors.phoneNumber = 'Phone number is invalid';
+      newErrors.phoneNumber = t('profile.validation.phoneInvalid');
     }
     
     setErrors(newErrors);
@@ -180,19 +182,19 @@ const UserProfilePage = () => {
     const newErrors = {};
     
     if (!passwordData.currentPassword) {
-      newErrors.currentPassword = 'Current password is required';
+      newErrors.currentPassword = t('profile.validation.currentPasswordRequired');
     }
     
     if (!passwordData.newPassword) {
-      newErrors.newPassword = 'New password is required';
+      newErrors.newPassword = t('profile.validation.newPasswordRequired');
     } else if (passwordData.newPassword.length < 8) {
-      newErrors.newPassword = 'Password must be at least 8 characters';
+      newErrors.newPassword = t('profile.validation.passwordLength');
     }
     
     if (!passwordData.confirmNewPassword) {
-      newErrors.confirmNewPassword = 'Please confirm your new password';
+      newErrors.confirmNewPassword = t('profile.validation.confirmPasswordRequired');
     } else if (passwordData.newPassword !== passwordData.confirmNewPassword) {
-      newErrors.confirmNewPassword = 'Passwords do not match';
+      newErrors.confirmNewPassword = t('profile.validation.passwordsDoNotMatch');
     }
     
     setErrors(newErrors);
@@ -216,7 +218,7 @@ const UserProfilePage = () => {
       if (imageFile) {
         pictureUrl = await uploadProfileImage();
         if (!pictureUrl) {
-          throw new Error('Failed to upload profile image');
+          throw new Error(t('profile.errors.imageUploadFailed'));
         }
       }
       
@@ -234,8 +236,8 @@ const UserProfilePage = () => {
       if (response.data && response.data.success) {
         Swal.fire({
           icon: 'success',
-          title: 'Profile Updated',
-          text: 'Your profile has been updated successfully',
+          title: t('profile.alerts.updateSuccess.title'),
+          text: t('profile.alerts.updateSuccess.message'),
           timer: 2000,
           showConfirmButton: false
         }).then(() => {
@@ -246,14 +248,14 @@ const UserProfilePage = () => {
         // Exit edit mode
         setEditMode(false);
       } else {
-        throw new Error(response.data?.message || 'Failed to update profile');
+        throw new Error(response.data?.message || t('profile.errors.updateFailed'));
       }
     } catch (err) {
       console.error('Error updating profile:', err);
       Swal.fire({
         icon: 'error',
-        title: 'Update Failed',
-        text: err.response?.data?.message || 'Failed to update profile. Please try again.',
+        title: t('profile.alerts.updateFailed.title'),
+        text: err.response?.data?.message || t('profile.alerts.updateFailed.message'),
       });
     } finally {
       setLoading(false);
@@ -285,8 +287,8 @@ const UserProfilePage = () => {
       if (response.data && response.data.success) {
         Swal.fire({
           icon: 'success',
-          title: 'Password Changed',
-          text: 'Your password has been changed successfully',
+          title: t('profile.alerts.passwordSuccess.title'),
+          text: t('profile.alerts.passwordSuccess.message'),
           timer: 2000,
           showConfirmButton: false
         }).then(() => {
@@ -302,14 +304,14 @@ const UserProfilePage = () => {
         });
         setPasswordMode(false);
       } else {
-        throw new Error(response.data?.message || 'Failed to change password');
+        throw new Error(response.data?.message || t('profile.errors.passwordChangeFailed'));
       }
     } catch (err) {
       console.error('Error changing password:', err);
       Swal.fire({
         icon: 'error',
-        title: 'Password Change Failed',
-        text: err.response?.data?.message || 'Failed to change password. Please verify your current password.',
+        title: t('profile.alerts.passwordFailed.title'),
+        text: err.response?.data?.message || t('profile.alerts.passwordFailed.message'),
       });
     } finally {
       setLoading(false);
@@ -376,14 +378,14 @@ const UserProfilePage = () => {
     return (
       <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
         <div className="container mx-auto px-4 text-center py-20">
-          <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>Please log in to view your profile.</p>
+          <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{t('profile.loginRequired')}</p>
           <motion.button
             onClick={() => window.location.href = '/login'}
             className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300"
             whileHover={{ scale: 1.05 }}
             whileTap={{ scale: 0.95 }}
           >
-            Log In
+            {t('common.login')}
           </motion.button>
         </div>
       </div>
@@ -400,7 +402,7 @@ const UserProfilePage = () => {
           variants={pageVariants}
           className="max-w-4xl mx-auto"
         >
-          <h1 className={`text-3xl font-bold mb-8 ${isDark ? 'text-white' : 'text-gray-800'}`}>My Profile</h1>
+          <h1 className={`text-3xl font-bold mb-8 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('profile.title')}</h1>
           
           <div className={`rounded-lg shadow-md overflow-hidden ${isDark ? 'bg-gray-800 shadow-gray-700/10' : 'bg-white'}`}>
             {/* Profile Header */}
@@ -460,7 +462,7 @@ const UserProfilePage = () => {
                       whileTap={{ scale: 0.97 }}
                     >
                       <FiEdit className="mr-2 h-4 w-4" />
-                      Edit Profile
+                      {t('profile.actions.editProfile')}
                     </motion.button>
                     <motion.button
                       onClick={() => setPasswordMode(true)}
@@ -469,7 +471,7 @@ const UserProfilePage = () => {
                       whileTap={{ scale: 0.97 }}
                     >
                       <FiLock className="mr-2 h-4 w-4" />
-                      Change Password
+                      {t('profile.actions.changePassword')}
                     </motion.button>
                   </div>
                 )}
@@ -488,7 +490,7 @@ const UserProfilePage = () => {
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="name" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Full Name
+                        {t('profile.fields.fullName')}
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -501,7 +503,7 @@ const UserProfilePage = () => {
                           value={profileData.name}
                           onChange={handleProfileChange}
                           className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.name ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
-                          placeholder="Enter your full name"
+                          placeholder={t('profile.placeholders.name')}
                         />
                       </div>
                       {errors.name && (
@@ -511,7 +513,7 @@ const UserProfilePage = () => {
                     
                     <div>
                       <label htmlFor="email" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Email Address
+                        {t('profile.fields.emailAddress')}
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -524,7 +526,7 @@ const UserProfilePage = () => {
                           value={profileData.email}
                           onChange={handleProfileChange}
                           className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.email ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
-                          placeholder="Enter your email address"
+                          placeholder={t('profile.placeholders.email')}
                         />
                       </div>
                       {errors.email && (
@@ -534,7 +536,7 @@ const UserProfilePage = () => {
                     
                     <div>
                       <label htmlFor="phoneNumber" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Phone Number (optional)
+                        {t('profile.fields.phoneNumber')}
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -547,7 +549,7 @@ const UserProfilePage = () => {
                           value={profileData.phoneNumber}
                           onChange={handleProfileChange}
                           className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.phoneNumber ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
-                          placeholder="Enter your phone number"
+                          placeholder={t('profile.placeholders.phone')}
                         />
                       </div>
                       {errors.phoneNumber && (
@@ -581,12 +583,12 @@ const UserProfilePage = () => {
                         {loading ? (
                           <span className="flex items-center">
                             <span className="mr-2 h-4 w-4 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
-                            Saving...
+                            {t('common.saving')}
                           </span>
                         ) : (
                           <>
                             <FiSave className="mr-2 h-4 w-4" />
-                            Save Changes
+                            {t('profile.actions.saveChanges')}
                           </>
                         )}
                       </motion.button>
@@ -608,7 +610,7 @@ const UserProfilePage = () => {
                   <div className="space-y-4">
                     <div>
                       <label htmlFor="currentPassword" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Current Password
+                        {t('profile.fields.currentPassword')}
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -621,7 +623,7 @@ const UserProfilePage = () => {
                           value={passwordData.currentPassword}
                           onChange={handlePasswordChange}
                           className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.currentPassword ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
-                          placeholder="Enter your current password"
+                          placeholder={t('profile.placeholders.currentPassword')}
                         />
                       </div>
                       {errors.currentPassword && (
@@ -631,7 +633,7 @@ const UserProfilePage = () => {
                     
                     <div>
                       <label htmlFor="newPassword" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        New Password
+                        {t('profile.fields.newPassword')}
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -644,7 +646,7 @@ const UserProfilePage = () => {
                           value={passwordData.newPassword}
                           onChange={handlePasswordChange}
                           className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.newPassword ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
-                          placeholder="Enter your new password"
+                          placeholder={t('profile.placeholders.newPassword')}
                         />
                       </div>
                       {errors.newPassword && (
@@ -654,7 +656,7 @@ const UserProfilePage = () => {
                     
                     <div>
                       <label htmlFor="confirmNewPassword" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                        Confirm New Password
+                        {t('profile.fields.confirmNewPassword')}
                       </label>
                       <div className="relative">
                         <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -667,7 +669,7 @@ const UserProfilePage = () => {
                           value={passwordData.confirmNewPassword}
                           onChange={handlePasswordChange}
                           className={`block w-full pl-10 pr-3 py-2 rounded-md ${errors.confirmNewPassword ? 'border-red-500' : isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'} focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot`}
-                          placeholder="Confirm your new password"
+                          placeholder={t('profile.placeholders.confirmPassword')}
                         />
                       </div>
                       {errors.confirmNewPassword && (

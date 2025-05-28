@@ -1,0 +1,64 @@
+{
+  "hero": {
+    "title": "Expert Electrical Solutions for Your Home & Business",
+    "description": "We provide high-quality electrical services with a focus on safety, reliability, and customer satisfaction. Our team of certified electricians is ready to tackle any electrical project."
+  },
+  "navigation": {
+    "ourProjects": "Our Projects",
+    "contactUs": "Contact Us"
+  },
+  "services": {
+    "title": "Our Services",
+    "description": "We offer a comprehensive range of electrical services for residential and commercial properties.",
+    "items": {
+      "electrical": {
+        "title": "Electrical Installation",
+        "description": "Complete electrical systems installation for new construction or renovation projects."
+      },
+      "energy": {
+        "title": "Energy Solutions",
+        "description": "Energy-efficient solutions including LED lighting and smart home systems."
+      },
+      "maintenance": {
+        "title": "Maintenance & Repair",
+        "description": "Regular maintenance and emergency repair services for all electrical systems."
+      },
+      "security": {
+        "title": "Security Systems",
+        "description": "Installation of security cameras, alarms, and access control systems."
+      }
+    }
+  },
+  "stats": {
+    "title": "Our Track Record",
+    "projectsCompleted": "Projects Completed",
+    "yearsExperience": "Years Experience",
+    "expertTechnicians": "Expert Technicians",
+    "emergencySupport": "Emergency Support"
+  },
+  "testimonials": {
+    "title": "What Our Clients Say",
+    "items": {
+      "client1": {
+        "name": "Sarah Johnson",
+        "role": "Homeowner",
+        "text": "The team was professional, efficient, and completed the work ahead of schedule. I'm very impressed with the quality of service."
+      },
+      "client2": {
+        "name": "Michael Brown",
+        "role": "Business Owner",
+        "text": "They helped us upgrade our entire office electrical system with minimal disruption to our operations. Highly recommended!"
+      },
+      "client3": {
+        "name": "David Wilson",
+        "role": "Property Manager",
+        "text": "I've worked with many electrical contractors, but this company stands out for their reliability and excellent workmanship."
+      }
+    }
+  },
+  "cta": {
+    "title": "Ready to Start Your Project?",
+    "description": "Contact us today for a free consultation and estimate.",
+    "button": "Get in Touch"
+  }
+}

@@ -9,6 +9,7 @@ import { useTranslation } from 'react-i18next';
 const HomePage = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { t } = useTranslation(['common', 'home']);
   
   // Animation controls for scroll-triggered animations
   const statsControls = useAnimation();
@@ -85,23 +86,23 @@ const HomePage = () => {
   const services = [
     {
       icon: <FaBolt className="h-8 w-8 text-coquelicot" />,
-      title: 'Electrical Installations',
-      description: 'Complete electrical installation services for residential, commercial, and industrial properties.',
+      title: t('services.items.electrical.title', { ns: 'home' }),
+      description: t('services.items.electrical.description', { ns: 'home' }),
     },
     {
       icon: <FaLightbulb className="h-8 w-8 text-coquelicot" />,
-      title: 'Energy Solutions',
-      description: 'Sustainable and efficient energy solutions including solar panels and smart energy systems.',
+      title: t('services.items.energy.title', { ns: 'home' }),
+      description: t('services.items.energy.description', { ns: 'home' }),
     },
     {
       icon: <FaTools className="h-8 w-8 text-coquelicot" />,
-      title: 'Maintenance & Repair',
-      description: 'Professional maintenance and repair services for all your electrical systems and equipment.',
+      title: t('services.items.maintenance.title', { ns: 'home' }),
+      description: t('services.items.maintenance.description', { ns: 'home' }),
     },
     {
       icon: <FaShieldAlt className="h-8 w-8 text-coquelicot" />,
-      title: 'Security Systems',
-      description: 'Advanced security systems including alarms, CCTV, and access control for your property.',
+      title: t('services.items.security.title', { ns: 'home' }),
+      description: t('services.items.security.description', { ns: 'home' }),
     },
   ];
   
@@ -110,44 +111,44 @@ const HomePage = () => {
     {
       icon: <FaStar className="h-6 w-6 text-coquelicot" />,
       value: '500+',
-      label: 'Projects Completed',
+      label: t('stats.projectsCompleted', { ns: 'home' }),
     },
     {
       icon: <FaAward className="h-6 w-6 text-coquelicot" />,
       value: '10+',
-      label: 'Years of Experience',
+      label: t('stats.yearsExperience', { ns: 'home' }),
     },
     {
       icon: <FaTools className="h-6 w-6 text-coquelicot" />,
       value: '25+',
-      label: 'Expert Technicians',
+      label: t('stats.expertTechnicians', { ns: 'home' }),
     },
     {
       icon: <FaClock className="h-6 w-6 text-coquelicot" />,
       value: '24/7',
-      label: 'Emergency Support',
+      label: t('stats.emergencySupport', { ns: 'home' }),
     },
   ];
 
   // Testimonials data
   const testimonials = [
     {
-      name: 'Sarah Johnson',
-      role: 'Homeowner',
+      name: t('testimonials.items.client1.name', { ns: 'home' }),
+      role: t('testimonials.items.client1.role', { ns: 'home' }),
       image: 'https://ui-avatars.com/api/?name=Sarah+Johnson&background=fe3201&color=fff',
-      text: 'HEC provided excellent service for our home electrical renovation. Professional, punctual, and high-quality work.',
+      text: t('testimonials.items.client1.text', { ns: 'home' }),
     },
     {
-      name: 'Michael Brown',
-      role: 'Business Owner',
+      name: t('testimonials.items.client2.name', { ns: 'home' }),
+      role: t('testimonials.items.client2.role', { ns: 'home' }),
       image: 'https://ui-avatars.com/api/?name=Michael+Brown&background=fe3201&color=fff',
-      text: 'We hired HEC for our office electrical maintenance and they exceeded our expectations. Highly recommended!',
+      text: t('testimonials.items.client2.text', { ns: 'home' }),
     },
     {
-      name: 'David Wilson',
-      role: 'Project Manager',
+      name: t('testimonials.items.client3.name', { ns: 'home' }),
+      role: t('testimonials.items.client3.role', { ns: 'home' }),
       image: 'https://ui-avatars.com/api/?name=David+Wilson&background=fe3201&color=fff',
-      text: 'Their team is professional and knowledgeable. They completed our large-scale project on time and within budget.',
+      text: t('testimonials.items.client3.text', { ns: 'home' }),
     },
   ];
 
@@ -169,7 +170,7 @@ const HomePage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2, duration: 0.6 }}
               >
-                Reliable Electrical Services for Your Home & Business
+                {t('hero.title', { ns: 'home' })}
               </motion.h1>
               <motion.p 
                 className={`mb-8 text-lg ${isDark ? 'text-gray-300' : 'text-silver-200'}`}
@@ -177,7 +178,7 @@ const HomePage = () => {
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.6 }}
               >
-                Hammemi Electricity Concept provides professional electrical services with quality workmanship and excellent customer service.
+                {t('hero.description', { ns: 'home' })}
               </motion.p>
               <motion.div 
                 className="flex flex-wrap gap-4"
@@ -189,13 +190,13 @@ const HomePage = () => {
                   to="/projects"
                   className="rounded-md bg-coquelicot px-6 py-3 font-medium text-white shadow-md transition-all duration-300 hover:bg-coquelicot-600 hover:scale-105 transform"
                 >
-                  Our Projects
+                  {t('navigation.ourProjects', { ns: 'home' })}
                 </Link>
                 <Link
                   to="/contact"
                   className={`rounded-md border px-6 py-3 font-medium shadow-md transition-all duration-300 hover:scale-105 transform ${isDark ? 'border-gray-600 text-gray-200 hover:bg-gray-700' : 'border-silver-300 bg-transparent text-silver-100 hover:bg-silver-200 hover:text-white'}`}
                 >
-                  Contact Us
+                  {t('navigation.contactUs', { ns: 'home' })}
                 </Link>
               </motion.div>
             </motion.div>
@@ -237,9 +238,9 @@ const HomePage = () => {
             transition={{ duration: 0.5 }}
             className="mb-12 text-center"
           >
-            <h2 className={`mb-4 text-3xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>Our Services</h2>
+            <h2 className={`mb-4 text-3xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>{t('services.title', { ns: 'home' })}</h2>
             <p className={`mx-auto max-w-2xl ${isDark ? 'text-gray-300' : 'text-silver-200'}`}>
-              We offer a wide range of electrical services for residential, commercial, and industrial clients. Our experienced team ensures quality workmanship on every project.
+              {t('services.description', { ns: 'home' })}
             </p>
           </motion.div>
 
@@ -286,9 +287,9 @@ const HomePage = () => {
             >
               <FaBolt className="h-10 w-10 text-coquelicot" />
             </motion.div>
-            <h2 className={`mb-6 text-3xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>Ready to start your project?</h2>
+            <h2 className={`mb-6 text-3xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>{t('cta.title', { ns: 'home' })}</h2>
             <p className={`mb-8 max-w-2xl ${isDark ? 'text-gray-300' : 'text-silver-200'}`}>
-              Whether you need a small repair or a complete electrical installation, we're here to help. Contact us today for a free consultation and quote.
+              {t('cta.description', { ns: 'home' })}
             </p>
             <motion.div
               whileHover={{ scale: 1.05 }}
@@ -298,7 +299,7 @@ const HomePage = () => {
                 to="/contact"
                 className="rounded-md bg-coquelicot px-8 py-3 font-medium text-white shadow-lg transition-all duration-300 hover:bg-coquelicot-600 hover:shadow-xl"
               >
-                Get a Free Quote
+                {t('cta.button', { ns: 'home' })}
               </Link>
             </motion.div>
           </motion.div>
@@ -315,9 +316,9 @@ const HomePage = () => {
             transition={{ duration: 0.5 }}
             className="mb-12 text-center"
           >
-            <h2 className={`mb-4 text-3xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>What Our Clients Say</h2>
+            <h2 className={`mb-4 text-3xl font-bold ${isDark ? 'text-white' : 'text-silver-100'}`}>{t('testimonials.title', { ns: 'home' })}</h2>
             <p className={`mx-auto max-w-2xl ${isDark ? 'text-gray-300' : 'text-silver-200'}`}>
-              Don't just take our word for it. Here's what our satisfied clients have to say about our services.
+              {t('testimonials.description', { ns: 'home' })}
             </p>
           </motion.div>
 

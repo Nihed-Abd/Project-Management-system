@@ -1,0 +1,59 @@
+{
+  "hero": {
+    "title": "Contact Us",
+    "subtitle": "Get in Touch With Our Team",
+    "description": "Have questions or need assistance? We're here to help! Fill out the form below or use our contact information to reach us."
+  },
+  "form": {
+    "title": "Send Us a Message",
+    "name": "Your Name",
+    "email": "Your Email",
+    "subject": "Subject",
+    "message": "Your Message",
+    "submit": "Send Message",
+    "sending": "Sending...",
+    "required": "This field is required",
+    "validEmail": "Please enter a valid email address",
+    "success": "Your message has been sent successfully. We'll get back to you soon!",
+    "error": "There was an error sending your message. Please try again."
+  },
+  "contact": {
+    "title": "Contact Information",
+    "address": {
+      "label": "Our Address",
+      "value": "123 Electrical Ave, Suite 101, City, Country"
+    },
+    "phone": {
+      "label": "Phone Number",
+      "value": "+216 71 123 456"
+    },
+    "email": {
+      "label": "Email Address",
+      "value": "info@hecelectrical.com"
+    },
+    "hours": {
+      "label": "Working Hours",
+      "value": "Monday - Friday: 8:00 AM - 6:00 PM"
+    }
+  },
+  "map": {
+    "title": "Find Us On The Map"
+  },
+  "social": {
+    "title": "Follow Us",
+    "description": "Stay connected with us on social media for updates, tips, and more."
+  },
+  "cta": {
+    "title": "Ready to Start Your Project?",
+    "description": "Contact us today for a free consultation and estimate.",
+    "button": "Get Started"
+  },
+  "success": {
+    "title": "Thank You!",
+    "message": "Thank you for your trust, an agent will contact you as soon as possible."
+  },
+  "error": {
+    "title": "Error",
+    "message": "There was an error processing your request. Please try again later."
+  }
+}

@@ -1,0 +1,64 @@
+{
+  "hero": {
+    "title": "Solutions Électriques Expertes pour Votre Maison et Entreprise",
+    "description": "Nous fournissons des services électriques de haute qualité axés sur la sécurité, la fiabilité et la satisfaction client. Notre équipe d'électriciens certifiés est prête à relever tout projet électrique."
+  },
+  "navigation": {
+    "ourProjects": "Nos Projets",
+    "contactUs": "Contactez-Nous"
+  },
+  "services": {
+    "title": "Nos Services",
+    "description": "Nous offrons une gamme complète de services électriques pour les propriétés résidentielles et commerciales.",
+    "items": {
+      "electrical": {
+        "title": "Installation Électrique",
+        "description": "Installation complète de systèmes électriques pour des projets de construction neuve ou de rénovation."
+      },
+      "energy": {
+        "title": "Solutions Énergétiques",
+        "description": "Solutions économes en énergie, y compris l'éclairage LED et les systèmes de maison intelligente."
+      },
+      "maintenance": {
+        "title": "Maintenance et Réparation",
+        "description": "Services de maintenance régulière et de réparation d'urgence pour tous les systèmes électriques."
+      },
+      "security": {
+        "title": "Systèmes de Sécurité",
+        "description": "Installation de caméras de sécurité, d'alarmes et de systèmes de contrôle d'accès."
+      }
+    }
+  },
+  "stats": {
+    "title": "Notre Bilan",
+    "projectsCompleted": "Projets Complétés",
+    "yearsExperience": "Années d'Expérience",
+    "expertTechnicians": "Techniciens Experts",
+    "emergencySupport": "Support d'Urgence"
+  },
+  "testimonials": {
+    "title": "Ce Que Disent Nos Clients",
+    "items": {
+      "client1": {
+        "name": "Sarah Johnson",
+        "role": "Propriétaire",
+        "text": "L'équipe était professionnelle, efficace et a terminé les travaux avant l'échéance. Je suis très impressionnée par la qualité du service."
+      },
+      "client2": {
+        "name": "Michael Brown",
+        "role": "Propriétaire d'Entreprise",
+        "text": "Ils nous ont aidés à moderniser tout notre système électrique de bureau avec un minimum de perturbation de nos opérations. Hautement recommandé!"
+      },
+      "client3": {
+        "name": "David Wilson",
+        "role": "Gestionnaire Immobilier",
+        "text": "J'ai travaillé avec de nombreux entrepreneurs en électricité, mais cette entreprise se démarque par sa fiabilité et son excellent travail."
+      }
+    }
+  },
+  "cta": {
+    "title": "Prêt à Démarrer Votre Projet?",
+    "description": "Contactez-nous aujourd'hui pour une consultation et un devis gratuits.",
+    "button": "Prenez Contact"
+  }
+}

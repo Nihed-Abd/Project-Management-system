@@ -1,0 +1,59 @@
+{
+  "hero": {
+    "title": "Contactez-Nous",
+    "subtitle": "Entrez en Contact Avec Notre Équipe",
+    "description": "Vous avez des questions ou besoin d'assistance? Nous sommes là pour vous aider! Remplissez le formulaire ci-dessous ou utilisez nos coordonnées pour nous joindre."
+  },
+  "form": {
+    "title": "Envoyez-Nous un Message",
+    "name": "Votre Nom",
+    "email": "Votre Email",
+    "subject": "Sujet",
+    "message": "Votre Message",
+    "submit": "Envoyer Message",
+    "sending": "Envoi en cours...",
+    "required": "Ce champ est obligatoire",
+    "validEmail": "Veuillez entrer une adresse email valide",
+    "success": "Votre message a été envoyé avec succès. Nous vous répondrons bientôt!",
+    "error": "Une erreur s'est produite lors de l'envoi de votre message. Veuillez réessayer."
+  },
+  "contact": {
+    "title": "Informations de Contact",
+    "address": {
+      "label": "Notre Adresse",
+      "value": "123 Avenue Électrique, Suite 101, Ville, Pays"
+    },
+    "phone": {
+      "label": "Numéro de Téléphone",
+      "value": "+216 71 123 456"
+    },
+    "email": {
+      "label": "Adresse Email",
+      "value": "info@hecelectrical.com"
+    },
+    "hours": {
+      "label": "Heures d'Ouverture",
+      "value": "Lundi - Vendredi: 8h00 - 18h00"
+    }
+  },
+  "map": {
+    "title": "Trouvez-Nous Sur La Carte"
+  },
+  "social": {
+    "title": "Suivez-Nous",
+    "description": "Restez connecté avec nous sur les réseaux sociaux pour des mises à jour, des conseils et plus encore."
+  },
+  "cta": {
+    "title": "Prêt à Démarrer Votre Projet?",
+    "description": "Contactez-nous aujourd'hui pour une consultation et un devis gratuits.",
+    "button": "Commencer"
+  },
+  "success": {
+    "title": "Merci!",
+    "message": "Merci pour votre confiance, un agent vous contactera dans les plus brefs délais."
+  },
+  "error": {
+    "title": "Erreur",
+    "message": "Une erreur s'est produite lors du traitement de votre demande. Veuillez réessayer plus tard."
+  }
+}

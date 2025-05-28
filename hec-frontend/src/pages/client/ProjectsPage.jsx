@@ -4,10 +4,13 @@ import { FiGrid, FiList, FiChevronRight, FiFilter, FiX, FiCalendar, FiTag, FiSea
 import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 const ProjectsPage = () => {
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { t } = useTranslation(['common', 'projects']);
   
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
@@ -104,11 +107,11 @@ const ProjectsPage = () => {
         setProjects(response.data.projects);
         setFilteredProjects(response.data.projects);
       } else {
-        setError('Unexpected API response format');
+        setError(t('projects.errors.unexpectedResponse'));
       }
     } catch (err) {
       console.error('Error fetching projects:', err);
-      setError('Failed to load projects. Please try again later.');
+      setError(t('projects.errors.loadFailed'));
     } finally {
       setLoading(false);
     }
@@ -153,7 +156,9 @@ const ProjectsPage = () => {
   const getMonthName = (monthNumber) => {
     const date = new Date();
     date.setMonth(monthNumber - 1);
-    return date.toLocaleString('en-US', { month: 'long' });
+    // Use the current i18next language for localization
+    const locale = i18next.language === 'fr' ? 'fr-FR' : 'en-US';
+    return date.toLocaleString(locale, { month: 'long' });
   };
   
   // Reset all filters
@@ -218,7 +223,7 @@ const ProjectsPage = () => {
                   />
                 ) : (
                   <div className={`w-full h-full flex items-center justify-center ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                    <span className="text-gray-400">No image available</span>
+                    <span className="text-gray-400">{t('projects.noImage')}</span>
                   </div>
                 )}
                 <div className="absolute top-2 right-2">
@@ -237,7 +242,7 @@ const ProjectsPage = () => {
               <div className="p-4">
                 <h3 className={`text-lg font-semibold mb-2 truncate ${isDark ? 'text-white' : 'text-gray-800'}`}>{project.title}</h3>
                 <p className={`text-sm line-clamp-2 mb-3 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-                  {project.description || 'No description available'}
+                  {project.description || t('projects.noDescription')}
                 </p>
                 <div className="flex justify-between items-center">
                   <span className={`text-xs ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
@@ -246,7 +251,7 @@ const ProjectsPage = () => {
                   <span 
                     className="text-coquelicot hover:text-coquelicot-400 text-sm font-medium flex items-center"
                   >
-                    View Details 
+                    {t('viewDetails', { ns: 'projects' })} 
                     <FiChevronRight className="ml-1 h-4 w-4" />
                   </span>
                 </div>
@@ -286,7 +291,7 @@ const ProjectsPage = () => {
                   />
                 ) : (
                   <div className={`w-full h-full flex items-center justify-center ${isDark ? 'bg-gray-700' : 'bg-gray-100'}`}>
-                    <span className="text-gray-400 text-xs">No image</span>
+                    <span className="text-gray-400 text-xs">{t('projects.noImage')}</span>
                   </div>
                 )}
               </div>
@@ -318,7 +323,7 @@ const ProjectsPage = () => {
                   <span 
                     className="text-coquelicot hover:text-coquelicot-400 text-sm font-medium flex items-center"
                   >
-                    View Details 
+                    {t('viewDetails', { ns: 'projects' })} 
                     <FiChevronRight className="ml-1 h-4 w-4" />
                   </span>
                 </div>
@@ -349,7 +354,7 @@ const ProjectsPage = () => {
             whileTap={{ scale: 0.95 }}
             className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
           >
-            Try Again
+            {t('common.tryAgain')}
           </motion.button>
         </div>
       );
@@ -358,7 +363,7 @@ const ProjectsPage = () => {
     if (filteredProjects.length === 0) {
       return (
         <div className="text-center py-20">
-          <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>No projects found.</p>
+          <p className={`${isDark ? 'text-gray-400' : 'text-gray-600'}`}>{t('noProjectsFound', { ns: 'projects' })}</p>
         </div>
       );
     }
@@ -385,9 +390,9 @@ const ProjectsPage = () => {
             >
               <FiGrid className="h-8 w-8 text-coquelicot" />
             </motion.div>
-            <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Project Gallery</h1>
+            <h1 className={`text-4xl md:text-5xl font-bold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('title', { ns: 'projects' })}</h1>
             <p className={`text-lg ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-              Explore our showcase of electrical excellence - from residential installations to industrial solutions.
+              {t('description', { ns: 'projects' })}
             </p>
           </motion.div>
         </div>
@@ -430,7 +435,7 @@ const ProjectsPage = () => {
                   className={`flex items-center px-3 py-2 rounded-md transition-all duration-300 ${isDark ? 'bg-gray-800 hover:bg-gray-700 text-gray-200 border border-gray-700' : 'bg-gray-100 hover:bg-gray-200 text-gray-700'}`}
                 >
                   <FiFilter className="mr-2" />
-                  Filters
+                  {t('filters.title', { ns: 'projects' })}
                 </motion.button>
                 {(categoryFilter || yearFilter) && (
                   <motion.button 
@@ -441,13 +446,13 @@ const ProjectsPage = () => {
                     title="Reset filters"
                   >
                     <FiX className="mr-2" />
-                    Clear
+                    {t('filters.clear', { ns: 'projects' })}
                   </motion.button>
                 )}
               </div>
               <div className={`text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
-                Showing {filteredProjects.length} project{filteredProjects.length !== 1 ? 's' : ''}
-                {(categoryFilter || yearFilter) && ' (filtered)'}
+                {t('filters.showing', { count: filteredProjects.length, ns: 'projects' })}
+                {(categoryFilter || yearFilter) && t('filters.filtered', { ns: 'projects' })}
               </div>
             </div>
             
@@ -463,14 +468,14 @@ const ProjectsPage = () => {
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                   {/* Category filter */}
                   <div className="relative">
-                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Category</label>
+                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{t('filters.category.label', { ns: 'projects' })}</label>
                     <div className="relative">
                       <select
                         className={`block w-full pl-3 pr-10 py-2 text-base rounded-md focus:outline-none focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                         value={categoryFilter}
                         onChange={handleCategoryFilterChange}
                       >
-                        <option value="">All Categories</option>
+                        <option value="">{t('filters.category.all', { ns: 'projects' })}</option>
                         {categories.map(category => (
                           <option key={category._id} value={category._id}>{category.name}</option>
                         ))}
@@ -483,14 +488,14 @@ const ProjectsPage = () => {
                   
                   {/* Year filter */}
                   <div className="relative">
-                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Year</label>
+                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{t('filters.year.label', { ns: 'projects' })}</label>
                     <div className="relative">
                       <select
                         className={`block w-full pl-3 pr-10 py-2 text-base rounded-md focus:outline-none focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'}`}
                         value={yearFilter}
                         onChange={handleYearFilterChange}
                       >
-                        <option value="">All Years</option>
+                        <option value="">{t('filters.year.all', { ns: 'projects' })}</option>
                         {availableYears.map(year => (
                           <option key={year} value={year}>{year}</option>
                         ))}
@@ -503,7 +508,7 @@ const ProjectsPage = () => {
                   
                   {/* Month filter - only enabled if year is selected */}
                   <div className="relative">
-                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>Month</label>
+                    <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>{t('filters.month.label', { ns: 'projects' })}</label>
                     <div className="relative">
                       <select
                         className={`block w-full pl-3 pr-10 py-2 text-base rounded-md focus:outline-none focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white disabled:bg-gray-800 disabled:text-gray-500' : 'bg-white border-gray-300 text-gray-700 disabled:bg-gray-100 disabled:text-gray-400'}`}
@@ -511,7 +516,7 @@ const ProjectsPage = () => {
                         onChange={handleMonthFilterChange}
                         disabled={!yearFilter}
                       >
-                        <option value="">All Months</option>
+                        <option value="">{t('filters.month.all', { ns: 'projects' })}</option>
                         {Array.from({ length: 12 }, (_, i) => i + 1).map(month => (
                           <option key={month} value={month}>{getMonthName(month)}</option>
                         ))}
@@ -567,7 +572,7 @@ const ProjectsPage = () => {
               transition={{ delay: 0.2, duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Need a similar project?
+              {t('cta.title', { ns: 'projects' })}
             </motion.h2>
             <motion.p 
               className="mb-8 max-w-2xl mx-auto"
@@ -576,7 +581,7 @@ const ProjectsPage = () => {
               transition={{ delay: 0.4, duration: 0.5 }}
               viewport={{ once: true }}
             >
-              Our team of experienced professionals is ready to bring your electrical project to life with quality and expertise.
+              {t('cta.description', { ns: 'projects' })}
             </motion.p>
             <motion.div
               initial={{ opacity: 0, y: 20 }}
@@ -590,7 +595,7 @@ const ProjectsPage = () => {
                 className="inline-block"
               >
                 <Link to="/request-project" className={`px-8 py-3 bg-white text-coquelicot font-medium rounded-md shadow transition-all duration-300 inline-block ${isDark ? 'hover:bg-gray-100' : 'hover:bg-gray-50'}`}>
-                  Request a Project
+                  {t('cta.button', { ns: 'projects' })}
                 </Link>
               </motion.div>
             </motion.div>
