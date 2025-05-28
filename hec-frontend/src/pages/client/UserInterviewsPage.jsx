@@ -14,98 +14,16 @@ import { useTheme } from '../../context/ThemeContext';
 import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 import { format as formatDate, isToday, isTomorrow, addDays, isAfter, isBefore, parseISO } from 'date-fns';
-import { createGlobalStyle } from 'styled-components';
-
-// Custom styles for calendar dark mode
-const CalendarDarkModeStyles = createGlobalStyle`
-  .rbc-calendar-dark {
-    /* Calendar background and text */
-    background-color: #1f2937;
-    color: #e5e7eb;
-  }
-  
-  .rbc-calendar-dark .rbc-toolbar {
-    background-color: #111827;
-    color: #e5e7eb;
-    border-radius: 0.375rem;
-    padding: 8px;
-    margin-bottom: 10px;
-  }
-  
-  .rbc-calendar-dark .rbc-toolbar button {
-    color: #e5e7eb;
-    background-color: #374151;
-    border-color: #4b5563;
-  }
-  
-  .rbc-calendar-dark .rbc-toolbar button:hover {
-    background-color: #4b5563;
-  }
-  
-  .rbc-calendar-dark .rbc-toolbar button.rbc-active {
-    background-color: #f97316;
-    color: white;
-    border-color: #f97316;
-  }
-  
-  /* Month view cells */
-  .rbc-calendar-dark .rbc-month-view {
-    border-color: #4b5563;
-  }
-  
-  .rbc-calendar-dark .rbc-month-row {
-    border-color: #4b5563;
-  }
-  
-  .rbc-calendar-dark .rbc-day-bg {
-    border-color: #4b5563;
-  }
-  
-  .rbc-calendar-dark .rbc-date-cell {
-    color: #e5e7eb;
-  }
-  
-  .rbc-calendar-dark .rbc-off-range {
-    color: #6b7280;
-  }
-  
-  .rbc-calendar-dark .rbc-today {
-    background-color: rgba(249, 115, 22, 0.15);
-  }
-  
-  /* Week and day view */
-  .rbc-calendar-dark .rbc-time-view {
-    border-color: #4b5563;
-  }
-  
-  .rbc-calendar-dark .rbc-time-header {
-    border-color: #4b5563;
-  }
-  
-  .rbc-calendar-dark .rbc-time-content {
-    border-color: #4b5563;
-  }
-  
-  .rbc-calendar-dark .rbc-time-slot {
-    color: #9ca3af;
-  }
-  
-  .rbc-calendar-dark .rbc-time-gutter {
-    background-color: #1f2937;
-    color: #e5e7eb;
-  }
-  
-  /* Event styling */
-  .rbc-calendar-dark .rbc-event {
-    border-radius: 4px;
-  }
-`;
+// No need for styled-components, we'll use regular CSS classes
+import './UserInterviewsPage.css';
 
 const UserInterviewsPage = () => {
   const { currentUser } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
   const { t } = useTranslation(['common', 'interviews']);
+  
+  // We'll apply dark mode classes directly instead of using GlobalStyles variable
   const [interviews, setInterviews] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -125,9 +43,9 @@ const UserInterviewsPage = () => {
   
   // Status options
   const statusOptions = [
-    { value: 'pending', label: t('interviews.status.pending'), color: '#F59E0B', icon: FiAlertCircle },
-    { value: 'accepted', label: t('interviews.status.accepted'), color: '#10B981', icon: FiCheckCircle },
-    { value: 'declined', label: t('interviews.status.declined'), color: '#EF4444', icon: FiXCircle }
+    { value: 'pending', label: t('status.pending', { ns: 'interviews' }), color: '#F59E0B', icon: FiAlertCircle },
+    { value: 'accepted', label: t('status.accepted', { ns: 'interviews' }), color: '#10B981', icon: FiCheckCircle },
+    { value: 'declined', label: t('status.declined', { ns: 'interviews' }), color: '#EF4444', icon: FiXCircle }
   ];
   
   // Set up calendar localizer
@@ -424,9 +342,8 @@ const UserInterviewsPage = () => {
     return (
       <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
         <div className="container mx-auto px-4 py-8">
-          {isDark && <CalendarDarkModeStyles />}
           <div className="text-center py-20">
-            <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{t('interviews.pleaseLogIn')}</p>
+            <p className={`mb-4 ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>{t('pleaseLogIn', { ns: 'interviews' })}</p>
             <motion.button
               onClick={() => window.location.href = '/login'}
               className="px-4 py-2 bg-coquelicot text-white rounded-md hover:bg-coquelicot-600 transition-all duration-300 shadow-md"
@@ -443,7 +360,6 @@ const UserInterviewsPage = () => {
   
   return (
     <div className={`min-h-screen pt-24 pb-16 ${isDark ? 'bg-gray-900' : 'bg-white'}`}>
-      {isDark && <CalendarDarkModeStyles />}
       <div className="container mx-auto px-4">
         <motion.div
           initial="hidden"
@@ -452,7 +368,7 @@ const UserInterviewsPage = () => {
           className="max-w-7xl mx-auto"
         >
           <div className="flex justify-between items-center mb-8">
-            <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('interviews.myInterviews')}</h1>
+            <h1 className={`text-3xl font-bold ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('myInterviews', { ns: 'interviews' })}</h1>
             <motion.button
               onClick={() => {
                 setShowForm(true);
@@ -468,7 +384,8 @@ const UserInterviewsPage = () => {
               whileHover={{ scale: 1.05 }}
               whileTap={{ scale: 0.95 }}
             >
-              <FiPlus className="mr-2" /> {t('interviews.scheduleInterview')}
+              <FiPlus className="mr-2" /> 
+              <span className="ml-2">{t('scheduleInterview', { ns: 'interviews' })}</span>
             </motion.button>
           </div>
           
@@ -676,7 +593,7 @@ const UserInterviewsPage = () => {
                   
                   <div>
                     <label htmlFor="time" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Time*
+                      {t('form.time', { ns: 'interviews' })}*
                     </label>
                     <input
                       type="time"
@@ -692,7 +609,7 @@ const UserInterviewsPage = () => {
                 
                 <div>
                   <label htmlFor="note" className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                    Notes (Optional)
+                    {t('form.notes', { ns: 'interviews' })} ({t('optional', { ns: 'common' })})
                   </label>
                   <textarea
                     id="note"
@@ -701,14 +618,14 @@ const UserInterviewsPage = () => {
                     onChange={handleInputChange}
                     rows="3"
                     className={`block w-full px-3 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot focus:border-coquelicot ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-300 text-gray-700'}`}
-                    placeholder="Any additional details or topics to discuss"
+                    placeholder={t('form.notesPlaceholder', { ns: 'interviews' })}
                   ></textarea>
                 </div>
                 
                 {editMode && selectedInterview && (
                   <div>
                     <label className={`block text-sm font-medium mb-1 ${isDark ? 'text-gray-300' : 'text-gray-700'}`}>
-                      Status
+                      {t('status.label', { ns: 'interviews' })}
                     </label>
                     <div className={`px-3 py-2 rounded-md ${isDark ? 'bg-gray-700 text-gray-300' : 'bg-gray-50 text-gray-700'}`}>
                       <div className="flex items-center">
@@ -737,7 +654,7 @@ const UserInterviewsPage = () => {
                     whileHover={{ scale: 1.05 }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </motion.button>
                   
                   <motion.button
@@ -746,7 +663,7 @@ const UserInterviewsPage = () => {
                     whileHover={{ scale: 1.05, backgroundColor: '#FF5722' }}
                     whileTap={{ scale: 0.95 }}
                   >
-                    {editMode ? 'Update Interview' : 'Schedule Interview'}
+                    {editMode ? t('interviews.actions.updateInterview') : t('interviews.actions.scheduleInterview')}
                   </motion.button>
                 </div>
               </div>

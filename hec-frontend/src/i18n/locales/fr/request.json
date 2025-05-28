@@ -1,0 +1,35 @@
+{
+  "title": "Demander un Projet",
+  "description": "Remplissez le formulaire ci-dessous pour demander un projet électrique personnalisé. Notre équipe examinera votre demande et vous contactera rapidement.",
+  "form": {
+    "title": "Titre du Projet",
+    "titlePlaceholder": "Entrez le titre du projet",
+    "description": "Description du Projet",
+    "descriptionPlaceholder": "Décrivez les besoins de votre projet, les exigences et tout détail spécifique qui nous aiderait à mieux comprendre votre demande",
+    "category": "Catégorie du Projet",
+    "categoryPlaceholder": "Sélectionnez une catégorie",
+    "images": "Images du Projet (Optionnel)",
+    "imagesHelp": "Vous pouvez télécharger jusqu'à 5 images pour illustrer les exigences de votre projet",
+    "selectImages": "Sélectionner des Images",
+    "location": "Emplacement du Projet (Optionnel)",
+    "locationCoordinates": "Emplacement sélectionné : {{lat}}, {{lng}}",
+    "locationHelp": "Cliquez sur la carte pour définir l'emplacement du projet ou faites glisser le marqueur",
+    "submit": "Soumettre la Demande de Projet",
+    "submitting": "Soumission en cours..."
+  },
+  "success": {
+    "title": "Demande Soumise",
+    "message": "Votre demande de projet a été soumise avec succès. Nous examinerons votre demande et vous contacterons bientôt.",
+    "button": "Retour aux Projets"
+  },
+  "errors": {
+    "title": "Erreur",
+    "general": "Une erreur est survenue. Veuillez réessayer.",
+    "categoryLoad": "Échec du chargement des catégories. Veuillez réessayer plus tard.",
+    "imageUpload": "Échec du téléchargement des images. Veuillez réessayer.",
+    "tooManyImages": "Vous pouvez télécharger un maximum de 5 images",
+    "titleRequired": "Le titre du projet est requis",
+    "descriptionRequired": "La description du projet est requise",
+    "categoryRequired": "La catégorie du projet est requise"
+  }
+}

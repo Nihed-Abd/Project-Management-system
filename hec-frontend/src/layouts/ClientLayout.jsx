@@ -146,7 +146,7 @@ const ClientLayout = () => {
                         animate={{ opacity: 1, y: 0 }}
                         exit={{ opacity: 0, y: 10 }}
                         transition={{ duration: 0.2 }}
-                        className="absolute right-0 mt-2 w-48 rounded-md bg-white py-2 shadow-lg ring-1 ring-black ring-opacity-5"
+                        className={`absolute right-0 mt-2 w-48 rounded-md py-2 shadow-lg ring-1 ring-opacity-5 ${isDark ? 'bg-gray-800 text-white ring-gray-700' : 'bg-white text-gray-700 ring-black'}`}
                       >
                         <Link to="/profile" className={`flex items-center px-4 py-2 text-sm ${isDark ? 'text-gray-300 hover:bg-gray-700' : 'text-gray-700 hover:bg-gray-100'}`}>
                           <FiUser className="mr-3 h-4 w-4" /> {t('navigation.profile')}

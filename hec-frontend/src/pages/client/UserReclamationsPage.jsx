@@ -117,8 +117,8 @@ const UserReclamationsPage = () => {
     
     if (!formData.object || !formData.message) {
       Swal.fire({
-        title: 'Error!',
-        text: 'Please fill in all fields',
+        title: t('common.error'),
+        text: t('reclamations.errors.fillAllFields'),
         icon: 'error',
         confirmButtonColor: '#fe3201'
       });
@@ -408,7 +408,7 @@ const UserReclamationsPage = () => {
                     whileHover={{ scale: 1.03 }}
                     whileTap={{ scale: 0.97 }}
                   >
-                    Cancel
+                    {t('common.cancel')}
                   </motion.button>
                   <motion.button
                     type="submit"
@@ -430,9 +430,9 @@ const UserReclamationsPage = () => {
                           <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4"></circle>
                           <path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
                         </motion.svg>
-                        Submitting...
+                        {t('common.submitting')}
                       </span>
-                    ) : 'Submit Reclamation'}
+                    ) : t('reclamations.actions.submitReclamation')}
                   </motion.button>
                 </div>
               </form>
@@ -453,7 +453,7 @@ const UserReclamationsPage = () => {
                 <FiSearch className={`absolute left-3 top-1/2 transform -translate-y-1/2 ${isDark ? 'text-gray-500' : 'text-gray-400'}`} />
                 <input
                   type="text"
-                  placeholder="Search reclamations..."
+                  placeholder={t('reclamations.searchPlaceholder')}
                   value={searchQuery}
                   onChange={handleSearchChange}
                   className={`w-full pl-10 pr-4 py-2 rounded-md focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400' : 'bg-white border-gray-200 text-gray-700'}`}

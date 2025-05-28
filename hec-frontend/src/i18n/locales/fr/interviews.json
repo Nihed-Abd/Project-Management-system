@@ -1,56 +1,65 @@
 {
-  "interviews": {
-    "title": "Entretiens",
-    "myInterviews": "Mes Entretiens",
+  "title": "Entretiens",
+  "myInterviews": "Mes Entretiens",
+  "scheduleInterview": "Planifier un Entretien",
+  "updateInterview": "Mettre à jour l'Entretien",
+  "editInterview": "Modifier l'Entretien",
+  "deleteInterview": "Supprimer l'Entretien",
+  "upcomingInterviews": "Entretiens à Venir",
+  "fields": {
+    "interviewGoal": "Objectif/But de l'Entretien",
+    "date": "Date",
+    "time": "Heure",
+    "notes": "Notes",
+    "status": "Statut"
+  },
+  "status": {
+    "label": "Statut",
+    "pending": "En attente",
+    "accepted": "Accepté",
+    "declined": "Refusé"
+  },
+  "actions": {
+    "schedule": "Planifier",
+    "edit": "Modifier",
+    "delete": "Supprimer",
+    "view": "Voir",
+    "accept": "Accepter",
+    "decline": "Refuser",
     "scheduleInterview": "Planifier un Entretien",
-    "editInterview": "Modifier l'Entretien",
-    "deleteInterview": "Supprimer l'Entretien",
-    "upcomingInterviews": "Entretiens à Venir",
-    "fields": {
-      "interviewGoal": "Objectif/But de l'Entretien",
-      "date": "Date",
-      "time": "Heure",
-      "notes": "Notes",
-      "status": "Statut"
-    },
-    "status": {
-      "pending": "En attente",
-      "accepted": "Accepté",
-      "declined": "Refusé"
-    },
-    "actions": {
-      "schedule": "Planifier",
-      "edit": "Modifier",
-      "delete": "Supprimer",
-      "view": "Voir",
-      "accept": "Accepter",
-      "decline": "Refuser"
-    },
-    "messages": {
-      "interviewScheduled": "Entretien planifié avec succès",
-      "interviewUpdated": "Entretien mis à jour avec succès",
-      "interviewDeleted": "Entretien supprimé avec succès",
-      "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet entretien ?",
-      "noInterviews": "Aucun entretien planifié"
-    },
-    "errors": {
-      "unexpectedResponse": "Format de réponse API inattendu",
-      "failedToLoad": "Échec du chargement de vos entretiens. Veuillez réessayer plus tard.",
-      "failedToDelete": "Échec de la suppression de l'entretien. Veuillez réessayer."
-    },
-    "pleaseLogIn": "Veuillez vous connecter pour voir vos entretiens.",
-    "calendar": {
-      "today": "Aujourd'hui",
-      "month": "Mois",
-      "week": "Semaine",
-      "day": "Jour",
-      "statusLegend": "Légende des Statuts"
-    },
-    "placeholders": {
-      "interviewGoal": "ex., Discussion de Projet, Consultation Initiale",
-      "notes": "Détails supplémentaires ou sujets à discuter"
-    },
-    "dragToRotate": "Faites glisser pour pivoter, défilez pour zoomer",
-    "loadingMap": "Chargement de la carte..."
+    "updateInterview": "Mettre à jour l'Entretien"
+  },
+  "messages": {
+    "interviewScheduled": "Entretien planifié avec succès",
+    "interviewUpdated": "Entretien mis à jour avec succès",
+    "interviewDeleted": "Entretien supprimé avec succès",
+    "confirmDelete": "Êtes-vous sûr de vouloir supprimer cet entretien ?",
+    "noInterviews": "Aucun entretien planifié"
+  },
+  "errors": {
+    "unexpectedResponse": "Format de réponse API inattendu",
+    "failedToLoad": "Échec du chargement de vos entretiens. Veuillez réessayer plus tard.",
+    "failedToDelete": "Échec de la suppression de l'entretien. Veuillez réessayer."
+  },
+  "pleaseLogIn": "Veuillez vous connecter pour voir vos entretiens.",
+  "calendar": {
+    "today": "Aujourd'hui",
+    "month": "Mois",
+    "week": "Semaine",
+    "day": "Jour",
+    "statusLegend": "Légende des Statuts"
+  },
+  "placeholders": {
+    "interviewGoal": "ex., Discussion de Projet, Consultation Initiale",
+    "notes": "Détails supplémentaires ou sujets à discuter"
+  },
+  "dragToRotate": "Faites glisser pour pivoter, défilez pour zoomer",
+  "loadingMap": "Chargement de la carte...",
+  "form": {
+    "interviewGoal": "Objectif/But de l'Entretien", 
+    "date": "Date",
+    "time": "Heure",
+    "notes": "Notes",
+    "notesPlaceholder": "Détails supplémentaires ou sujets à discuter"
   }
 }

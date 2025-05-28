@@ -275,16 +275,16 @@ const ProjectDetailPage = () => {
             transition={{ duration: 0.5 }}
             className="md:col-span-2"
           >
-            <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('projects.projectDescription')}</h2>
+            <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('projectDetails', { ns: 'projects' })}</h2>
             <div className={`prose prose-lg max-w-none ${isDark ? 'text-gray-300' : 'text-gray-600'}`}>
-              <p>{project.description || t('projects.noDescriptionAvailable')}</p>
+              <p>{project.description || t('noDescriptionAvailable', { ns: 'projects' })}</p>
             </div>
             
             {project.location && project.location.coordinates && (
               <div className="mt-10">
                 <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>
                   <div className="flex items-center">
-                    <FiMapPin className="mr-2" /> {t('projects.projectLocation')}
+                    <FiMapPin className="mr-2" /> {t('mapLocation', { ns: 'projects' })}
                   </div>
                 </h2>
                 <motion.div 
@@ -306,16 +306,16 @@ const ProjectDetailPage = () => {
                         animate={{ rotate: 360 }}
                         transition={{ duration: 1, repeat: Infinity, ease: "linear" }}
                       />
-                      <p className="text-white">Loading 3D map...</p>
+                      <p className="text-white">{t('loadingMap', { ns: 'common' })}</p>
                     </div>
                   )}
                 </motion.div>
                 <div className="mt-2 flex justify-between text-xs">
                   <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>
-                    <span className="font-medium">Coordinates:</span> {project.location.coordinates[1]}, {project.location.coordinates[0]}
+                    <span className="font-medium">{t('coordinates', { ns: 'projects' })}:</span> {project.location.coordinates[1]}, {project.location.coordinates[0]}
                   </p>
                   <p className={isDark ? 'text-gray-400' : 'text-gray-500'}>
-                    <span className="italic">Drag to rotate, scroll to zoom</span>
+                    <span className="italic">{t('mapControls', { ns: 'common' })}</span>
                   </p>
                 </div>
               </div>
@@ -328,19 +328,19 @@ const ProjectDetailPage = () => {
             transition={{ duration: 0.5, delay: 0.2 }}
           >
             <div className={`p-6 rounded-xl ${isDark ? 'bg-gray-800 shadow-gray-900/50' : 'bg-gray-50'}`}>
-              <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>Project Info</h2>
+              <h2 className={`text-xl font-semibold mb-4 ${isDark ? 'text-white' : 'text-gray-800'}`}>{t('projectInfo', { ns: 'projects' })}</h2>
               
               {project.categoryId && (
                 <div className="mb-4">
-                  <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Category</h3>
-                  <p className={`mt-1 ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>{project.categoryId.name || 'Unknown'}</p>
+                  <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{t('fields.category', { ns: 'projects' })}</h3>
+                  <p className={`mt-1 ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>{project.categoryId.name || t('unknown', { ns: 'common' })}</p>
                 </div>
               )}
               
               {project.userId && (
                 <div className="mb-4">
-                  <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>Client</h3>
-                  <p className={`mt-1 ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>{project.userId.name || 'Unknown client'}</p>
+                  <h3 className={`text-sm font-medium ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>{t('fields.client', { ns: 'projects' })}</h3>
+                  <p className={`mt-1 ${isDark ? 'text-gray-300' : 'text-gray-800'}`}>{project.userId.name || t('unknownClient', { ns: 'projects' })}</p>
                 </div>
               )}
               
@@ -350,7 +350,7 @@ const ProjectDetailPage = () => {
                     to="/request-project" 
                     className="block w-full text-center bg-coquelicot hover:bg-coquelicot-600 text-white py-3 px-4 rounded-lg transition-all duration-300 shadow-md"
                   >
-                    Request Similar Project
+                    {t('requestSimilar', { ns: 'projects' })}
                   </Link>
                 </motion.div>
               </div>

@@ -5,12 +5,14 @@ import axios from 'axios';
 import { Link } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { useTheme } from '../../context/ThemeContext';
+import { useTranslation } from 'react-i18next';
 import Swal from 'sweetalert2';
 
 const UserProjectsPage = () => {
   const { currentUser } = useAuth();
   const { theme } = useTheme();
   const isDark = theme === 'dark';
+  const { t } = useTranslation(['common', 'projects']);
   const [projects, setProjects] = useState([]);
   const [filteredProjects, setFilteredProjects] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -22,11 +24,11 @@ const UserProjectsPage = () => {
   const [viewMode, setViewMode] = useState('list'); // 'grid' or 'list'
   
   const statusOptions = [
-    { value: '', label: 'All Statuses' },
-    { value: 'Demandé', label: 'Demandé' },
-    { value: 'En cours', label: 'En cours' },
-    { value: 'Terminé', label: 'Terminé' },
-    { value: 'Annulé', label: 'Annulé' },
+    { value: '', label: t('filters.status.all', { ns: 'projects' }) },
+    { value: 'Demandé', label: t('status.requested', { ns: 'projects' }) },
+    { value: 'En cours', label: t('status.inProgress', { ns: 'projects' }) },
+    { value: 'Terminé', label: t('status.completed', { ns: 'projects' }) },
+    { value: 'Annulé', label: t('status.cancelled', { ns: 'projects' }) },
   ];
 
   // Fetch user projects on component mount
@@ -535,7 +537,7 @@ const UserProjectsPage = () => {
                     onChange={handleYearFilterChange}
                     className={`w-full pl-10 pr-4 py-2 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-700'}`}
                   >
-                    <option value="">All Years</option>
+                    <option value="">{t('filters.year.all', { ns: 'projects' })}</option>
                     {availableYears.map(year => (
                       <option key={year} value={year}>{year}</option>
                     ))}
@@ -552,19 +554,19 @@ const UserProjectsPage = () => {
                     disabled={!yearFilter}
                     className={`w-full pl-10 pr-4 py-2 rounded-md appearance-none focus:outline-none focus:ring-2 focus:ring-coquelicot-500 ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-200 text-gray-700'} ${!yearFilter ? 'opacity-50 cursor-not-allowed' : ''}`}
                   >
-                    <option value="">All Months</option>
-                    <option value="1">January</option>
-                    <option value="2">February</option>
-                    <option value="3">March</option>
-                    <option value="4">April</option>
-                    <option value="5">May</option>
-                    <option value="6">June</option>
-                    <option value="7">July</option>
-                    <option value="8">August</option>
-                    <option value="9">September</option>
-                    <option value="10">October</option>
-                    <option value="11">November</option>
-                    <option value="12">December</option>
+                    <option value="">{t('filters.month.all', { ns: 'projects' })}</option>
+                    <option value="1">{t('months.january', { ns: 'common' })}</option>
+                    <option value="2">{t('months.february', { ns: 'common' })}</option>
+                    <option value="3">{t('months.march', { ns: 'common' })}</option>
+                    <option value="4">{t('months.april', { ns: 'common' })}</option>
+                    <option value="5">{t('months.may', { ns: 'common' })}</option>
+                    <option value="6">{t('months.june', { ns: 'common' })}</option>
+                    <option value="7">{t('months.july', { ns: 'common' })}</option>
+                    <option value="8">{t('months.august', { ns: 'common' })}</option>
+                    <option value="9">{t('months.september', { ns: 'common' })}</option>
+                    <option value="10">{t('months.october', { ns: 'common' })}</option>
+                    <option value="11">{t('months.november', { ns: 'common' })}</option>
+                    <option value="12">{t('months.december', { ns: 'common' })}</option>
                   </select>
                 </div>
               </div>
@@ -617,7 +619,7 @@ const UserProjectsPage = () => {
               to="/request-project"
               className="inline-flex items-center px-6 py-3 bg-coquelicot text-white rounded-md shadow-md hover:bg-coquelicot-600 transition-all duration-300"
             >
-              Request a New Project
+              {t('requestProject', { ns: 'projects' })}
             </Link>
           </motion.div>
         </motion.div>

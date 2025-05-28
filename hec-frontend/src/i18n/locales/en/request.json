@@ -1,0 +1,35 @@
+{
+  "title": "Request a Project",
+  "description": "Fill out the form below to request a custom electrical project. Our team will review your request and get back to you shortly.",
+  "form": {
+    "title": "Project Title",
+    "titlePlaceholder": "Enter project title",
+    "description": "Project Description",
+    "descriptionPlaceholder": "Describe your project needs, requirements, and any specific details that would help us understand your request better",
+    "category": "Project Category",
+    "categoryPlaceholder": "Select a category",
+    "images": "Project Images (Optional)",
+    "imagesHelp": "You can upload up to 5 images to help illustrate your project requirements",
+    "selectImages": "Select Images",
+    "location": "Project Location (Optional)",
+    "locationCoordinates": "Location selected at: {{lat}}, {{lng}}",
+    "locationHelp": "Click on the map to set project location or drag the marker",
+    "submit": "Submit Project Request",
+    "submitting": "Submitting..."
+  },
+  "success": {
+    "title": "Request Submitted",
+    "message": "Your project request has been successfully submitted. We will review your request and contact you soon.",
+    "button": "Back to Projects"
+  },
+  "errors": {
+    "title": "Error",
+    "general": "An error occurred. Please try again.",
+    "categoryLoad": "Failed to load categories. Please try again later.",
+    "imageUpload": "Failed to upload images. Please try again.",
+    "tooManyImages": "You can upload a maximum of 5 images",
+    "titleRequired": "Project title is required",
+    "descriptionRequired": "Project description is required",
+    "categoryRequired": "Project category is required"
+  }
+}

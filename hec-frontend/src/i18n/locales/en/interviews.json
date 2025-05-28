@@ -1,56 +1,65 @@
 {
-  "interviews": {
-    "title": "Interviews",
-    "myInterviews": "My Interviews",
+  "title": "Interviews",
+  "myInterviews": "My Interviews",
+  "scheduleInterview": "Schedule Interview",
+  "updateInterview": "Update Interview",
+  "editInterview": "Edit Interview",
+  "deleteInterview": "Delete Interview",
+  "upcomingInterviews": "Upcoming Interviews",
+  "fields": {
+    "interviewGoal": "Interview Purpose/Goal",
+    "date": "Date",
+    "time": "Time",
+    "notes": "Notes",
+    "status": "Status"
+  },
+  "status": {
+    "label": "Status",
+    "pending": "Pending",
+    "accepted": "Accepted",
+    "declined": "Declined"
+  },
+  "actions": {
+    "schedule": "Schedule",
+    "edit": "Edit",
+    "delete": "Delete",
+    "view": "View",
+    "accept": "Accept",
+    "decline": "Decline",
     "scheduleInterview": "Schedule Interview",
-    "editInterview": "Edit Interview",
-    "deleteInterview": "Delete Interview",
-    "upcomingInterviews": "Upcoming Interviews",
-    "fields": {
-      "interviewGoal": "Interview Purpose/Goal",
-      "date": "Date",
-      "time": "Time",
-      "notes": "Notes",
-      "status": "Status"
-    },
-    "status": {
-      "pending": "Pending",
-      "accepted": "Accepted",
-      "declined": "Declined"
-    },
-    "actions": {
-      "schedule": "Schedule",
-      "edit": "Edit",
-      "delete": "Delete",
-      "view": "View",
-      "accept": "Accept",
-      "decline": "Decline"
-    },
-    "messages": {
-      "interviewScheduled": "Interview scheduled successfully",
-      "interviewUpdated": "Interview updated successfully",
-      "interviewDeleted": "Interview deleted successfully",
-      "confirmDelete": "Are you sure you want to delete this interview?",
-      "noInterviews": "No interviews scheduled"
-    },
-    "errors": {
-      "unexpectedResponse": "Unexpected API response format",
-      "failedToLoad": "Failed to load your interviews. Please try again later.",
-      "failedToDelete": "Failed to delete interview. Please try again."
-    },
-    "pleaseLogIn": "Please log in to view your interviews.",
-    "calendar": {
-      "today": "Today",
-      "month": "Month",
-      "week": "Week",
-      "day": "Day",
-      "statusLegend": "Status Legend"
-    },
-    "placeholders": {
-      "interviewGoal": "e.g., Project Discussion, Initial Consultation",
-      "notes": "Any additional details or topics to discuss"
-    },
-    "dragToRotate": "Drag to rotate, scroll to zoom",
-    "loadingMap": "Loading map..."
+    "updateInterview": "Update Interview"
+  },
+  "messages": {
+    "interviewScheduled": "Interview scheduled successfully",
+    "interviewUpdated": "Interview updated successfully",
+    "interviewDeleted": "Interview deleted successfully",
+    "confirmDelete": "Are you sure you want to delete this interview?",
+    "noInterviews": "No interviews scheduled"
+  },
+  "errors": {
+    "unexpectedResponse": "Unexpected API response format",
+    "failedToLoad": "Failed to load your interviews. Please try again later.",
+    "failedToDelete": "Failed to delete interview. Please try again."
+  },
+  "pleaseLogIn": "Please log in to view your interviews.",
+  "calendar": {
+    "today": "Today",
+    "month": "Month",
+    "week": "Week",
+    "day": "Day",
+    "statusLegend": "Status Legend"
+  },
+  "placeholders": {
+    "interviewGoal": "e.g., Project Discussion, Initial Consultation",
+    "notes": "Any additional details or topics to discuss"
+  },
+  "dragToRotate": "Drag to rotate, scroll to zoom",
+  "loadingMap": "Loading map...",
+  "form": {
+    "interviewGoal": "Interview Goal/Purpose", 
+    "date": "Date",
+    "time": "Time",
+    "notes": "Notes",
+    "notesPlaceholder": "Any additional details or topics to discuss"
   }
 }
