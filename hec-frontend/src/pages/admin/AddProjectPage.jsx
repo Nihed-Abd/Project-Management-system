@@ -22,6 +22,7 @@ const AddProjectPage = () => {
     status: 'Demandé', // Default status
     categoryId: '',
     userId: '',
+    createdAt: new Date().toISOString().slice(0, 16), // Default to current date/time in format YYYY-MM-DDThh:mm
   });
   
   // Image upload states
@@ -285,7 +286,8 @@ const AddProjectPage = () => {
       const projectData = {
         ...formData,
         pictures: imageUrls,
-        location: location
+        location: location,
+        createdAt: new Date(formData.createdAt).toISOString() // Convert to ISO format for backend
       };
       
       const response = await axios.post(`${process.env.REACT_APP_API_URL}/api/projects`, projectData);
@@ -583,6 +585,22 @@ const AddProjectPage = () => {
                       />
                     </label>
                   </div>
+                </div>
+                
+                <div className="mb-4">
+                  <label className={`block text-sm font-medium ${isDark ? 'text-gray-300' : 'text-silver-100'} mb-1`}>
+                    Creation Date
+                  </label>
+                  <input
+                    type="datetime-local"
+                    name="createdAt"
+                    value={formData.createdAt}
+                    onChange={handleChange}
+                    className={`w-full rounded-md shadow-sm ${isDark ? 'bg-gray-700 border-gray-600 text-white' : 'bg-white border-gray-300 text-gray-700'} focus:ring-coquelicot focus:border-coquelicot`}
+                  />
+                  <p className={`mt-1 text-sm ${isDark ? 'text-gray-400' : 'text-gray-500'}`}>
+                    Select the date and time when the project was created. Defaults to current time.
+                  </p>
                 </div>
                 
                 <div className="mb-4">

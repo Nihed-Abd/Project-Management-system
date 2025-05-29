@@ -219,7 +219,7 @@ const HomePage = () => {
                 transition={{ delay: 0.7, duration: 0.5 }}
               />
               <img
-                src="/images/hero-electrician.jpg"
+                src="EM-icon.png"
                 alt="Electrician at work"
                 className="relative h-full w-full rounded-lg object-cover shadow-xl"
               />
