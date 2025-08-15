@@ -1,4 +1,3 @@
-Here’s a suggested README.md file for your repository, including a custom license statement as you requested. Please note: for legal enforceability, you may wish to consult a legal professional to draft a formal license. The following is for informational and illustrative purposes:
 
 ---
 
